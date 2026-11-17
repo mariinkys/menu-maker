@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=MenuMaker
+GenericName=Menu Maker
+Comment=Editor de Cartas de Restaurante
+Exec=menu-maker
+Icon=menu-maker
+Terminal=false
+Categories=Office;
+Keywords=hotel;menu;editor;

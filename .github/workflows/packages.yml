@@ -1,0 +1,163 @@
+name: Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag de la release (p. ej. v0.2.0). Vacío = solo paquetes «latest»"
+        required: false
+        default: ""
+      nombre:
+        description: "Nombre de la release (vacío = el tag)"
+        required: false
+        default: ""
+      prerelease:
+        description: "Marcar como pre-release"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+  APP: menu-maker
+  ICON_SVG: resources/icons/hicolor/scalable/apps/icon.svg
+  TAG: ${{ inputs.tag }}
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Compilar
+        run: cargo build --release --locked
+      - name: Preparar
+        run: |
+          mkdir -p dist
+          cp "target/release/$APP.exe" "dist/$APP-windows-x64.exe"
+      - uses: actions/upload-artifact@v7
+        with:
+          path: dist/${{ env.APP }}-windows-x64.exe
+          archive: false
+          if-no-files-found: error
+
+  linux:
+    # Ubuntu más antigua disponible → los paquetes funcionan con glibc ≥ 2.35.
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Dependencias del sistema
+        run: sudo apt-get update && sudo apt-get install -y libfontconfig1-dev libxkbcommon-dev libssl-dev pkg-config librsvg2-bin desktop-file-utils
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deb
+      - name: Compilar
+        run: cargo build --release --locked
+
+      # Todo (binario, .desktop, icono y StartupWMClass) se llama igual: $APP.
+      # El icono del repo se llama «icon.svg», un nombre genérico que choca con
+      # el tema de iconos del sistema; aquí se renombra a «$APP».
+      - name: Icono y .desktop
+        run: |
+          mkdir -p target/linux/icons
+          cp "$ICON_SVG" "target/linux/icons/$APP.svg"
+          for s in 32 48 64 128 256 512; do
+            mkdir -p "target/linux/icons/${s}x${s}"
+            rsvg-convert -w $s -h $s "$ICON_SVG" -o "target/linux/icons/${s}x${s}/$APP.png"
+          done
+          # Se usa el .desktop del repo (debe haber exactamente uno en packaging/linux).
+          shopt -s nullglob
+          DESKTOPS=(packaging/linux/*.desktop)
+          if [ "${#DESKTOPS[@]}" -ne 1 ]; then
+            echo "::error::Se esperaba un único .desktop en packaging/linux (hay ${#DESKTOPS[@]})"; exit 1
+          fi
+          D="target/linux/$APP.desktop"
+          cp "${DESKTOPS[0]}" "$D"
+          # Icon= tiene que coincidir con el nombre del icono instalado ($APP), y
+          # StartupWMClass con el app_id/WM_CLASS de la ventana; si no, el escritorio
+          # no asocia la ventana abierta al .desktop y sale el icono genérico.
+          sed -i "s|^Icon=.*|Icon=$APP|" "$D"
+          grep -q '^StartupWMClass=' "$D" || sed -i "/^\[Desktop Entry\]/a StartupWMClass=$APP" "$D"
+          cat "$D"
+          desktop-file-validate "$D"
+
+      - name: .deb
+        run: |
+          mkdir -p dist
+          V="${TAG#v}"
+          # dpkg exige que la versión empiece por número; sin tag se usa la del Cargo.toml.
+          if [[ "$V" =~ ^[0-9] ]]; then EXTRA=(--deb-version "$V"); else EXTRA=(); fi
+          cargo deb --no-build "${EXTRA[@]}" --output "dist/$APP-linux-x64.deb"
+          dpkg-deb --info dist/*.deb
+          dpkg-deb --contents dist/*.deb
+
+      - name: AppImage
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: 1 # los runners no tienen FUSE
+        run: |
+          curl -sSL -o linuxdeploy https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy
+
+          # Iconos en todos los tamaños + SVG escalable dentro del AppDir (hicolor).
+          ICON_ARGS=(--icon-file "target/linux/icons/$APP.svg")
+          for f in target/linux/icons/*x*/"$APP.png"; do ICON_ARGS+=(--icon-file "$f"); done
+
+          export LDAI_OUTPUT="$APP-linux-x64.AppImage"
+          ./linuxdeploy --appdir AppDir \
+            --executable "target/release/$APP" \
+            --desktop-file "target/linux/$APP.desktop" \
+            "${ICON_ARGS[@]}"
+
+          # .DirIcon es el icono que muestran el gestor de archivos y los integradores
+          # (AppImageLauncher, Gear Lever…). Se fuerza a un PNG de 256 px: si apunta al
+          # SVG o a un tamaño pequeño, muchos lo ignoran y muestran el icono genérico.
+          rm -f AppDir/.DirIcon "AppDir/$APP.png" "AppDir/$APP.svg"
+          cp "target/linux/icons/256x256/$APP.png" "AppDir/$APP.png"
+          ln -s "$APP.png" AppDir/.DirIcon
+
+          ./linuxdeploy --appdir AppDir --output appimage
+
+          # Por si el plugin ignorase LDAI_OUTPUT: el único *.AppImage generado (linuxdeploy se
+          # descarga sin extensión, así que no entra en el patrón).
+          [ -f "$LDAI_OUTPUT" ] || mv -- *.AppImage "$LDAI_OUTPUT"
+          mv "$LDAI_OUTPUT" dist/
+          find AppDir -name "$APP.*" -o -name .DirIcon | sort
+          ls -l dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          path: dist/${{ env.APP }}-linux-x64.AppImage
+          archive: false
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          path: dist/${{ env.APP }}-linux-x64.deb
+          archive: false
+          if-no-files-found: error
+
+  release:
+    if: inputs.tag != ''
+    needs: [windows, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+      - run: ls -l dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          name: ${{ inputs.nombre != '' && inputs.nombre || inputs.tag }}
+          target_commitish: ${{ github.sha }}
+          prerelease: ${{ inputs.prerelease }}
+          generate_release_notes: true
+          files: dist/*
