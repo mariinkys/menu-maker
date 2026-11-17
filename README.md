@@ -62,7 +62,6 @@ src/
     ├── branding.rs        applies app settings to Theme/Branding, reads the settings dialog
     └── preview.rs         background thread with debounce for the preview
 ui/                        .slint files (interface only; no logic)
-examples/render_sample.rs  renders the sample menu in 4 layouts without the UI
 ```
 
 Data flows one way: the UI calls `Actions.*`. The controller updates the `MenuDocument`,
@@ -141,7 +140,6 @@ sudo apt install libfontconfig1-dev
 
 cargo run --release             # binary: target/release/menu-maker
 cargo test                      # 29 tests: prices, layout, flow, PDF, SQLite, logos, contrast…
-cargo run --release --example render_sample -- out/   # sample PDFs
 ```
 
 On Windows and macOS no extra system dependencies are needed.
