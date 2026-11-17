@@ -150,10 +150,22 @@ export global SettingsState {
     in-out property <bool> colorize-logo: true;
 }
 
+// Package metadata for the About dialog, filled from Cargo.toml by Rust.
+export global AboutInfo {
+    in property <string> name;
+    in property <string> version;
+    in property <string> description;
+    in property <string> license;
+    in property <string> license-url;
+    in property <string> authors;
+    in property <string> repository;
+}
+
 export global AppState {
     in property <string> status;
     // 0 = info, 1 = success, 2 = error
     in property <int> status-kind;
+    in-out property <bool> about-open;
 }
 
 export global Actions {
@@ -191,4 +203,5 @@ export global Actions {
     callback settings-changed();
     callback choose-app-logo();
     callback reset-settings();
+    callback open-url(string);
 }

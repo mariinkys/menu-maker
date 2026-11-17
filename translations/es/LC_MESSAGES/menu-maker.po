@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: menu-maker 0.1.0\n"
-"POT-Creation-Date: 2026-11-17 07:56+0000\n"
+"POT-Creation-Date: 2026-11-17 18:30+0000\n"
 "PO-Revision-Date: 2026-11-17 07:56+0000\n"
 "Last-Translator: menu-maker\n"
 "Language-Team: Spanish (Spain)\n"
@@ -12,28 +12,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ui/app.slint:18 ui/app.slint:59 ui/settings-dialog.slint:121
+#: ui/about-dialog.slint:38
+msgid "Version {}"
+msgstr "Versión {}"
+
+#: ui/about-dialog.slint:50
+msgid "License"
+msgstr "Licencia"
+
+#: ui/about-dialog.slint:58
+msgid "Authors"
+msgstr "Autores"
+
+#: ui/about-dialog.slint:62
+msgid "Repository"
+msgstr "Repositorio"
+
+#: ui/about-dialog.slint:77 ui/settings-dialog.slint:174
+msgid "Close"
+msgstr "Cerrar"
+
+#: ui/app.slint:19 ui/app.slint:60 ui/settings-dialog.slint:121
 msgid "Casa Peix · Menu Editor"
 msgstr "Casa Peix · Editor de Cartas"
 
-#: ui/app.slint:69
+#: ui/app.slint:70
 msgid "New menu"
 msgstr "Nueva carta"
 
 #. --- PDF ---------------------------------------------------------------
-#: ui/app.slint:76 ui/strings.slint:76
+#: ui/app.slint:77 ui/strings.slint:77
 msgid "Export PDF"
 msgstr "Exportar PDF"
 
-#: ui/app.slint:103
+#: ui/app.slint:116
 msgid "Content"
 msgstr "Contenido"
 
-#: ui/app.slint:107 ui/presets-panel.slint:30
+#: ui/app.slint:120 ui/presets-panel.slint:30
 msgid "Design"
 msgstr "Diseño"
 
-#: ui/app.slint:111
+#: ui/app.slint:124
 msgid "Presets"
 msgstr "Presets"
 
@@ -128,12 +148,19 @@ msgid "Choose image…"
 msgstr "Elegir imagen…"
 
 #: ui/content-panel.slint:288
-msgid "Uses the app logo, which you change in the app settings (gear icon, top right). Position and size are set in the “Design” tab."
-msgstr "Usa el logo de la aplicación, que se cambia en los ajustes (icono del engranaje, arriba a la derecha). La posición y el tamaño se ajustan en la pestaña «Diseño»."
+msgid ""
+"Uses the app logo, which you change in the app settings (gear icon, top "
+"right). Position and size are set in the “Design” tab."
+msgstr ""
+"Usa el logo de la aplicación, que se cambia en los ajustes (icono del "
+"engranaje, arriba a la derecha). La posición y el tamaño se ajustan en la "
+"pestaña «Diseño»."
 
 #: ui/content-panel.slint:289
 msgid "Logo and title position and size are set in the “Design” tab."
-msgstr "La posición y el tamaño del logo y del título se ajustan en la pestaña «Diseño»."
+msgstr ""
+"La posición y el tamaño del logo y del título se ajustan en la pestaña "
+"«Diseño»."
 
 #: ui/content-panel.slint:303
 msgid "The menu is empty. Add a section to get started."
@@ -239,7 +266,7 @@ msgstr "Izquierda (precio a la derecha)"
 msgid "Centred"
 msgstr "Centrada"
 
-#: ui/design-panel.slint:197 ui/design-panel.slint:252 ui/design-panel.slint:197 ui/design-panel.slint:252
+#: ui/design-panel.slint:197 ui/design-panel.slint:252
 msgid "Right"
 msgstr "Derecha"
 
@@ -304,8 +331,12 @@ msgid "Style"
 msgstr "Estilo"
 
 #: ui/design-panel.slint:296
-msgid "B = bold, I = italic. If the menu does not fit on the sheet, all sizes are reduced by the same proportion."
-msgstr "N = negrita, K = cursiva. Si la carta no cabe en la hoja, todos los tamaños se reducen en la misma proporción."
+msgid ""
+"B = bold, I = italic. If the menu does not fit on the sheet, all sizes are "
+"reduced by the same proportion."
+msgstr ""
+"N = negrita, K = cursiva. Si la carta no cabe en la hoja, todos los tamaños "
+"se reducen en la misma proporción."
 
 #: ui/design-panel.slint:301
 msgid "Section titles in capitals"
@@ -420,8 +451,14 @@ msgid "Save design only"
 msgstr "Guardar solo el diseño"
 
 #: ui/presets-panel.slint:102
-msgid "“Menu” saves dishes, texts and design. “Design” only saves page, columns, fonts and colours, to apply them to any menu. An existing name is overwritten."
-msgstr "«Carta» guarda platos, textos y diseño. «Diseño» guarda solo página, columnas, fuentes y colores, para aplicarlo a cualquier carta. Si el nombre ya existe, se sobrescribe."
+msgid ""
+"“Menu” saves dishes, texts and design. “Design” only saves page, columns, "
+"fonts and colours, to apply them to any menu. An existing name is "
+"overwritten."
+msgstr ""
+"«Carta» guarda platos, textos y diseño. «Diseño» guarda solo página, "
+"columnas, fuentes y colores, para aplicarlo a cualquier carta. Si el nombre "
+"ya existe, se sobrescribe."
 
 #: ui/presets-panel.slint:109
 msgid "SAVED PRESETS"
@@ -436,8 +473,12 @@ msgid "FILES"
 msgstr "ARCHIVOS"
 
 #: ui/presets-panel.slint:121
-msgid "To move a menu to another computer, export it to a .json file and import it there."
-msgstr "Para llevar una carta a otro ordenador, expórtala a un archivo .json e impórtala allí."
+msgid ""
+"To move a menu to another computer, export it to a .json file and import it "
+"there."
+msgstr ""
+"Para llevar una carta a otro ordenador, expórtala a un archivo .json e "
+"impórtala allí."
 
 #: ui/presets-panel.slint:128
 msgid "Import from file…"
@@ -468,8 +509,12 @@ msgid "Does not fit on one sheet"
 msgstr "No cabe en una hoja"
 
 #: ui/preview-pane.slint:87
-msgid "The content does not fit on one sheet even at the smallest text size. Shorten descriptions, reduce margins or use more columns."
-msgstr "El contenido no cabe en una hoja ni reduciendo el texto al mínimo. Acorta descripciones, reduce márgenes o usa más columnas."
+msgid ""
+"The content does not fit on one sheet even at the smallest text size. "
+"Shorten descriptions, reduce margins or use more columns."
+msgstr ""
+"El contenido no cabe en una hoja ni reduciendo el texto al mínimo. Acorta "
+"descripciones, reduce márgenes o usa más columnas."
 
 #: ui/settings-dialog.slint:45
 msgid "App settings"
@@ -520,16 +565,18 @@ msgid "Recolour the logo (for single-colour logos)"
 msgstr "Recolorear el logo (para logos de un solo color)"
 
 #: ui/settings-dialog.slint:161
-msgid "These settings change how the app looks. The main colour is also the accent colour when a menu design is reset, and the app logo is the default logo of every menu."
-msgstr "Estos ajustes cambian el aspecto de la aplicación. El color principal también es el color de acento al restablecer el diseño de una carta, y el logo de la aplicación es el logo predeterminado de las cartas."
+msgid ""
+"These settings change how the app looks. The main colour is also the accent "
+"colour when a menu design is reset, and the app logo is the default logo of "
+"every menu."
+msgstr ""
+"Estos ajustes cambian el aspecto de la aplicación. El color principal "
+"también es el color de acento al restablecer el diseño de una carta, y el "
+"logo de la aplicación es el logo predeterminado de las cartas."
 
 #: ui/settings-dialog.slint:169
 msgid "Reset (Casa Peix)"
 msgstr "Restablecer (Casa Peix)"
-
-#: ui/settings-dialog.slint:174
-msgid "Close"
-msgstr "Cerrar"
 
 #: ui/state.slint:43
 msgid "Gluten"
@@ -666,8 +713,12 @@ msgid "Section “{}” deleted."
 msgstr "Sección «{}» eliminada."
 
 #: ui/strings.slint:31
-msgid "Click “New menu” again to start from scratch (the design is kept; save a preset first if you want to keep the dishes)."
-msgstr "Pulsa «Nueva carta» otra vez para empezar de cero (se mantiene el diseño; guarda antes un preset si quieres conservar los platos)."
+msgid ""
+"Click “New menu” again to start from scratch (the design is kept; save a "
+"preset first if you want to keep the dishes)."
+msgstr ""
+"Pulsa «Nueva carta» otra vez para empezar de cero (se mantiene el diseño; "
+"guarda antes un preset si quieres conservar los platos)."
 
 #: ui/strings.slint:33
 msgid "New menu created."
@@ -702,7 +753,7 @@ msgstr "Formato de imagen no soportado (usa PNG, JPEG, WebP o GIF)."
 msgid "Invalid image: {}"
 msgstr "Imagen no válida: {}"
 
-#. --- Design & settings -------------------------------------------------
+#. --- Design, Settings & About ------------------------------------------
 #: ui/strings.slint:46
 msgid "Design reset."
 msgstr "Diseño restablecido."
@@ -715,100 +766,105 @@ msgstr "Ajustes restablecidos (Casa Peix)."
 msgid "Could not save the settings: {}"
 msgstr "No se pudieron guardar los ajustes: {}"
 
+#: ui/strings.slint:49
+#, fuzzy
+msgid "Could not open {} in the browser."
+msgstr "No se pudo abrir {} en el navegador."
+
 #. --- Presets -----------------------------------------------------------
-#: ui/strings.slint:51
+#: ui/strings.slint:52
 msgid "Could not read the presets: {}"
 msgstr "No se pudieron leer los presets: {}"
 
-#: ui/strings.slint:52
+#: ui/strings.slint:53
 msgid "Menu saved as “{}”."
 msgstr "Carta guardada como «{}»."
 
-#: ui/strings.slint:53
+#: ui/strings.slint:54
 msgid "Design saved as “{}”."
 msgstr "Diseño guardado como «{}»."
 
-#: ui/strings.slint:54
+#: ui/strings.slint:55
 msgid "Could not save: {}"
 msgstr "No se pudo guardar: {}"
 
-#: ui/strings.slint:55
+#: ui/strings.slint:56
 msgid "Menu loaded."
 msgstr "Carta cargada."
 
-#: ui/strings.slint:56
+#: ui/strings.slint:57
 msgid "Design applied to the current menu."
 msgstr "Diseño aplicado a la carta actual."
 
-#: ui/strings.slint:57
+#: ui/strings.slint:58
 msgid "Could not load: {}"
 msgstr "No se pudo cargar: {}"
 
-#: ui/strings.slint:58
+#: ui/strings.slint:59
 msgid "Click the bin again to delete the preset “{}”."
 msgstr "Pulsa otra vez la papelera para eliminar el preset «{}»."
 
-#: ui/strings.slint:59
+#: ui/strings.slint:60
 msgid "Preset “{}” deleted."
 msgstr "Preset «{}» eliminado."
 
-#: ui/strings.slint:60
+#: ui/strings.slint:61
 msgid "Could not delete: {}"
 msgstr "No se pudo eliminar: {}"
 
 #. --- Files -------------------------------------------------------------
-#: ui/strings.slint:63
+#: ui/strings.slint:64
 msgid "Import menu or design"
 msgstr "Importar carta o diseño"
 
-#: ui/strings.slint:64
+#: ui/strings.slint:65
 msgid "Export menu"
 msgstr "Exportar carta"
 
-#: ui/strings.slint:65
+#: ui/strings.slint:66
 msgid "Menu (JSON)"
 msgstr "Carta (JSON)"
 
-#: ui/strings.slint:66
+#: ui/strings.slint:67
 msgid "Could not read the file: {}"
 msgstr "No se pudo leer el archivo: {}"
 
-#: ui/strings.slint:67
+#: ui/strings.slint:68
 msgid "The file is not valid JSON: {}"
 msgstr "El archivo no es JSON válido: {}"
 
-#: ui/strings.slint:68
+#: ui/strings.slint:69
 msgid "Menu imported."
 msgstr "Carta importada."
 
-#: ui/strings.slint:69
+#: ui/strings.slint:70
 msgid "Design imported."
 msgstr "Diseño importado."
 
-#: ui/strings.slint:70
+#: ui/strings.slint:71
 msgid "Invalid menu format: {}"
 msgstr "Formato de carta no válido: {}"
 
-#: ui/strings.slint:71
+#: ui/strings.slint:72
 msgid "Invalid design format: {}"
 msgstr "Formato de diseño no válido: {}"
 
-#: ui/strings.slint:72
+#: ui/strings.slint:73
 msgid "Menu exported to {}"
 msgstr "Carta exportada a {}"
 
-#: ui/strings.slint:73
+#: ui/strings.slint:74
 msgid "Could not export: {}"
 msgstr "No se pudo exportar: {}"
 
-#: ui/strings.slint:77
+#: ui/strings.slint:78
 msgid "PDF saved to {}"
 msgstr "PDF guardado en {}"
 
-#: ui/strings.slint:79
+#: ui/strings.slint:80
 msgid "PDF saved to {}, but the content does not fit on one sheet."
 msgstr "PDF guardado en {}, pero el contenido no cabe en una hoja."
 
-#: ui/strings.slint:81
+#: ui/strings.slint:82
 msgid "Could not export the PDF: {}"
 msgstr "No se pudo exportar el PDF: {}"

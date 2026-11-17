@@ -1,8 +1,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: menu-maker 0.1.0\n"
-"POT-Creation-Date: 2026-11-17 07:56+0000\n"
+"Project-Id-Version: menu-maker VERSION\n"
+"POT-Creation-Date: 2026-11-17 18:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,28 +12,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ui/app.slint:18 ui/app.slint:59 ui/settings-dialog.slint:121
+#: ui/about-dialog.slint:38
+msgid "Version {}"
+msgstr ""
+
+#: ui/about-dialog.slint:50
+msgid "License"
+msgstr ""
+
+#: ui/about-dialog.slint:58
+msgid "Authors"
+msgstr ""
+
+#: ui/about-dialog.slint:62
+msgid "Repository"
+msgstr ""
+
+#: ui/about-dialog.slint:77 ui/settings-dialog.slint:174
+msgid "Close"
+msgstr ""
+
+#: ui/app.slint:19 ui/app.slint:60 ui/settings-dialog.slint:121
 msgid "Casa Peix · Menu Editor"
 msgstr ""
 
-#: ui/app.slint:69
+#: ui/app.slint:70
 msgid "New menu"
 msgstr ""
 
 #. --- PDF ---------------------------------------------------------------
-#: ui/app.slint:76 ui/strings.slint:76
+#: ui/app.slint:77 ui/strings.slint:77
 msgid "Export PDF"
 msgstr ""
 
-#: ui/app.slint:103
+#: ui/app.slint:116
 msgid "Content"
 msgstr ""
 
-#: ui/app.slint:107 ui/presets-panel.slint:30
+#: ui/app.slint:120 ui/presets-panel.slint:30
 msgid "Design"
 msgstr ""
 
-#: ui/app.slint:111
+#: ui/app.slint:124
 msgid "Presets"
 msgstr ""
 
@@ -542,10 +562,6 @@ msgstr ""
 msgid "Reset (Casa Peix)"
 msgstr ""
 
-#: ui/settings-dialog.slint:174
-msgid "Close"
-msgstr ""
-
 #: ui/state.slint:43
 msgid "Gluten"
 msgstr ""
@@ -719,7 +735,7 @@ msgstr ""
 msgid "Invalid image: {}"
 msgstr ""
 
-#. --- Design & settings -------------------------------------------------
+#. --- Design, Settings & About ------------------------------------------
 #: ui/strings.slint:46
 msgid "Design reset."
 msgstr ""
@@ -732,100 +748,104 @@ msgstr ""
 msgid "Could not save the settings: {}"
 msgstr ""
 
+#: ui/strings.slint:49
+msgid "Could not open {} in the browser."
+msgstr ""
+
 #. --- Presets -----------------------------------------------------------
-#: ui/strings.slint:51
+#: ui/strings.slint:52
 msgid "Could not read the presets: {}"
 msgstr ""
 
-#: ui/strings.slint:52
+#: ui/strings.slint:53
 msgid "Menu saved as “{}”."
 msgstr ""
 
-#: ui/strings.slint:53
+#: ui/strings.slint:54
 msgid "Design saved as “{}”."
 msgstr ""
 
-#: ui/strings.slint:54
+#: ui/strings.slint:55
 msgid "Could not save: {}"
 msgstr ""
 
-#: ui/strings.slint:55
+#: ui/strings.slint:56
 msgid "Menu loaded."
 msgstr ""
 
-#: ui/strings.slint:56
+#: ui/strings.slint:57
 msgid "Design applied to the current menu."
 msgstr ""
 
-#: ui/strings.slint:57
+#: ui/strings.slint:58
 msgid "Could not load: {}"
 msgstr ""
 
-#: ui/strings.slint:58
+#: ui/strings.slint:59
 msgid "Click the bin again to delete the preset “{}”."
 msgstr ""
 
-#: ui/strings.slint:59
+#: ui/strings.slint:60
 msgid "Preset “{}” deleted."
 msgstr ""
 
-#: ui/strings.slint:60
+#: ui/strings.slint:61
 msgid "Could not delete: {}"
 msgstr ""
 
 #. --- Files -------------------------------------------------------------
-#: ui/strings.slint:63
+#: ui/strings.slint:64
 msgid "Import menu or design"
 msgstr ""
 
-#: ui/strings.slint:64
+#: ui/strings.slint:65
 msgid "Export menu"
 msgstr ""
 
-#: ui/strings.slint:65
+#: ui/strings.slint:66
 msgid "Menu (JSON)"
 msgstr ""
 
-#: ui/strings.slint:66
+#: ui/strings.slint:67
 msgid "Could not read the file: {}"
 msgstr ""
 
-#: ui/strings.slint:67
+#: ui/strings.slint:68
 msgid "The file is not valid JSON: {}"
 msgstr ""
 
-#: ui/strings.slint:68
+#: ui/strings.slint:69
 msgid "Menu imported."
 msgstr ""
 
-#: ui/strings.slint:69
+#: ui/strings.slint:70
 msgid "Design imported."
 msgstr ""
 
-#: ui/strings.slint:70
+#: ui/strings.slint:71
 msgid "Invalid menu format: {}"
 msgstr ""
 
-#: ui/strings.slint:71
+#: ui/strings.slint:72
 msgid "Invalid design format: {}"
 msgstr ""
 
-#: ui/strings.slint:72
+#: ui/strings.slint:73
 msgid "Menu exported to {}"
 msgstr ""
 
-#: ui/strings.slint:73
+#: ui/strings.slint:74
 msgid "Could not export: {}"
 msgstr ""
 
-#: ui/strings.slint:77
+#: ui/strings.slint:78
 msgid "PDF saved to {}"
 msgstr ""
 
-#: ui/strings.slint:79
+#: ui/strings.slint:80
 msgid "PDF saved to {}, but the content does not fit on one sheet."
 msgstr ""
 
-#: ui/strings.slint:81
+#: ui/strings.slint:82
 msgid "Could not export the PDF: {}"
 msgstr ""
