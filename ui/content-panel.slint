@@ -1,0 +1,333 @@
+// "Content" tab: header texts, logo, sections and dishes.
+
+import { LineEdit, TextEdit, ComboBox, Button, ScrollView } from "std-widgets.slint";
+import { Theme, IconButton, AllergenChip, MiniBadge, FieldLabel, Card, PrimaryButton } from "theme.slint";
+import { MenuState, Catalog, Actions, ProductRow, SectionRow } from "state.slint";
+
+component AllergenRow inherits HorizontalLayout {
+    in property <ProductRow> product;
+    in property <int> section-index;
+    in property <int> product-index;
+    in property <int> first;
+    in property <int> count;
+    spacing: 5px;
+    alignment: start;
+    for k in root.count: AllergenChip {
+        number: root.first + k + 1;
+        label: Catalog.allergen-short[root.first + k];
+        checked: root.product.allergens[root.first + k];
+        toggled => {
+            Actions.allergen-toggle(root.section-index, root.product-index, root.first + k);
+        }
+    }
+}
+
+component ProductEditor inherits Rectangle {
+    in property <ProductRow> product;
+    in property <int> section-index;
+    in property <int> product-index;
+    in property <bool> is-first;
+    in property <bool> is-last;
+
+    // Live copies so the summary row follows typing without a model refresh.
+    property <string> live-name: root.product.name;
+    property <string> live-price: root.product.price-label;
+
+    border-radius: 7px;
+    background: root.product.expanded ? Theme.surface-alt : head-touch.has-hover ? Theme.hover : transparent;
+    border-width: root.product.expanded ? 1px : 0px;
+    border-color: Theme.border;
+
+    VerticalLayout {
+        padding: 6px;
+        spacing: 8px;
+
+        HorizontalLayout {
+            spacing: 4px;
+            Rectangle {
+                horizontal-stretch: 1;
+                head-touch := TouchArea {
+                    mouse-cursor: MouseCursor.pointer;
+                    clicked => { Actions.product-toggle(root.section-index, root.product-index); }
+                }
+                HorizontalLayout {
+                    spacing: 6px;
+                    IconButton {
+                        icon: root.product.expanded ? "down" : "right";
+                        clicked => { Actions.product-toggle(root.section-index, root.product-index); }
+                    }
+                    Text {
+                        text: root.live-name == "" ? @tr("(unnamed dish)") : root.live-name;
+                        color: root.live-name == "" ? Theme.text-muted : Theme.text;
+                        font-size: 13px;
+                        font-weight: 600;
+                        overflow: elide;
+                        vertical-alignment: center;
+                        horizontal-stretch: 1;
+                    }
+                    HorizontalLayout {
+                        spacing: 2px;
+                        alignment: end;
+                        for n in root.product.allergen-numbers: VerticalLayout {
+                            alignment: center;
+                            MiniBadge { number: n; }
+                        }
+                    }
+                    Text {
+                        text: root.live-price;
+                        color: Theme.brand-text;
+                        font-size: 13px;
+                        font-weight: 600;
+                        vertical-alignment: center;
+                    }
+                }
+            }
+            IconButton {
+                icon: "up";
+                enabled: !root.is-first;
+                clicked => { Actions.product-move(root.section-index, root.product-index, -1); }
+            }
+            IconButton {
+                icon: "down";
+                enabled: !root.is-last;
+                clicked => { Actions.product-move(root.section-index, root.product-index, 1); }
+            }
+            IconButton {
+                icon: "trash";
+                clicked => { Actions.product-remove(root.section-index, root.product-index); }
+            }
+        }
+
+        if root.product.expanded: VerticalLayout {
+            padding-left: 32px;
+            padding-right: 4px;
+            padding-bottom: 6px;
+            spacing: 6px;
+
+            HorizontalLayout {
+                spacing: 10px;
+                VerticalLayout {
+                    horizontal-stretch: 3;
+                    spacing: 3px;
+                    FieldLabel { text: @tr("Dish name"); }
+                    LineEdit {
+                        text: root.product.name;
+                        placeholder-text: @tr("e.g. Ham croquettes");
+                        edited(t) => {
+                            root.live-name = t;
+                            Actions.product-edit(root.section-index, root.product-index, "name", t);
+                        }
+                    }
+                }
+                VerticalLayout {
+                    horizontal-stretch: 1;
+                    spacing: 3px;
+                    FieldLabel { text: @tr("Price"); }
+                    LineEdit {
+                        text: root.product.price;
+                        placeholder-text: @tr("12.50");
+                        edited(t) => {
+                            root.live-price = Actions.product-edit(root.section-index, root.product-index, "price", t);
+                        }
+                    }
+                }
+            }
+
+            FieldLabel { text: @tr("Description"); }
+            TextEdit {
+                text: root.product.description;
+                wrap: word-wrap;
+                height: 54px;
+                font-size: 13px;
+                edited(t) => { Actions.product-edit(root.section-index, root.product-index, "description", t); }
+            }
+
+            FieldLabel { text: @tr("Allergens"); }
+            AllergenRow { product: root.product; section-index: root.section-index; product-index: root.product-index; first: 0; count: 5; }
+            AllergenRow { product: root.product; section-index: root.section-index; product-index: root.product-index; first: 5; count: 5; }
+            AllergenRow { product: root.product; section-index: root.section-index; product-index: root.product-index; first: 10; count: 4; }
+        }
+    }
+}
+
+component SectionEditor inherits Rectangle {
+    in property <SectionRow> section;
+    in property <int> index;
+    in property <bool> is-first;
+    in property <bool> is-last;
+
+    background: Theme.surface;
+    border-radius: Theme.radius;
+    border-width: 1px;
+    border-color: Theme.border;
+
+    VerticalLayout {
+        padding: 10px;
+        spacing: 8px;
+
+        HorizontalLayout {
+            spacing: 4px;
+            IconButton {
+                icon: root.section.expanded ? "down" : "right";
+                clicked => { Actions.section-toggle(root.index); }
+            }
+            LineEdit {
+                text: root.section.name;
+                placeholder-text: @tr("Section name");
+                font-size: 15px;
+                horizontal-stretch: 1;
+                edited(t) => { Actions.section-edit(root.index, "name", t); }
+            }
+            Text {
+                text: @tr("{n} dish" | "{n} dishes" % root.section.products.length);
+                color: Theme.text-muted;
+                font-size: 12px;
+                vertical-alignment: center;
+            }
+            IconButton {
+                icon: "up";
+                enabled: !root.is-first;
+                clicked => { Actions.section-move(root.index, -1); }
+            }
+            IconButton {
+                icon: "down";
+                enabled: !root.is-last;
+                clicked => { Actions.section-move(root.index, 1); }
+            }
+            IconButton {
+                icon: "trash";
+                clicked => { Actions.section-remove(root.index); }
+            }
+        }
+
+        if root.section.expanded: VerticalLayout {
+            spacing: 4px;
+            LineEdit {
+                text: root.section.note;
+                placeholder-text: @tr("Optional note under the title (e.g. “To share”)");
+                font-size: 12px;
+                edited(t) => { Actions.section-edit(root.index, "note", t); }
+            }
+            for product[pi] in root.section.products: ProductEditor {
+                product: product;
+                section-index: root.index;
+                product-index: pi;
+                is-first: pi == 0;
+                is-last: pi == root.section.products.length - 1;
+            }
+            HorizontalLayout {
+                alignment: start;
+                padding-top: 4px;
+                Button {
+                    text: @tr("+  Add dish");
+                    clicked => { Actions.product-add(root.index); }
+                }
+            }
+        }
+    }
+}
+
+export component ContentPanel inherits Rectangle {
+    scroll := ScrollView {
+        VerticalLayout {
+            width: scroll.visible-width;
+            alignment: start;
+            padding: 14px;
+            spacing: 12px;
+
+            Card {
+                heading: @tr("HEADER");
+                VerticalLayout {
+                    spacing: 3px;
+                    FieldLabel { text: @tr("Menu title"); }
+                    LineEdit {
+                        text <=> MenuState.title;
+                        placeholder-text: @tr("e.g. Garden Menu");
+                        edited => { Actions.header-changed(); }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 3px;
+                    FieldLabel { text: @tr("Subtitle (optional)"); }
+                    LineEdit {
+                        text <=> MenuState.subtitle;
+                        placeholder-text: @tr("e.g. Autumn · Winter 2026");
+                        edited => { Actions.header-changed(); }
+                    }
+                }
+                HorizontalLayout {
+                    spacing: 10px;
+                    VerticalLayout {
+                        spacing: 3px;
+                        horizontal-stretch: 1;
+                        FieldLabel { text: @tr("Logo"); }
+                        ComboBox {
+                            model: [@tr("App logo"), @tr("Custom image…"), @tr("No logo")];
+                            current-index <=> MenuState.logo-mode;
+                            selected => {
+                                if (MenuState.logo-mode == 1) {
+                                    Actions.choose-logo();
+                                } else {
+                                    Actions.header-changed();
+                                }
+                            }
+                        }
+                    }
+                    if MenuState.logo-mode == 1: VerticalLayout {
+                        spacing: 3px;
+                        horizontal-stretch: 1;
+                        FieldLabel { text: MenuState.logo-file-name == "" ? @tr("No file") : MenuState.logo-file-name; overflow: elide; }
+                        Button {
+                            text: @tr("Choose image…");
+                            clicked => { Actions.choose-logo(); }
+                        }
+                    }
+                }
+                FieldLabel {
+                    text: MenuState.logo-mode == 0
+                        ? @tr("Uses the app logo, which you change in the app settings (gear icon, top right). Position and size are set in the “Design” tab.")
+                        : @tr("Logo and title position and size are set in the “Design” tab.");
+                    wrap: word-wrap;
+                    font-size: 11px;
+                }
+            }
+
+            for section[si] in MenuState.sections: SectionEditor {
+                section: section;
+                index: si;
+                is-first: si == 0;
+                is-last: si == MenuState.sections.length - 1;
+            }
+
+            if MenuState.sections.length == 0: Text {
+                text: @tr("The menu is empty. Add a section to get started.");
+                color: Theme.text-muted;
+                horizontal-alignment: center;
+            }
+
+            HorizontalLayout {
+                alignment: center;
+                PrimaryButton {
+                    text: @tr("+  Add section");
+                    clicked => { Actions.section-add(); }
+                }
+            }
+
+            Card {
+                heading: @tr("FOOTER");
+                TextEdit {
+                    text <=> MenuState.footer;
+                    wrap: word-wrap;
+                    height: 60px;
+                    font-size: 13px;
+                    edited => { Actions.header-changed(); }
+                }
+                FieldLabel {
+                    text: @tr("The allergen legend is added automatically above this text.");
+                    wrap: word-wrap;
+                    font-size: 11px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,245 @@
+// Visual theme and small reusable widgets.
+
+export global Theme {
+    // Set from Rust (app settings).
+    in-out property <bool> dark: false;
+    in-out property <color> brand: #AD0000;
+    // Text/icon colour on top of `brand`, picked in Rust for contrast.
+    in-out property <color> on-brand: #FFFFFF;
+
+    out property <color> brand-dark: self.brand.darker(0.25);
+    out property <color> brand-soft: self.dark ? self.brand.with-alpha(0.25) : self.brand.with-alpha(0.10);
+    // Brand colour for text on surfaces, adjusted in Rust to keep 4.5:1 contrast.
+    in-out property <color> brand-text: #AD0000;
+
+    out property <color> text: self.dark ? #EDE7E2 : #26211F;
+    out property <color> text-muted: self.dark ? #A79F98 : #6F6863;
+    out property <color> disabled: self.dark ? #5E5853 : #B9B2AC;
+    out property <color> border: self.dark ? #3A3431 : #E1DBD5;
+    out property <color> surface: self.dark ? #24201E : #FFFFFF;
+    out property <color> surface-alt: self.dark ? #1C1917 : #F7F4F1;
+    out property <color> canvas: self.dark ? #141210 : #E7E2DC;
+    out property <color> hover: self.dark ? #322C29 : #F0EBE6;
+    out property <color> chip: self.dark ? #2B2623 : #F4F0EC;
+    out property <color> success: self.dark ? #6CC48F : #2E7D4F;
+    out property <color> success-soft: self.dark ? #1F3A2A : #E3F1E8;
+    out property <color> danger: self.dark ? #F2827A : #B3261E;
+    out property <color> danger-soft: self.dark ? #47201D : #FBE3E1;
+    out property <color> info: self.dark ? #8FB3DE : #1F3A5F;
+    out property <color> info-soft: self.dark ? #1E2C3D : #E7EEF6;
+    out property <color> scrim: self.dark ? #000000AA : #00000055;
+    out property <length> radius: 8px;
+}
+
+// Line icons drawn with paths, so they look the same on every OS.
+export component IconButton inherits Rectangle {
+    in property <string> icon;
+    in property <bool> enabled: true;
+    in property <color> tint: Theme.text-muted;
+    in property <length> icon-size: 14px;
+    in property <color> hover-background: Theme.hover;
+    callback clicked();
+
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: touch.has-hover && root.enabled ? root.hover-background : transparent;
+
+    touch := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: root.enabled ? MouseCursor.pointer : MouseCursor.default;
+        clicked => { root.clicked(); }
+    }
+
+    Path {
+        width: root.icon-size;
+        height: root.icon-size;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        fill: transparent;
+        stroke: root.enabled ? (touch.has-hover && root.icon == "trash" ? Theme.danger : root.tint) : Theme.disabled;
+        stroke-width: 2px;
+        commands: root.icon == "up" ? "M 6 15 L 12 9 L 18 15"
+            : root.icon == "down" ? "M 6 9 L 12 15 L 18 9"
+            : root.icon == "right" ? "M 9 6 L 15 12 L 9 18"
+            : root.icon == "close" ? "M 6 6 L 18 18 M 18 6 L 6 18"
+            : root.icon == "plus" ? "M 12 5 L 12 19 M 5 12 L 19 12"
+            : root.icon == "trash" ? "M 4 7 L 20 7 M 9 7 L 9 4 L 15 4 L 15 7 M 6 7 L 7 20 L 17 20 L 18 7"
+            : root.icon == "cog" ? "M 19.56 9.38 L 22.26 9.75 L 22.26 14.25 L 19.56 14.62 L 19.20 15.49 L 20.84 17.66 L 17.66 20.84 L 15.49 19.20 L 14.62 19.56 L 14.25 22.26 L 9.75 22.26 L 9.38 19.56 L 8.51 19.20 L 6.34 20.84 L 3.16 17.66 L 4.80 15.49 L 4.44 14.62 L 1.74 14.25 L 1.74 9.75 L 4.44 9.38 L 4.80 8.51 L 3.16 6.34 L 6.34 3.16 L 8.51 4.80 L 9.38 4.44 L 9.75 1.74 L 14.25 1.74 L 14.62 4.44 L 15.49 4.80 L 17.66 3.16 L 20.84 6.34 L 19.20 8.51 Z M 15 12 A 3 3 0 1 0 9 12 A 3 3 0 1 0 15 12 Z"
+            : "M 6 9 L 12 15 L 18 9";
+    }
+}
+
+// Flat text button used in toolbars.
+export component ToolButton inherits Rectangle {
+    in property <string> text;
+    in property <bool> primary: false;
+    in property <bool> enabled: true;
+    callback clicked();
+
+    min-width: label.preferred-width + 28px;
+    height: 34px;
+    border-radius: 7px;
+    background: !root.enabled ? Theme.on-brand.with-alpha(0.13)
+        : root.primary ? (touch.pressed ? Theme.on-brand.with-alpha(0.8) : touch.has-hover ? Theme.on-brand.with-alpha(0.92) : Theme.on-brand)
+        : (touch.pressed ? Theme.on-brand.with-alpha(0.2) : touch.has-hover ? Theme.on-brand.with-alpha(0.13) : transparent);
+    border-width: root.primary ? 0px : 1px;
+    border-color: Theme.on-brand.with-alpha(0.33);
+
+    label := Text {
+        text: root.text;
+        color: !root.enabled ? Theme.on-brand.with-alpha(0.5) : root.primary ? Theme.brand : Theme.on-brand;
+        font-size: 13px;
+        font-weight: 600;
+        vertical-alignment: center;
+        horizontal-alignment: center;
+    }
+
+    touch := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: MouseCursor.pointer;
+        clicked => { root.clicked(); }
+    }
+}
+
+// Brand-coloured primary button (std-widgets' accent follows the OS, not the brand).
+export component PrimaryButton inherits Rectangle {
+    in property <string> text;
+    in property <bool> enabled: true;
+    callback clicked();
+
+    min-width: label.preferred-width + 32px;
+    min-height: 32px;
+    border-radius: 5px;
+    background: !root.enabled ? Theme.chip
+        : touch.pressed ? Theme.brand-dark
+        : touch.has-hover ? Theme.brand.brighter(0.12)
+        : Theme.brand;
+
+    label := Text {
+        text: root.text;
+        color: root.enabled ? Theme.on-brand : Theme.disabled;
+        font-size: 13px;
+        font-weight: 600;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+    touch := TouchArea {
+        enabled: root.enabled;
+        mouse-cursor: root.enabled ? MouseCursor.pointer : MouseCursor.default;
+        clicked => { root.clicked(); }
+    }
+}
+
+// Rounded toggle chip for an allergen.
+export component AllergenChip inherits Rectangle {
+    in property <int> number;
+    in property <string> label;
+    in property <bool> checked;
+    callback toggled();
+
+    height: 26px;
+    min-width: row.preferred-width;
+    border-radius: 13px;
+    background: root.checked ? Theme.brand : touch.has-hover ? Theme.hover : Theme.chip;
+    border-width: 1px;
+    border-color: root.checked ? Theme.brand : Theme.border;
+
+    row := HorizontalLayout {
+        padding-left: 4px;
+        padding-right: 9px;
+        spacing: 5px;
+        VerticalLayout {
+            alignment: center;
+            Rectangle {
+                width: 18px;
+                height: 18px;
+                border-radius: 9px;
+                background: root.checked ? Theme.on-brand : Theme.brand;
+                Text {
+                    text: root.number;
+                    color: root.checked ? Theme.brand : Theme.on-brand;
+                    font-size: 10px;
+                    font-weight: 700;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+        }
+        Text {
+            text: root.label;
+            color: root.checked ? Theme.on-brand : Theme.text;
+            font-size: 11px;
+            vertical-alignment: center;
+        }
+    }
+
+    touch := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => { root.toggled(); }
+    }
+}
+
+// Mini read-only allergen badge for collapsed rows.
+export component MiniBadge inherits Rectangle {
+    in property <int> number;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background: Theme.brand;
+    Text {
+        text: root.number;
+        color: Theme.on-brand;
+        font-size: 9px;
+        font-weight: 700;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+}
+
+export component FieldLabel inherits Text {
+    color: Theme.text-muted;
+    font-size: 12px;
+    vertical-alignment: center;
+}
+
+export component SectionHeading inherits Text {
+    color: Theme.brand-text;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+}
+
+// White card with a heading, used to group settings.
+export component Card inherits Rectangle {
+    in property <string> heading;
+    background: Theme.surface;
+    border-radius: Theme.radius;
+    border-width: 1px;
+    border-color: Theme.border;
+
+    VerticalLayout {
+        padding: 14px;
+        spacing: 10px;
+        if root.heading != "": SectionHeading {
+            text: root.heading;
+        }
+        @children
+    }
+}
+
+export component ColorSwatch inherits Rectangle {
+    in property <color> value;
+    callback clicked();
+    width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    background: root.value;
+    border-width: touch.has-hover ? 2px : 1px;
+    border-color: touch.has-hover ? Theme.text : Theme.border;
+    touch := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => { root.clicked(); }
+    }
+}

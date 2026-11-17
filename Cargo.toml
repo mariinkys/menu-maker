@@ -1,0 +1,52 @@
+[package]
+name = "menu-maker"
+version = "0.1.0"
+edition = "2024"
+description = "Editor de cartas de restaurante para el Hotel Casa Peix"
+license = "GPL-3.0"
+default-run = "menu-maker"
+
+[lib]
+name = "menu_core"
+path = "src/lib.rs"
+
+[[bin]]
+name = "menu-maker"
+path = "src/main.rs"
+
+[dependencies]
+# UI
+slint = "1.19"
+rfd = "0.18"
+
+# PDF writing, PDF rasterising (preview), text shaping
+krilla = { version = "0.8", default-features = false, features = ["raster-images"] }
+hayro = { version = "0.9", default-features = false }
+harfrust = "0.16"
+
+# Font metrics / coverage checks (same version krilla uses, so no extra copy).
+skrifa = "0.42.1"
+fontdb = "0.24"
+
+# Persistence
+rusqlite = { version = "0.43", features = ["bundled"] }
+dirs = "7"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+tracing-appender = "0.2"
+
+[build-dependencies]
+slint-build = "1.19"
+
+[profile.release]
+lto = "thin"
+strip = true
+
+# Keep image/PDF/raster code fast in debug builds too.
+[profile.dev.package."*"]
+opt-level = 2

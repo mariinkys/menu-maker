@@ -1,0 +1,436 @@
+// "Design" tab: page, layout, header, typography, colours, prices, allergens.
+
+import { LineEdit, ComboBox, SpinBox, CheckBox, Switch, Slider, Button, ScrollView } from "std-widgets.slint";
+import { Theme, FieldLabel, Card, ColorSwatch } from "theme.slint";
+import { DesignState, Catalog, Actions, FontRow } from "state.slint";
+
+// Label on the left, control(s) on the right.
+component Row inherits HorizontalLayout {
+    in property <string> label;
+    in property <length> label-width: 176px;
+    spacing: 10px;
+    FieldLabel {
+        text: root.label;
+        width: root.label-width;
+    }
+    @children
+}
+
+component StyleToggle inherits Rectangle {
+    in property <string> glyph;
+    in property <bool> bold-glyph;
+    in property <bool> italic-glyph;
+    in-out property <bool> checked;
+    callback toggled();
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: root.checked ? Theme.brand : touch.has-hover ? Theme.hover : Theme.chip;
+    border-width: 1px;
+    border-color: root.checked ? Theme.brand : Theme.border;
+    Text {
+        text: root.glyph;
+        color: root.checked ? Theme.on-brand : Theme.text;
+        font-weight: root.bold-glyph ? 800 : 400;
+        font-italic: root.italic-glyph;
+        font-size: 14px;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+    touch := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => {
+            root.checked = !root.checked;
+            root.toggled();
+        }
+    }
+}
+
+component FontEditor inherits HorizontalLayout {
+    in property <FontRow> font;
+    in property <int> index;
+    spacing: 6px;
+
+    FieldLabel {
+        text: [@tr("Title"), @tr("Subtitle"), @tr("Sections"), @tr("Dishes"), @tr("Description"), @tr("Price")][root.index];
+        width: 76px;
+    }
+    family := ComboBox {
+        model: Catalog.font-families;
+        current-index: root.font.family-index;
+        horizontal-stretch: 1;
+        selected => { root.notify(); }
+    }
+    size := SpinBox {
+        minimum: 4;
+        maximum: 96;
+        value: root.font.size;
+        width: 96px;
+        edited => { root.notify(); }
+    }
+    bold := StyleToggle {
+        glyph: @tr("B");
+        bold-glyph: true;
+        checked: root.font.bold;
+        toggled => { root.notify(); }
+    }
+    italic := StyleToggle {
+        glyph: @tr("I");
+        italic-glyph: true;
+        checked: root.font.italic;
+        toggled => { root.notify(); }
+    }
+
+    function notify() {
+        Actions.font-changed(root.index, family.current-index, size.value, bold.checked, italic.checked);
+    }
+}
+
+component ColorEditor inherits HorizontalLayout {
+    in property <string> label;
+    in property <color> value;
+    in-out property <string> hex;
+    spacing: 8px;
+    FieldLabel {
+        text: root.label;
+        width: 176px;
+    }
+    VerticalLayout {
+        alignment: center;
+        ColorSwatch { value: root.value; }
+    }
+    LineEdit {
+        text <=> root.hex;
+        width: 110px;
+        placeholder-text: "#AD0000";
+        edited => { Actions.design-changed(); }
+    }
+    Rectangle { }
+}
+
+export component DesignPanel inherits Rectangle {
+    scroll := ScrollView {
+        VerticalLayout {
+            width: scroll.visible-width;
+            alignment: start;
+            padding: 14px;
+            spacing: 12px;
+
+            Card {
+                heading: @tr("PAGE");
+                Row {
+                    label: @tr("Paper size");
+                    ComboBox {
+                        model: Catalog.paper-sizes;
+                        current-index <=> DesignState.paper-index;
+                        selected => { Actions.design-changed(); }
+                    }
+                }
+                if DesignState.paper-index == 5: Row {
+                    label: @tr("Width × height (mm)");
+                    SpinBox {
+                        minimum: 50;
+                        maximum: 2000;
+                        value <=> DesignState.custom-width;
+                        edited => { Actions.design-changed(); }
+                    }
+                    SpinBox {
+                        minimum: 50;
+                        maximum: 2000;
+                        value <=> DesignState.custom-height;
+                        edited => { Actions.design-changed(); }
+                    }
+                }
+                Row {
+                    label: @tr("Orientation");
+                    ComboBox {
+                        model: [@tr("Portrait"), @tr("Landscape")];
+                        current-index <=> DesignState.orientation-index;
+                        selected => { Actions.design-changed(); }
+                    }
+                }
+                Row {
+                    label: @tr("Top / bottom margins (mm)");
+                    SpinBox {
+                        minimum: 0;
+                        maximum: 100;
+                        value <=> DesignState.margin-top;
+                        edited => { Actions.design-changed(); }
+                    }
+                    SpinBox {
+                        minimum: 0;
+                        maximum: 100;
+                        value <=> DesignState.margin-bottom;
+                        edited => { Actions.design-changed(); }
+                    }
+                }
+                Row {
+                    label: @tr("Left / right margins (mm)");
+                    SpinBox {
+                        minimum: 0;
+                        maximum: 100;
+                        value <=> DesignState.margin-left;
+                        edited => { Actions.design-changed(); }
+                    }
+                    SpinBox {
+                        minimum: 0;
+                        maximum: 100;
+                        value <=> DesignState.margin-right;
+                        edited => { Actions.design-changed(); }
+                    }
+                }
+            }
+
+            Card {
+                heading: @tr("LAYOUT");
+                Row {
+                    label: @tr("Columns");
+                    ComboBox {
+                        model: [@tr("1 column"), @tr("2 columns"), @tr("3 columns")];
+                        current-index <=> DesignState.columns-index;
+                        selected => { Actions.design-changed(); }
+                    }
+                }
+                Row {
+                    label: @tr("Alignment");
+                    ComboBox {
+                        model: [@tr("Left (price on the right)"), @tr("Centred"), @tr("Right")];
+                        current-index <=> DesignState.align-index;
+                        selected => { Actions.design-changed(); }
+                    }
+                }
+                Row {
+                    label: @tr("Content width");
+                    Slider {
+                        minimum: 40;
+                        maximum: 100;
+                        step: 5;
+                        value: DesignState.body-width;
+                        horizontal-stretch: 1;
+                        changed(v) => {
+                            DesignState.body-width = round(v);
+                            Actions.design-changed();
+                        }
+                    }
+                    FieldLabel {
+                        text: "\{DesignState.body-width} %";
+                        width: 44px;
+                    }
+                }
+                if DesignState.columns-index > 0: Row {
+                    label: @tr("Column gap (mm)");
+                    SpinBox {
+                        minimum: 0;
+                        maximum: 60;
+                        value <=> DesignState.column-gap;
+                        edited => { Actions.design-changed(); }
+                    }
+                    Rectangle { }
+                }
+                if DesignState.columns-index > 0: CheckBox {
+                    text: @tr("Vertical rule between columns");
+                    checked <=> DesignState.column-rule;
+                    toggled => { Actions.design-changed(); }
+                }
+                if DesignState.columns-index > 0: CheckBox {
+                    text: @tr("Keep each section in one column");
+                    checked <=> DesignState.keep-together;
+                    toggled => { Actions.design-changed(); }
+                }
+                CheckBox {
+                    text: @tr("Centre dishes vertically");
+                    checked <=> DesignState.vertical-center;
+                    toggled => { Actions.design-changed(); }
+                }
+            }
+
+            Card {
+                heading: @tr("HEADER");
+                Row {
+                    label: @tr("Logo position");
+                    ComboBox {
+                        model: [@tr("Left"), @tr("Centre"), @tr("Right")];
+                        current-index <=> DesignState.logo-align;
+                        selected => { Actions.design-changed(); }
+                    }
+                }
+                Row {
+                    label: @tr("Logo height (mm)");
+                    SpinBox {
+                        minimum: 5;
+                        maximum: 120;
+                        value <=> DesignState.logo-height;
+                        edited => { Actions.design-changed(); }
+                    }
+                    Rectangle { }
+                }
+                Row {
+                    label: @tr("Title alignment");
+                    ComboBox {
+                        model: [@tr("Left"), @tr("Centre"), @tr("Right")];
+                        current-index <=> DesignState.title-align;
+                        selected => { Actions.design-changed(); }
+                    }
+                }
+                CheckBox {
+                    text: @tr("Decorative rule under the header");
+                    checked <=> DesignState.header-divider;
+                    toggled => { Actions.design-changed(); }
+                }
+            }
+
+            Card {
+                heading: @tr("TYPOGRAPHY");
+                HorizontalLayout {
+                    spacing: 6px;
+                    FieldLabel { text: ""; width: 76px; }
+                    FieldLabel { text: @tr("Font"); horizontal-stretch: 1; }
+                    FieldLabel { text: @tr("Size (pt)"); width: 96px; }
+                    FieldLabel { text: @tr("Style"); width: 62px; }
+                }
+                for font-row[i] in DesignState.fonts: FontEditor {
+                    font: font-row;
+                    index: i;
+                }
+                FieldLabel {
+                    text: @tr("B = bold, I = italic. If the menu does not fit on the sheet, all sizes are reduced by the same proportion.");
+                    wrap: word-wrap;
+                    font-size: 11px;
+                }
+                CheckBox {
+                    text: @tr("Section titles in capitals");
+                    checked <=> DesignState.uppercase-sections;
+                    toggled => { Actions.design-changed(); }
+                }
+                CheckBox {
+                    text: @tr("Decorative rule under each section");
+                    checked <=> DesignState.section-dividers;
+                    toggled => { Actions.design-changed(); }
+                }
+                Row {
+                    label: @tr("Spacing");
+                    Slider {
+                        minimum: 0.5;
+                        maximum: 2.0;
+                        step: 0.05;
+                        value: DesignState.spacing;
+                        horizontal-stretch: 1;
+                        changed(v) => {
+                            DesignState.spacing = v;
+                            Actions.design-changed();
+                        }
+                    }
+                    FieldLabel {
+                        text: "\{round(DesignState.spacing * 100)} %";
+                        width: 44px;
+                    }
+                }
+                Switch {
+                    text: @tr("Enlarge text to fill the page");
+                    checked <=> DesignState.grow-to-fill;
+                    toggled => { Actions.design-changed(); }
+                }
+            }
+
+            Card {
+                heading: @tr("COLOURS");
+                ColorEditor {
+                    label: @tr("Accent (titles, prices)");
+                    value: DesignState.accent-color;
+                    hex <=> DesignState.accent-hex;
+                }
+                HorizontalLayout {
+                    spacing: 8px;
+                    FieldLabel { text: ""; width: 176px; }
+                    for c in [
+                        { hex: "#AD0000", value: #AD0000 },
+                        { hex: "#1F3A5F", value: #1F3A5F },
+                        { hex: "#2F5D3A", value: #2F5D3A },
+                        { hex: "#8A6D3B", value: #8A6D3B },
+                        { hex: "#5B2A86", value: #5B2A86 },
+                        { hex: "#222222", value: #222222 },
+                    ]: ColorSwatch {
+                        value: c.value;
+                        clicked => {
+                            DesignState.accent-hex = c.hex;
+                            Actions.design-changed();
+                        }
+                    }
+                    Rectangle { }
+                }
+                ColorEditor {
+                    label: @tr("Text (dishes)");
+                    value: DesignState.text-color;
+                    hex <=> DesignState.text-hex;
+                }
+                ColorEditor {
+                    label: @tr("Secondary (descriptions)");
+                    value: DesignState.muted-color;
+                    hex <=> DesignState.muted-hex;
+                }
+            }
+
+            Card {
+                heading: @tr("PRICES");
+                Row {
+                    label: @tr("Currency symbol");
+                    LineEdit {
+                        text <=> DesignState.currency;
+                        width: 70px;
+                        edited => { Actions.design-changed(); }
+                    }
+                    Rectangle { }
+                }
+                CheckBox {
+                    text: @tr("Symbol before the amount (€12)");
+                    checked <=> DesignState.symbol-before;
+                    toggled => { Actions.design-changed(); }
+                }
+                CheckBox {
+                    text: @tr("Always show decimals (12.00)");
+                    checked <=> DesignState.always-decimals;
+                    toggled => { Actions.design-changed(); }
+                }
+                CheckBox {
+                    text: @tr("Dot leaders up to the price (left alignment)");
+                    checked <=> DesignState.dot-leaders;
+                    toggled => { Actions.design-changed(); }
+                }
+            }
+
+            Card {
+                heading: @tr("ALLERGENS");
+                Row {
+                    label: @tr("Show allergens as");
+                    ComboBox {
+                        model: [@tr("Numbered icons"), @tr("Numbers in brackets"), @tr("Hide")];
+                        current-index <=> DesignState.allergen-mode;
+                        selected => { Actions.design-changed(); }
+                    }
+                }
+                CheckBox {
+                    text: @tr("Allergen legend at the bottom of the menu");
+                    checked <=> DesignState.show-legend;
+                    toggled => { Actions.design-changed(); }
+                }
+                if DesignState.show-legend: Row {
+                    label: @tr("Legend language");
+                    ComboBox {
+                        // Language names are shown in their own language.
+                        model: ["Español", "English"];
+                        current-index <=> DesignState.legend-language;
+                        selected => { Actions.design-changed(); }
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                alignment: center;
+                Button {
+                    text: @tr("Reset to the default design");
+                    clicked => { Actions.reset-design(); }
+                }
+            }
+        }
+    }
+}

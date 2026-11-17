@@ -1,0 +1,141 @@
+// "Presets" tab: save / load / delete presets stored in SQLite.
+
+import { LineEdit, Button, ScrollView } from "std-widgets.slint";
+import { Theme, IconButton, FieldLabel, Card, PrimaryButton } from "theme.slint";
+import { PresetState, Actions, PresetRow } from "state.slint";
+
+component PresetItem inherits Rectangle {
+    in property <PresetRow> preset;
+    border-radius: 7px;
+    background: touch.has-hover ? Theme.hover : transparent;
+    height: 44px;
+
+    touch := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        double-clicked => { Actions.preset-load(root.preset.id); }
+    }
+
+    HorizontalLayout {
+        padding-left: 8px;
+        padding-right: 4px;
+        spacing: 10px;
+        VerticalLayout {
+            alignment: center;
+            Rectangle {
+                width: 58px;
+                height: 20px;
+                border-radius: 10px;
+                background: root.preset.is-style ? Theme.info-soft : Theme.brand-soft;
+                Text {
+                    text: root.preset.is-style ? @tr("Design") : @tr("Menu");
+                    color: root.preset.is-style ? Theme.info : Theme.brand-text;
+                    font-size: 11px;
+                    font-weight: 600;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+        }
+        VerticalLayout {
+            alignment: center;
+            horizontal-stretch: 1;
+            Text {
+                text: root.preset.name;
+                color: Theme.text;
+                font-size: 13px;
+                font-weight: 600;
+                overflow: elide;
+            }
+            Text {
+                text: @tr("Saved: {}", root.preset.updated);
+                color: Theme.text-muted;
+                font-size: 11px;
+            }
+        }
+        VerticalLayout {
+            alignment: center;
+            Button {
+                text: @tr("Load");
+                clicked => { Actions.preset-load(root.preset.id); }
+            }
+        }
+        VerticalLayout {
+            alignment: center;
+            IconButton {
+                icon: "trash";
+                clicked => { Actions.preset-delete(root.preset.id); }
+            }
+        }
+    }
+}
+
+export component PresetsPanel inherits Rectangle {
+    scroll := ScrollView {
+        VerticalLayout {
+            width: scroll.visible-width;
+            alignment: start;
+            padding: 14px;
+            spacing: 12px;
+
+            Card {
+                heading: @tr("SAVE PRESET");
+                LineEdit {
+                    text <=> PresetState.new-name;
+                    placeholder-text: @tr("Name, e.g. “Summer menu”");
+                }
+                HorizontalLayout {
+                    spacing: 8px;
+                    PrimaryButton {
+                        text: @tr("Save full menu");
+                        horizontal-stretch: 1;
+                        enabled: PresetState.new-name != "";
+                        clicked => { Actions.preset-save-menu(PresetState.new-name); }
+                    }
+                    Button {
+                        text: @tr("Save design only");
+                        horizontal-stretch: 1;
+                        enabled: PresetState.new-name != "";
+                        clicked => { Actions.preset-save-style(PresetState.new-name); }
+                    }
+                }
+                FieldLabel {
+                    text: @tr("“Menu” saves dishes, texts and design. “Design” only saves page, columns, fonts and colours, to apply them to any menu. An existing name is overwritten.");
+                    wrap: word-wrap;
+                    font-size: 11px;
+                }
+            }
+
+            Card {
+                heading: @tr("SAVED PRESETS");
+                if PresetState.presets.length == 0: FieldLabel {
+                    text: @tr("You have not saved any presets yet.");
+                }
+                for preset in PresetState.presets: PresetItem {
+                    preset: preset;
+                }
+            }
+
+            Card {
+                heading: @tr("FILES");
+                FieldLabel {
+                    text: @tr("To move a menu to another computer, export it to a .json file and import it there.");
+                    wrap: word-wrap;
+                    font-size: 11px;
+                }
+                HorizontalLayout {
+                    spacing: 8px;
+                    Button {
+                        text: @tr("Import from file…");
+                        horizontal-stretch: 1;
+                        clicked => { Actions.import-json(); }
+                    }
+                    Button {
+                        text: @tr("Export to file…");
+                        horizontal-stretch: 1;
+                        clicked => { Actions.export-json(); }
+                    }
+                }
+            }
+        }
+    }
+}

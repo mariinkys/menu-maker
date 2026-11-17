@@ -1,0 +1,814 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: menu-maker 0.1.0\n"
+"POT-Creation-Date: 2026-11-17 07:56+0000\n"
+"PO-Revision-Date: 2026-11-17 07:56+0000\n"
+"Last-Translator: menu-maker\n"
+"Language-Team: Spanish (Spain)\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ui/app.slint:18 ui/app.slint:59 ui/settings-dialog.slint:121
+msgid "Casa Peix · Menu Editor"
+msgstr "Casa Peix · Editor de Cartas"
+
+#: ui/app.slint:69
+msgid "New menu"
+msgstr "Nueva carta"
+
+#. --- PDF ---------------------------------------------------------------
+#: ui/app.slint:76 ui/strings.slint:76
+msgid "Export PDF"
+msgstr "Exportar PDF"
+
+#: ui/app.slint:103
+msgid "Content"
+msgstr "Contenido"
+
+#: ui/app.slint:107 ui/presets-panel.slint:30
+msgid "Design"
+msgstr "Diseño"
+
+#: ui/app.slint:111
+msgid "Presets"
+msgstr "Presets"
+
+#: ui/content-panel.slint:60
+msgid "(unnamed dish)"
+msgstr "(plato sin nombre)"
+
+#: ui/content-panel.slint:112
+msgid "Dish name"
+msgstr "Nombre del plato"
+
+#: ui/content-panel.slint:115
+msgid "e.g. Ham croquettes"
+msgstr "p. ej. Croquetas de jamón"
+
+#: ui/content-panel.slint:125 ui/design-panel.slint:55
+msgid "Price"
+msgstr "Precio"
+
+#: ui/content-panel.slint:128
+msgid "12.50"
+msgstr "12,50"
+
+#: ui/content-panel.slint:136 ui/design-panel.slint:55
+msgid "Description"
+msgstr "Descripción"
+
+#: ui/content-panel.slint:145
+msgid "Allergens"
+msgstr "Alérgenos"
+
+#: ui/content-panel.slint:176
+msgid "Section name"
+msgstr "Nombre de la sección"
+
+#: ui/content-panel.slint:182
+msgid "{n} dish"
+msgid_plural "{n} dishes"
+msgstr[0] "{n} plato"
+msgstr[1] "{n} platos"
+
+#: ui/content-panel.slint:207
+msgid "Optional note under the title (e.g. “To share”)"
+msgstr "Nota opcional bajo el título (p. ej. «Para compartir»)"
+
+#: ui/content-panel.slint:222
+msgid "+  Add dish"
+msgstr "+  Añadir plato"
+
+#: ui/content-panel.slint:239 ui/design-panel.slint:248
+msgid "HEADER"
+msgstr "CABECERA"
+
+#: ui/content-panel.slint:242
+msgid "Menu title"
+msgstr "Título de la carta"
+
+#: ui/content-panel.slint:245
+msgid "e.g. Garden Menu"
+msgstr "p. ej. Carta del Jardín"
+
+#: ui/content-panel.slint:251
+msgid "Subtitle (optional)"
+msgstr "Subtítulo (opcional)"
+
+#: ui/content-panel.slint:254
+msgid "e.g. Autumn · Winter 2026"
+msgstr "p. ej. Otoño · Invierno 2026"
+
+#: ui/content-panel.slint:263
+msgid "Logo"
+msgstr "Logo"
+
+#: ui/content-panel.slint:265 ui/strings.slint:37
+msgid "App logo"
+msgstr "Logo de la aplicación"
+
+#: ui/content-panel.slint:265 ui/settings-dialog.slint:129
+msgid "Custom image…"
+msgstr "Imagen propia…"
+
+#: ui/content-panel.slint:265 ui/settings-dialog.slint:129
+msgid "No logo"
+msgstr "Sin logo"
+
+#: ui/content-panel.slint:279 ui/settings-dialog.slint:144
+msgid "No file"
+msgstr "Ningún archivo"
+
+#: ui/content-panel.slint:281 ui/settings-dialog.slint:149
+msgid "Choose image…"
+msgstr "Elegir imagen…"
+
+#: ui/content-panel.slint:288
+msgid "Uses the app logo, which you change in the app settings (gear icon, top right). Position and size are set in the “Design” tab."
+msgstr "Usa el logo de la aplicación, que se cambia en los ajustes (icono del engranaje, arriba a la derecha). La posición y el tamaño se ajustan en la pestaña «Diseño»."
+
+#: ui/content-panel.slint:289
+msgid "Logo and title position and size are set in the “Design” tab."
+msgstr "La posición y el tamaño del logo y del título se ajustan en la pestaña «Diseño»."
+
+#: ui/content-panel.slint:303
+msgid "The menu is empty. Add a section to get started."
+msgstr "La carta está vacía. Añade una sección para empezar."
+
+#: ui/content-panel.slint:311
+msgid "+  Add section"
+msgstr "+  Añadir sección"
+
+#: ui/content-panel.slint:317
+msgid "FOOTER"
+msgstr "PIE DE PÁGINA"
+
+#: ui/content-panel.slint:326
+msgid "The allergen legend is added automatically above this text."
+msgstr "La leyenda de alérgenos se añade automáticamente encima de este texto."
+
+#: ui/design-panel.slint:55
+msgid "Title"
+msgstr "Título"
+
+#: ui/design-panel.slint:55
+msgid "Subtitle"
+msgstr "Subtítulo"
+
+#: ui/design-panel.slint:55
+msgid "Sections"
+msgstr "Secciones"
+
+#: ui/design-panel.slint:55
+msgid "Dishes"
+msgstr "Platos"
+
+#: ui/design-panel.slint:72
+msgid "B"
+msgstr "N"
+
+#: ui/design-panel.slint:78
+msgid "I"
+msgstr "K"
+
+#: ui/design-panel.slint:120
+msgid "PAGE"
+msgstr "PÁGINA"
+
+#: ui/design-panel.slint:122
+msgid "Paper size"
+msgstr "Tamaño del papel"
+
+#: ui/design-panel.slint:130
+msgid "Width × height (mm)"
+msgstr "Ancho × alto (mm)"
+
+#: ui/design-panel.slint:145
+msgid "Orientation"
+msgstr "Orientación"
+
+#: ui/design-panel.slint:147
+msgid "Portrait"
+msgstr "Vertical"
+
+#: ui/design-panel.slint:147
+msgid "Landscape"
+msgstr "Horizontal"
+
+#: ui/design-panel.slint:153
+msgid "Top / bottom margins (mm)"
+msgstr "Márgenes sup. / inf. (mm)"
+
+#: ui/design-panel.slint:168
+msgid "Left / right margins (mm)"
+msgstr "Márgenes izq. / der. (mm)"
+
+#: ui/design-panel.slint:185
+msgid "LAYOUT"
+msgstr "DISTRIBUCIÓN"
+
+#: ui/design-panel.slint:187
+msgid "Columns"
+msgstr "Columnas"
+
+#: ui/design-panel.slint:189
+msgid "1 column"
+msgstr "1 columna"
+
+#: ui/design-panel.slint:189
+msgid "2 columns"
+msgstr "2 columnas"
+
+#: ui/design-panel.slint:189
+msgid "3 columns"
+msgstr "3 columnas"
+
+#: ui/design-panel.slint:195
+msgid "Alignment"
+msgstr "Alineación"
+
+#: ui/design-panel.slint:197
+msgid "Left (price on the right)"
+msgstr "Izquierda (precio a la derecha)"
+
+#: ui/design-panel.slint:197
+msgid "Centred"
+msgstr "Centrada"
+
+#: ui/design-panel.slint:197 ui/design-panel.slint:252 ui/design-panel.slint:197 ui/design-panel.slint:252
+msgid "Right"
+msgstr "Derecha"
+
+#: ui/design-panel.slint:203
+msgid "Content width"
+msgstr "Ancho del contenido"
+
+#: ui/design-panel.slint:221
+msgid "Column gap (mm)"
+msgstr "Separación columnas (mm)"
+
+#: ui/design-panel.slint:231
+msgid "Vertical rule between columns"
+msgstr "Línea vertical entre columnas"
+
+#: ui/design-panel.slint:236
+msgid "Keep each section in one column"
+msgstr "No partir secciones entre columnas"
+
+#: ui/design-panel.slint:241
+msgid "Centre dishes vertically"
+msgstr "Centrar verticalmente los platos"
+
+#: ui/design-panel.slint:250
+msgid "Logo position"
+msgstr "Posición del logo"
+
+#: ui/design-panel.slint:252 ui/design-panel.slint:270
+msgid "Left"
+msgstr "Izquierda"
+
+#: ui/design-panel.slint:252 ui/design-panel.slint:270
+msgid "Centre"
+msgstr "Centro"
+
+#: ui/design-panel.slint:258
+msgid "Logo height (mm)"
+msgstr "Altura del logo (mm)"
+
+#: ui/design-panel.slint:268
+msgid "Title alignment"
+msgstr "Alineación del título"
+
+#: ui/design-panel.slint:276
+msgid "Decorative rule under the header"
+msgstr "Línea decorativa bajo la cabecera"
+
+#: ui/design-panel.slint:283
+msgid "TYPOGRAPHY"
+msgstr "TIPOGRAFÍA"
+
+#: ui/design-panel.slint:287
+msgid "Font"
+msgstr "Fuente"
+
+#: ui/design-panel.slint:288
+msgid "Size (pt)"
+msgstr "Tamaño (pt)"
+
+#: ui/design-panel.slint:289
+msgid "Style"
+msgstr "Estilo"
+
+#: ui/design-panel.slint:296
+msgid "B = bold, I = italic. If the menu does not fit on the sheet, all sizes are reduced by the same proportion."
+msgstr "N = negrita, K = cursiva. Si la carta no cabe en la hoja, todos los tamaños se reducen en la misma proporción."
+
+#: ui/design-panel.slint:301
+msgid "Section titles in capitals"
+msgstr "Títulos de sección en mayúsculas"
+
+#: ui/design-panel.slint:306
+msgid "Decorative rule under each section"
+msgstr "Línea decorativa bajo cada sección"
+
+#: ui/design-panel.slint:311
+msgid "Spacing"
+msgstr "Espaciado"
+
+#: ui/design-panel.slint:329
+msgid "Enlarge text to fill the page"
+msgstr "Ampliar el texto para llenar la página"
+
+#: ui/design-panel.slint:336
+msgid "COLOURS"
+msgstr "COLORES"
+
+#: ui/design-panel.slint:338
+msgid "Accent (titles, prices)"
+msgstr "Acento (títulos, precios)"
+
+#: ui/design-panel.slint:362
+msgid "Text (dishes)"
+msgstr "Texto (platos)"
+
+#: ui/design-panel.slint:367
+msgid "Secondary (descriptions)"
+msgstr "Secundario (descripciones)"
+
+#: ui/design-panel.slint:374
+msgid "PRICES"
+msgstr "PRECIOS"
+
+#: ui/design-panel.slint:376
+msgid "Currency symbol"
+msgstr "Símbolo de moneda"
+
+#: ui/design-panel.slint:385
+msgid "Symbol before the amount (€12)"
+msgstr "Símbolo delante del importe (€12)"
+
+#: ui/design-panel.slint:390
+msgid "Always show decimals (12.00)"
+msgstr "Mostrar siempre los decimales (12,00)"
+
+#: ui/design-panel.slint:395
+msgid "Dot leaders up to the price (left alignment)"
+msgstr "Puntos guía hasta el precio (alineación izquierda)"
+
+#: ui/design-panel.slint:402
+msgid "ALLERGENS"
+msgstr "ALÉRGENOS"
+
+#: ui/design-panel.slint:404
+msgid "Show allergens as"
+msgstr "Indicar alérgenos con"
+
+#: ui/design-panel.slint:406
+msgid "Numbered icons"
+msgstr "Iconos numerados"
+
+#: ui/design-panel.slint:406
+msgid "Numbers in brackets"
+msgstr "Números entre paréntesis"
+
+#: ui/design-panel.slint:406
+msgid "Hide"
+msgstr "No mostrar"
+
+#: ui/design-panel.slint:412
+msgid "Allergen legend at the bottom of the menu"
+msgstr "Leyenda de alérgenos al pie de la carta"
+
+#: ui/design-panel.slint:417
+msgid "Legend language"
+msgstr "Idioma de la leyenda"
+
+#: ui/design-panel.slint:430
+msgid "Reset to the default design"
+msgstr "Restablecer el diseño por defecto"
+
+#: ui/presets-panel.slint:30
+msgid "Menu"
+msgstr "Carta"
+
+#: ui/presets-panel.slint:50
+msgid "Saved: {}"
+msgstr "Guardado: {}"
+
+#: ui/presets-panel.slint:58
+msgid "Load"
+msgstr "Cargar"
+
+#: ui/presets-panel.slint:81
+msgid "SAVE PRESET"
+msgstr "GUARDAR PRESET"
+
+#: ui/presets-panel.slint:84
+msgid "Name, e.g. “Summer menu”"
+msgstr "Nombre, p. ej. «Carta de verano»"
+
+#: ui/presets-panel.slint:89
+msgid "Save full menu"
+msgstr "Guardar carta completa"
+
+#: ui/presets-panel.slint:95
+msgid "Save design only"
+msgstr "Guardar solo el diseño"
+
+#: ui/presets-panel.slint:102
+msgid "“Menu” saves dishes, texts and design. “Design” only saves page, columns, fonts and colours, to apply them to any menu. An existing name is overwritten."
+msgstr "«Carta» guarda platos, textos y diseño. «Diseño» guarda solo página, columnas, fuentes y colores, para aplicarlo a cualquier carta. Si el nombre ya existe, se sobrescribe."
+
+#: ui/presets-panel.slint:109
+msgid "SAVED PRESETS"
+msgstr "PRESETS GUARDADOS"
+
+#: ui/presets-panel.slint:111
+msgid "You have not saved any presets yet."
+msgstr "Todavía no has guardado ningún preset."
+
+#: ui/presets-panel.slint:119
+msgid "FILES"
+msgstr "ARCHIVOS"
+
+#: ui/presets-panel.slint:121
+msgid "To move a menu to another computer, export it to a .json file and import it there."
+msgstr "Para llevar una carta a otro ordenador, expórtala a un archivo .json e impórtala allí."
+
+#: ui/presets-panel.slint:128
+msgid "Import from file…"
+msgstr "Importar desde archivo…"
+
+#: ui/presets-panel.slint:133
+msgid "Export to file…"
+msgstr "Exportar a archivo…"
+
+#: ui/preview-pane.slint:23
+msgid "Text at {} %"
+msgstr "Texto al {} %"
+
+#: ui/preview-pane.slint:30
+msgid "Updating…"
+msgstr "Actualizando…"
+
+#: ui/preview-pane.slint:40
+msgid "Render error"
+msgstr "Error al generar"
+
+#: ui/preview-pane.slint:40
+msgid "✓ Fits on one sheet"
+msgstr "✓ Cabe en una hoja"
+
+#: ui/preview-pane.slint:40
+msgid "Does not fit on one sheet"
+msgstr "No cabe en una hoja"
+
+#: ui/preview-pane.slint:87
+msgid "The content does not fit on one sheet even at the smallest text size. Shorten descriptions, reduce margins or use more columns."
+msgstr "El contenido no cabe en una hoja ni reduciendo el texto al mínimo. Acorta descripciones, reduce márgenes o usa más columnas."
+
+#: ui/settings-dialog.slint:45
+msgid "App settings"
+msgstr "Ajustes de la aplicación"
+
+#: ui/settings-dialog.slint:58
+msgid "APPEARANCE"
+msgstr "APARIENCIA"
+
+#: ui/settings-dialog.slint:61
+msgid "Language"
+msgstr "Idioma"
+
+#: ui/settings-dialog.slint:71
+msgid "Theme"
+msgstr "Tema"
+
+#: ui/settings-dialog.slint:73
+msgid "Light"
+msgstr "Claro"
+
+#: ui/settings-dialog.slint:73
+msgid "Dark"
+msgstr "Oscuro"
+
+#: ui/settings-dialog.slint:80
+msgid "Main colour"
+msgstr "Color principal"
+
+#: ui/settings-dialog.slint:115
+msgid "IDENTITY"
+msgstr "IDENTIDAD"
+
+#: ui/settings-dialog.slint:118
+msgid "App title"
+msgstr "Título de la aplicación"
+
+#: ui/settings-dialog.slint:127
+msgid "Top bar logo"
+msgstr "Logo de la barra"
+
+#: ui/settings-dialog.slint:129
+msgid "Casa Peix logo"
+msgstr "Logo Casa Peix"
+
+#: ui/settings-dialog.slint:155
+msgid "Recolour the logo (for single-colour logos)"
+msgstr "Recolorear el logo (para logos de un solo color)"
+
+#: ui/settings-dialog.slint:161
+msgid "These settings change how the app looks. The main colour is also the accent colour when a menu design is reset, and the app logo is the default logo of every menu."
+msgstr "Estos ajustes cambian el aspecto de la aplicación. El color principal también es el color de acento al restablecer el diseño de una carta, y el logo de la aplicación es el logo predeterminado de las cartas."
+
+#: ui/settings-dialog.slint:169
+msgid "Reset (Casa Peix)"
+msgstr "Restablecer (Casa Peix)"
+
+#: ui/settings-dialog.slint:174
+msgid "Close"
+msgstr "Cerrar"
+
+#: ui/state.slint:43
+msgid "Gluten"
+msgstr "Gluten"
+
+#: ui/state.slint:43
+msgid "Crustaceans"
+msgstr "Crustáceos"
+
+#: ui/state.slint:43
+msgid "Eggs"
+msgstr "Huevos"
+
+#: ui/state.slint:43
+msgid "Fish"
+msgstr "Pescado"
+
+#: ui/state.slint:43
+msgid "Peanuts"
+msgstr "Cacahuetes"
+
+#: ui/state.slint:43
+msgid "Soy"
+msgstr "Soja"
+
+#: ui/state.slint:43
+msgid "Milk"
+msgstr "Lácteos"
+
+#: ui/state.slint:44
+msgid "Tree nuts"
+msgstr "F. cáscara"
+
+#: ui/state.slint:44
+msgid "Celery"
+msgstr "Apio"
+
+#: ui/state.slint:44
+msgid "Mustard"
+msgstr "Mostaza"
+
+#: ui/state.slint:44
+msgid "Sesame"
+msgstr "Sésamo"
+
+#: ui/state.slint:44
+msgid "Sulphites"
+msgstr "Sulfitos"
+
+#: ui/state.slint:44
+msgid "Lupin"
+msgstr "Altramuces"
+
+#: ui/state.slint:44
+msgid "Molluscs"
+msgstr "Moluscos"
+
+#: ui/state.slint:46
+msgid "A4 (210 × 297 mm)"
+msgstr "A4 (210 × 297 mm)"
+
+#: ui/state.slint:46
+msgid "A5 (148 × 210 mm)"
+msgstr "A5 (148 × 210 mm)"
+
+#: ui/state.slint:46
+msgid "A3 (297 × 420 mm)"
+msgstr "A3 (297 × 420 mm)"
+
+#: ui/state.slint:46
+msgid "US Letter (8.5 × 11 in)"
+msgstr "Carta US (8,5 × 11 in)"
+
+#: ui/state.slint:46
+msgid "US Legal (8.5 × 14 in)"
+msgstr "Legal US (8,5 × 14 in)"
+
+#: ui/state.slint:46 ui/strings.slint:20
+msgid "Custom"
+msgstr "Personalizado"
+
+#. --- General ---------------------------------------------------------
+#: ui/strings.slint:8
+msgid "Ready. Changes are saved automatically."
+msgstr "Listo. Los cambios se guardan automáticamente."
+
+#: ui/strings.slint:9
+msgid "Could not open the preset database: {}"
+msgstr "No se pudo abrir la base de datos de presets: {}"
+
+#: ui/strings.slint:10
+msgid "The preset database is not available."
+msgstr "La base de datos de presets no está disponible."
+
+#: ui/strings.slint:11
+msgid "Could not render the menu: {}"
+msgstr "No se pudo generar la carta: {}"
+
+#. --- Defaults for new content ----------------------------------------
+#: ui/strings.slint:14
+msgid "New section"
+msgstr "Nueva sección"
+
+#: ui/strings.slint:15
+msgid "New dish"
+msgstr "Nuevo plato"
+
+#: ui/strings.slint:19
+msgid "{} · {} × {} mm · {}"
+msgstr "{} · {} × {} mm · {}"
+
+#: ui/strings.slint:20
+msgid "US Letter"
+msgstr "Carta US"
+
+#: ui/strings.slint:20
+msgid "US Legal"
+msgstr "Legal US"
+
+#: ui/strings.slint:22
+msgid "landscape"
+msgstr "horizontal"
+
+#: ui/strings.slint:22
+msgid "portrait"
+msgstr "vertical"
+
+#: ui/strings.slint:27
+msgid "Click the bin again to delete “{}” and all its dishes ({})."
+msgstr "Pulsa otra vez la papelera para eliminar «{}» y todos sus platos ({})."
+
+#: ui/strings.slint:29
+msgid "Section “{}” deleted."
+msgstr "Sección «{}» eliminada."
+
+#: ui/strings.slint:31
+msgid "Click “New menu” again to start from scratch (the design is kept; save a preset first if you want to keep the dishes)."
+msgstr "Pulsa «Nueva carta» otra vez para empezar de cero (se mantiene el diseño; guarda antes un preset si quieres conservar los platos)."
+
+#: ui/strings.slint:33
+msgid "New menu created."
+msgstr "Nueva carta creada."
+
+#. --- Logos -------------------------------------------------------------
+#: ui/strings.slint:36
+msgid "Choose logo"
+msgstr "Elegir logo"
+
+#: ui/strings.slint:38
+msgid "Images"
+msgstr "Imágenes"
+
+#: ui/strings.slint:39
+msgid "Logo updated."
+msgstr "Logo actualizado."
+
+#: ui/strings.slint:40
+msgid "App logo updated."
+msgstr "Logo de la aplicación actualizado."
+
+#: ui/strings.slint:41
+msgid "Could not open the image: {}"
+msgstr "No se pudo abrir la imagen: {}"
+
+#: ui/strings.slint:42
+msgid "Unsupported image format (use PNG, JPEG, WebP or GIF)."
+msgstr "Formato de imagen no soportado (usa PNG, JPEG, WebP o GIF)."
+
+#: ui/strings.slint:43
+msgid "Invalid image: {}"
+msgstr "Imagen no válida: {}"
+
+#. --- Design & settings -------------------------------------------------
+#: ui/strings.slint:46
+msgid "Design reset."
+msgstr "Diseño restablecido."
+
+#: ui/strings.slint:47
+msgid "Settings reset (Casa Peix)."
+msgstr "Ajustes restablecidos (Casa Peix)."
+
+#: ui/strings.slint:48
+msgid "Could not save the settings: {}"
+msgstr "No se pudieron guardar los ajustes: {}"
+
+#. --- Presets -----------------------------------------------------------
+#: ui/strings.slint:51
+msgid "Could not read the presets: {}"
+msgstr "No se pudieron leer los presets: {}"
+
+#: ui/strings.slint:52
+msgid "Menu saved as “{}”."
+msgstr "Carta guardada como «{}»."
+
+#: ui/strings.slint:53
+msgid "Design saved as “{}”."
+msgstr "Diseño guardado como «{}»."
+
+#: ui/strings.slint:54
+msgid "Could not save: {}"
+msgstr "No se pudo guardar: {}"
+
+#: ui/strings.slint:55
+msgid "Menu loaded."
+msgstr "Carta cargada."
+
+#: ui/strings.slint:56
+msgid "Design applied to the current menu."
+msgstr "Diseño aplicado a la carta actual."
+
+#: ui/strings.slint:57
+msgid "Could not load: {}"
+msgstr "No se pudo cargar: {}"
+
+#: ui/strings.slint:58
+msgid "Click the bin again to delete the preset “{}”."
+msgstr "Pulsa otra vez la papelera para eliminar el preset «{}»."
+
+#: ui/strings.slint:59
+msgid "Preset “{}” deleted."
+msgstr "Preset «{}» eliminado."
+
+#: ui/strings.slint:60
+msgid "Could not delete: {}"
+msgstr "No se pudo eliminar: {}"
+
+#. --- Files -------------------------------------------------------------
+#: ui/strings.slint:63
+msgid "Import menu or design"
+msgstr "Importar carta o diseño"
+
+#: ui/strings.slint:64
+msgid "Export menu"
+msgstr "Exportar carta"
+
+#: ui/strings.slint:65
+msgid "Menu (JSON)"
+msgstr "Carta (JSON)"
+
+#: ui/strings.slint:66
+msgid "Could not read the file: {}"
+msgstr "No se pudo leer el archivo: {}"
+
+#: ui/strings.slint:67
+msgid "The file is not valid JSON: {}"
+msgstr "El archivo no es JSON válido: {}"
+
+#: ui/strings.slint:68
+msgid "Menu imported."
+msgstr "Carta importada."
+
+#: ui/strings.slint:69
+msgid "Design imported."
+msgstr "Diseño importado."
+
+#: ui/strings.slint:70
+msgid "Invalid menu format: {}"
+msgstr "Formato de carta no válido: {}"
+
+#: ui/strings.slint:71
+msgid "Invalid design format: {}"
+msgstr "Formato de diseño no válido: {}"
+
+#: ui/strings.slint:72
+msgid "Menu exported to {}"
+msgstr "Carta exportada a {}"
+
+#: ui/strings.slint:73
+msgid "Could not export: {}"
+msgstr "No se pudo exportar: {}"
+
+#: ui/strings.slint:77
+msgid "PDF saved to {}"
+msgstr "PDF guardado en {}"
+
+#: ui/strings.slint:79
+msgid "PDF saved to {}, but the content does not fit on one sheet."
+msgstr "PDF guardado en {}, pero el contenido no cabe en una hoja."
+
+#: ui/strings.slint:81
+msgid "Could not export the PDF: {}"
+msgstr "No se pudo exportar el PDF: {}"

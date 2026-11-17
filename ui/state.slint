@@ -1,0 +1,194 @@
+// Data exchanged between the Rust controller and the UI.
+// Rust owns the document; the UI only displays these properties and
+// reports user intent through the `Actions` callbacks.
+
+export struct ProductRow {
+    name: string,
+    description: string,
+    price: string,
+    // Price as it will be printed (e.g. "12,50 €"); empty when unset.
+    price-label: string,
+    // One flag per allergen, in official order (14 entries).
+    allergens: [bool],
+    // Numbers of the allergens present, for the compact summary.
+    allergen-numbers: [int],
+    expanded: bool,
+}
+
+export struct SectionRow {
+    name: string,
+    note: string,
+    products: [ProductRow],
+    expanded: bool,
+}
+
+export struct FontRow {
+    family-index: int,
+    size: int,
+    bold: bool,
+    italic: bool,
+}
+
+export struct PresetRow {
+    id: int,
+    name: string,
+    is-style: bool,
+    updated: string,
+}
+
+export global Catalog {
+    in property <[string]> font-families;
+    // Short allergen names for the editor chips, in official order.
+    out property <[string]> allergen-short: [
+        @tr("Gluten"), @tr("Crustaceans"), @tr("Eggs"), @tr("Fish"), @tr("Peanuts"), @tr("Soy"), @tr("Milk"),
+        @tr("Tree nuts"), @tr("Celery"), @tr("Mustard"), @tr("Sesame"), @tr("Sulphites"), @tr("Lupin"), @tr("Molluscs"),
+    ];
+    in property <[string]> paper-sizes: [@tr("A4 (210 × 297 mm)"), @tr("A5 (148 × 210 mm)"), @tr("A3 (297 × 420 mm)"), @tr("US Letter (8.5 × 11 in)"), @tr("US Legal (8.5 × 14 in)"), @tr("Custom")];
+}
+
+export global MenuState {
+    in-out property <string> title;
+    in-out property <string> subtitle;
+    in-out property <string> footer;
+    // 0 = app logo, 1 = custom image, 2 = no logo
+    in-out property <int> logo-mode;
+    in property <string> logo-file-name;
+    in property <[SectionRow]> sections;
+}
+
+export global DesignState {
+    // Page
+    in-out property <int> paper-index;
+    in-out property <int> orientation-index;
+    in-out property <int> custom-width: 210;
+    in-out property <int> custom-height: 297;
+    in-out property <int> margin-top;
+    in-out property <int> margin-right;
+    in-out property <int> margin-bottom;
+    in-out property <int> margin-left;
+    // Header
+    in-out property <int> logo-align;
+    in-out property <int> logo-height;
+    in-out property <int> title-align;
+    in-out property <bool> header-divider;
+    // Layout
+    in-out property <int> columns-index;
+    in-out property <int> align-index;
+    in-out property <int> column-gap;
+    in-out property <int> body-width;
+    in-out property <bool> column-rule;
+    in-out property <bool> keep-together;
+    in-out property <bool> vertical-center;
+    // Typography
+    in property <[FontRow]> fonts;
+    in-out property <bool> uppercase-sections;
+    in-out property <bool> section-dividers;
+    in-out property <float> spacing: 1.0;
+    in-out property <bool> grow-to-fill;
+    // Colours (hex text + parsed colour for the swatch)
+    in-out property <string> accent-hex;
+    in-out property <string> text-hex;
+    in-out property <string> muted-hex;
+    in property <color> accent-color;
+    in property <color> text-color;
+    in property <color> muted-color;
+    // Prices & allergens
+    in-out property <string> currency;
+    in-out property <bool> symbol-before;
+    in-out property <bool> always-decimals;
+    in-out property <bool> dot-leaders;
+    in-out property <int> allergen-mode;
+    in-out property <bool> show-legend;
+    // 0 = español, 1 = English (printed legend)
+    in-out property <int> legend-language;
+}
+
+export global PresetState {
+    in property <[PresetRow]> presets;
+    in-out property <string> new-name;
+}
+
+export global PreviewState {
+    in property <image> page;
+    // Height / width of the page, for keeping the aspect ratio.
+    in property <float> aspect: 1.414;
+    in property <bool> busy;
+    in property <bool> fits: true;
+    in property <int> scale-percent: 100;
+    in property <string> page-label;
+    in property <string> error;
+    // On-screen width of the page, reported by the preview pane so the
+    // bitmap is rendered at exactly that size.
+    in-out property <length> display-width;
+}
+
+// Application branding, applied live (set from Rust).
+export global Branding {
+    // Empty = the translated default title.
+    in property <string> app-title;
+    in property <bool> has-logo: true;
+    in property <bool> colorize-logo: true;
+    // A user-chosen image replaces the built-in Casa Peix logo.
+    in property <bool> use-custom-logo: false;
+    in property <image> custom-logo;
+    out property <image> logo: self.use-custom-logo ? self.custom-logo : @image-url("../assets/logo-casapeix.png");
+}
+
+// Editable fields of the settings dialog.
+export global SettingsState {
+    in-out property <bool> open;
+    // 0 = español (España), 1 = English
+    in-out property <int> language-index;
+    // 0 = light, 1 = dark
+    in-out property <int> theme-index;
+    in-out property <string> brand-hex: "#AD0000";
+    in property <color> brand-preview: #AD0000;
+    in-out property <string> app-title;
+    // 0 = Casa Peix logo, 1 = custom image, 2 = no logo
+    in-out property <int> logo-mode;
+    in property <string> logo-file-name;
+    in-out property <bool> colorize-logo: true;
+}
+
+export global AppState {
+    in property <string> status;
+    // 0 = info, 1 = success, 2 = error
+    in property <int> status-kind;
+}
+
+export global Actions {
+    // Content
+    callback header-changed();
+    callback choose-logo();
+    callback section-add();
+    callback section-remove(int);
+    callback section-move(int, int);
+    callback section-toggle(int);
+    callback section-edit(int, string, string);
+    callback product-add(int);
+    callback product-remove(int, int);
+    callback product-move(int, int, int);
+    callback product-toggle(int, int);
+    // Returns the formatted price label when the price field changes.
+    callback product-edit(int, int, string, string) -> string;
+    callback allergen-toggle(int, int, int);
+    // Design
+    callback design-changed();
+    callback font-changed(int, int, int, bool, bool);
+    callback reset-design();
+    // Presets
+    callback preset-save-menu(string);
+    callback preset-save-style(string);
+    callback preset-load(int);
+    callback preset-delete(int);
+    callback import-json();
+    callback export-json();
+    // Document
+    callback new-document();
+    callback export-pdf();
+    callback preview-resized();
+    // Settings
+    callback settings-changed();
+    callback choose-app-logo();
+    callback reset-settings();
+}

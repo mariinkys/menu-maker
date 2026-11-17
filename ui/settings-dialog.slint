@@ -1,0 +1,180 @@
+// Application settings: theme, brand colour, title and top-bar logo.
+// Changes apply immediately and are saved by the controller.
+
+import { ComboBox, LineEdit, CheckBox, Button } from "std-widgets.slint";
+import { Theme, FieldLabel, SectionHeading, ColorSwatch, IconButton, PrimaryButton } from "theme.slint";
+import { SettingsState, Actions } from "state.slint";
+
+component SettingRow inherits HorizontalLayout {
+    in property <string> label;
+    spacing: 10px;
+    FieldLabel {
+        text: root.label;
+        width: 140px;
+    }
+    @children
+}
+
+export component SettingsDialog inherits Rectangle {
+    background: Theme.scrim;
+
+    // Clicking outside the card closes the dialog.
+    TouchArea {
+        clicked => { SettingsState.open = false; }
+    }
+
+    card := Rectangle {
+        width: 460px;
+        height: content.preferred-height;
+        background: Theme.surface;
+        border-radius: 12px;
+        border-width: 1px;
+        border-color: Theme.border;
+        drop-shadow-blur: 30px;
+        drop-shadow-color: #00000055;
+
+        // Swallow clicks on the card itself.
+        TouchArea { }
+
+        content := VerticalLayout {
+            padding: 22px;
+            spacing: 14px;
+
+            HorizontalLayout {
+                Text {
+                    text: @tr("App settings");
+                    color: Theme.text;
+                    font-size: 18px;
+                    font-weight: 700;
+                    vertical-alignment: center;
+                    horizontal-stretch: 1;
+                }
+                IconButton {
+                    icon: "close";
+                    clicked => { SettingsState.open = false; }
+                }
+            }
+
+            SectionHeading { text: @tr("APPEARANCE"); }
+
+            SettingRow {
+                label: @tr("Language");
+                ComboBox {
+                    // Language names are shown in their own language.
+                    model: ["Español (España)", "English"];
+                    current-index <=> SettingsState.language-index;
+                    selected => { Actions.settings-changed(); }
+                }
+            }
+
+            SettingRow {
+                label: @tr("Theme");
+                ComboBox {
+                    model: [@tr("Light"), @tr("Dark")];
+                    current-index <=> SettingsState.theme-index;
+                    selected => { Actions.settings-changed(); }
+                }
+            }
+
+            SettingRow {
+                label: @tr("Main colour");
+                VerticalLayout {
+                    alignment: center;
+                    ColorSwatch { value: SettingsState.brand-preview; }
+                }
+                LineEdit {
+                    text <=> SettingsState.brand-hex;
+                    width: 110px;
+                    placeholder-text: "#AD0000";
+                    edited => { Actions.settings-changed(); }
+                }
+                Rectangle { }
+            }
+
+            HorizontalLayout {
+                spacing: 8px;
+                Rectangle { width: 140px; }
+                for c in [
+                    { hex: "#AD0000", value: #AD0000 },
+                    { hex: "#1F3A5F", value: #1F3A5F },
+                    { hex: "#2F5D3A", value: #2F5D3A },
+                    { hex: "#8A6D3B", value: #8A6D3B },
+                    { hex: "#5B2A86", value: #5B2A86 },
+                    { hex: "#E0A100", value: #E0A100 },
+                    { hex: "#222222", value: #222222 },
+                ]: ColorSwatch {
+                    value: c.value;
+                    clicked => {
+                        SettingsState.brand-hex = c.hex;
+                        Actions.settings-changed();
+                    }
+                }
+                Rectangle { }
+            }
+
+            SectionHeading { text: @tr("IDENTITY"); }
+
+            SettingRow {
+                label: @tr("App title");
+                LineEdit {
+                    text <=> SettingsState.app-title;
+                    placeholder-text: @tr("Casa Peix · Menu Editor");
+                    edited => { Actions.settings-changed(); }
+                }
+            }
+
+            SettingRow {
+                label: @tr("Top bar logo");
+                ComboBox {
+                    model: [@tr("Casa Peix logo"), @tr("Custom image…"), @tr("No logo")];
+                    current-index <=> SettingsState.logo-mode;
+                    selected => {
+                        if (SettingsState.logo-mode == 1) {
+                            Actions.choose-app-logo();
+                        } else {
+                            Actions.settings-changed();
+                        }
+                    }
+                }
+            }
+
+            if SettingsState.logo-mode == 1: SettingRow {
+                label: "";
+                FieldLabel {
+                    text: SettingsState.logo-file-name == "" ? @tr("No file") : SettingsState.logo-file-name;
+                    overflow: elide;
+                    horizontal-stretch: 1;
+                }
+                Button {
+                    text: @tr("Choose image…");
+                    clicked => { Actions.choose-app-logo(); }
+                }
+            }
+
+            if SettingsState.logo-mode != 2: CheckBox {
+                text: @tr("Recolour the logo (for single-colour logos)");
+                checked <=> SettingsState.colorize-logo;
+                toggled => { Actions.settings-changed(); }
+            }
+
+            FieldLabel {
+                text: @tr("These settings change how the app looks. The main colour is also the accent colour when a menu design is reset, and the app logo is the default logo of every menu.");
+                wrap: word-wrap;
+                font-size: 11px;
+            }
+
+            HorizontalLayout {
+                spacing: 8px;
+                Button {
+                    text: @tr("Reset (Casa Peix)");
+                    clicked => { Actions.reset-settings(); }
+                }
+                Rectangle { horizontal-stretch: 1; }
+                PrimaryButton {
+                    text: @tr("Close");
+                    clicked => { SettingsState.open = false; }
+                }
+            }
+        }
+    }
+}

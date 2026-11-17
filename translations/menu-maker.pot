@@ -1,0 +1,831 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: menu-maker 0.1.0\n"
+"POT-Creation-Date: 2026-11-17 07:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ui/app.slint:18 ui/app.slint:59 ui/settings-dialog.slint:121
+msgid "Casa Peix · Menu Editor"
+msgstr ""
+
+#: ui/app.slint:69
+msgid "New menu"
+msgstr ""
+
+#. --- PDF ---------------------------------------------------------------
+#: ui/app.slint:76 ui/strings.slint:76
+msgid "Export PDF"
+msgstr ""
+
+#: ui/app.slint:103
+msgid "Content"
+msgstr ""
+
+#: ui/app.slint:107 ui/presets-panel.slint:30
+msgid "Design"
+msgstr ""
+
+#: ui/app.slint:111
+msgid "Presets"
+msgstr ""
+
+#: ui/content-panel.slint:60
+msgid "(unnamed dish)"
+msgstr ""
+
+#: ui/content-panel.slint:112
+msgid "Dish name"
+msgstr ""
+
+#: ui/content-panel.slint:115
+msgid "e.g. Ham croquettes"
+msgstr ""
+
+#: ui/content-panel.slint:125 ui/design-panel.slint:55
+msgid "Price"
+msgstr ""
+
+#: ui/content-panel.slint:128
+msgid "12.50"
+msgstr ""
+
+#: ui/content-panel.slint:136 ui/design-panel.slint:55
+msgid "Description"
+msgstr ""
+
+#: ui/content-panel.slint:145
+msgid "Allergens"
+msgstr ""
+
+#: ui/content-panel.slint:176
+msgid "Section name"
+msgstr ""
+
+#: ui/content-panel.slint:182
+msgid "{n} dish"
+msgid_plural "{n} dishes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ui/content-panel.slint:207
+msgid "Optional note under the title (e.g. “To share”)"
+msgstr ""
+
+#: ui/content-panel.slint:222
+msgid "+  Add dish"
+msgstr ""
+
+#: ui/content-panel.slint:239 ui/design-panel.slint:248
+msgid "HEADER"
+msgstr ""
+
+#: ui/content-panel.slint:242
+msgid "Menu title"
+msgstr ""
+
+#: ui/content-panel.slint:245
+msgid "e.g. Garden Menu"
+msgstr ""
+
+#: ui/content-panel.slint:251
+msgid "Subtitle (optional)"
+msgstr ""
+
+#: ui/content-panel.slint:254
+msgid "e.g. Autumn · Winter 2026"
+msgstr ""
+
+#: ui/content-panel.slint:263
+msgid "Logo"
+msgstr ""
+
+#: ui/content-panel.slint:265 ui/strings.slint:37
+msgid "App logo"
+msgstr ""
+
+#: ui/content-panel.slint:265 ui/settings-dialog.slint:129
+msgid "Custom image…"
+msgstr ""
+
+#: ui/content-panel.slint:265 ui/settings-dialog.slint:129
+msgid "No logo"
+msgstr ""
+
+#: ui/content-panel.slint:279 ui/settings-dialog.slint:144
+msgid "No file"
+msgstr ""
+
+#: ui/content-panel.slint:281 ui/settings-dialog.slint:149
+msgid "Choose image…"
+msgstr ""
+
+#: ui/content-panel.slint:288
+msgid ""
+"Uses the app logo, which you change in the app settings (gear icon, top "
+"right). Position and size are set in the “Design” tab."
+msgstr ""
+
+#: ui/content-panel.slint:289
+msgid "Logo and title position and size are set in the “Design” tab."
+msgstr ""
+
+#: ui/content-panel.slint:303
+msgid "The menu is empty. Add a section to get started."
+msgstr ""
+
+#: ui/content-panel.slint:311
+msgid "+  Add section"
+msgstr ""
+
+#: ui/content-panel.slint:317
+msgid "FOOTER"
+msgstr ""
+
+#: ui/content-panel.slint:326
+msgid "The allergen legend is added automatically above this text."
+msgstr ""
+
+#: ui/design-panel.slint:55
+msgid "Title"
+msgstr ""
+
+#: ui/design-panel.slint:55
+msgid "Subtitle"
+msgstr ""
+
+#: ui/design-panel.slint:55
+msgid "Sections"
+msgstr ""
+
+#: ui/design-panel.slint:55
+msgid "Dishes"
+msgstr ""
+
+#: ui/design-panel.slint:72
+msgid "B"
+msgstr ""
+
+#: ui/design-panel.slint:78
+msgid "I"
+msgstr ""
+
+#: ui/design-panel.slint:120
+msgid "PAGE"
+msgstr ""
+
+#: ui/design-panel.slint:122
+msgid "Paper size"
+msgstr ""
+
+#: ui/design-panel.slint:130
+msgid "Width × height (mm)"
+msgstr ""
+
+#: ui/design-panel.slint:145
+msgid "Orientation"
+msgstr ""
+
+#: ui/design-panel.slint:147
+msgid "Portrait"
+msgstr ""
+
+#: ui/design-panel.slint:147
+msgid "Landscape"
+msgstr ""
+
+#: ui/design-panel.slint:153
+msgid "Top / bottom margins (mm)"
+msgstr ""
+
+#: ui/design-panel.slint:168
+msgid "Left / right margins (mm)"
+msgstr ""
+
+#: ui/design-panel.slint:185
+msgid "LAYOUT"
+msgstr ""
+
+#: ui/design-panel.slint:187
+msgid "Columns"
+msgstr ""
+
+#: ui/design-panel.slint:189
+msgid "1 column"
+msgstr ""
+
+#: ui/design-panel.slint:189
+msgid "2 columns"
+msgstr ""
+
+#: ui/design-panel.slint:189
+msgid "3 columns"
+msgstr ""
+
+#: ui/design-panel.slint:195
+msgid "Alignment"
+msgstr ""
+
+#: ui/design-panel.slint:197
+msgid "Left (price on the right)"
+msgstr ""
+
+#: ui/design-panel.slint:197
+msgid "Centred"
+msgstr ""
+
+#: ui/design-panel.slint:197 ui/design-panel.slint:252
+#: ui/design-panel.slint:197 ui/design-panel.slint:252
+msgid "Right"
+msgstr ""
+
+#: ui/design-panel.slint:203
+msgid "Content width"
+msgstr ""
+
+#: ui/design-panel.slint:221
+msgid "Column gap (mm)"
+msgstr ""
+
+#: ui/design-panel.slint:231
+msgid "Vertical rule between columns"
+msgstr ""
+
+#: ui/design-panel.slint:236
+msgid "Keep each section in one column"
+msgstr ""
+
+#: ui/design-panel.slint:241
+msgid "Centre dishes vertically"
+msgstr ""
+
+#: ui/design-panel.slint:250
+msgid "Logo position"
+msgstr ""
+
+#: ui/design-panel.slint:252 ui/design-panel.slint:270
+msgid "Left"
+msgstr ""
+
+#: ui/design-panel.slint:252 ui/design-panel.slint:270
+msgid "Centre"
+msgstr ""
+
+#: ui/design-panel.slint:258
+msgid "Logo height (mm)"
+msgstr ""
+
+#: ui/design-panel.slint:268
+msgid "Title alignment"
+msgstr ""
+
+#: ui/design-panel.slint:276
+msgid "Decorative rule under the header"
+msgstr ""
+
+#: ui/design-panel.slint:283
+msgid "TYPOGRAPHY"
+msgstr ""
+
+#: ui/design-panel.slint:287
+msgid "Font"
+msgstr ""
+
+#: ui/design-panel.slint:288
+msgid "Size (pt)"
+msgstr ""
+
+#: ui/design-panel.slint:289
+msgid "Style"
+msgstr ""
+
+#: ui/design-panel.slint:296
+msgid ""
+"B = bold, I = italic. If the menu does not fit on the sheet, all sizes are "
+"reduced by the same proportion."
+msgstr ""
+
+#: ui/design-panel.slint:301
+msgid "Section titles in capitals"
+msgstr ""
+
+#: ui/design-panel.slint:306
+msgid "Decorative rule under each section"
+msgstr ""
+
+#: ui/design-panel.slint:311
+msgid "Spacing"
+msgstr ""
+
+#: ui/design-panel.slint:329
+msgid "Enlarge text to fill the page"
+msgstr ""
+
+#: ui/design-panel.slint:336
+msgid "COLOURS"
+msgstr ""
+
+#: ui/design-panel.slint:338
+msgid "Accent (titles, prices)"
+msgstr ""
+
+#: ui/design-panel.slint:362
+msgid "Text (dishes)"
+msgstr ""
+
+#: ui/design-panel.slint:367
+msgid "Secondary (descriptions)"
+msgstr ""
+
+#: ui/design-panel.slint:374
+msgid "PRICES"
+msgstr ""
+
+#: ui/design-panel.slint:376
+msgid "Currency symbol"
+msgstr ""
+
+#: ui/design-panel.slint:385
+msgid "Symbol before the amount (€12)"
+msgstr ""
+
+#: ui/design-panel.slint:390
+msgid "Always show decimals (12.00)"
+msgstr ""
+
+#: ui/design-panel.slint:395
+msgid "Dot leaders up to the price (left alignment)"
+msgstr ""
+
+#: ui/design-panel.slint:402
+msgid "ALLERGENS"
+msgstr ""
+
+#: ui/design-panel.slint:404
+msgid "Show allergens as"
+msgstr ""
+
+#: ui/design-panel.slint:406
+msgid "Numbered icons"
+msgstr ""
+
+#: ui/design-panel.slint:406
+msgid "Numbers in brackets"
+msgstr ""
+
+#: ui/design-panel.slint:406
+msgid "Hide"
+msgstr ""
+
+#: ui/design-panel.slint:412
+msgid "Allergen legend at the bottom of the menu"
+msgstr ""
+
+#: ui/design-panel.slint:417
+msgid "Legend language"
+msgstr ""
+
+#: ui/design-panel.slint:430
+msgid "Reset to the default design"
+msgstr ""
+
+#: ui/presets-panel.slint:30
+msgid "Menu"
+msgstr ""
+
+#: ui/presets-panel.slint:50
+msgid "Saved: {}"
+msgstr ""
+
+#: ui/presets-panel.slint:58
+msgid "Load"
+msgstr ""
+
+#: ui/presets-panel.slint:81
+msgid "SAVE PRESET"
+msgstr ""
+
+#: ui/presets-panel.slint:84
+msgid "Name, e.g. “Summer menu”"
+msgstr ""
+
+#: ui/presets-panel.slint:89
+msgid "Save full menu"
+msgstr ""
+
+#: ui/presets-panel.slint:95
+msgid "Save design only"
+msgstr ""
+
+#: ui/presets-panel.slint:102
+msgid ""
+"“Menu” saves dishes, texts and design. “Design” only saves page, "
+"columns, fonts and colours, to apply them to any menu. An existing name is "
+"overwritten."
+msgstr ""
+
+#: ui/presets-panel.slint:109
+msgid "SAVED PRESETS"
+msgstr ""
+
+#: ui/presets-panel.slint:111
+msgid "You have not saved any presets yet."
+msgstr ""
+
+#: ui/presets-panel.slint:119
+msgid "FILES"
+msgstr ""
+
+#: ui/presets-panel.slint:121
+msgid ""
+"To move a menu to another computer, export it to a .json file and import it "
+"there."
+msgstr ""
+
+#: ui/presets-panel.slint:128
+msgid "Import from file…"
+msgstr ""
+
+#: ui/presets-panel.slint:133
+msgid "Export to file…"
+msgstr ""
+
+#: ui/preview-pane.slint:23
+msgid "Text at {} %"
+msgstr ""
+
+#: ui/preview-pane.slint:30
+msgid "Updating…"
+msgstr ""
+
+#: ui/preview-pane.slint:40
+msgid "Render error"
+msgstr ""
+
+#: ui/preview-pane.slint:40
+msgid "✓ Fits on one sheet"
+msgstr ""
+
+#: ui/preview-pane.slint:40
+msgid "Does not fit on one sheet"
+msgstr ""
+
+#: ui/preview-pane.slint:87
+msgid ""
+"The content does not fit on one sheet even at the smallest text size. "
+"Shorten descriptions, reduce margins or use more columns."
+msgstr ""
+
+#: ui/settings-dialog.slint:45
+msgid "App settings"
+msgstr ""
+
+#: ui/settings-dialog.slint:58
+msgid "APPEARANCE"
+msgstr ""
+
+#: ui/settings-dialog.slint:61
+msgid "Language"
+msgstr ""
+
+#: ui/settings-dialog.slint:71
+msgid "Theme"
+msgstr ""
+
+#: ui/settings-dialog.slint:73
+msgid "Light"
+msgstr ""
+
+#: ui/settings-dialog.slint:73
+msgid "Dark"
+msgstr ""
+
+#: ui/settings-dialog.slint:80
+msgid "Main colour"
+msgstr ""
+
+#: ui/settings-dialog.slint:115
+msgid "IDENTITY"
+msgstr ""
+
+#: ui/settings-dialog.slint:118
+msgid "App title"
+msgstr ""
+
+#: ui/settings-dialog.slint:127
+msgid "Top bar logo"
+msgstr ""
+
+#: ui/settings-dialog.slint:129
+msgid "Casa Peix logo"
+msgstr ""
+
+#: ui/settings-dialog.slint:155
+msgid "Recolour the logo (for single-colour logos)"
+msgstr ""
+
+#: ui/settings-dialog.slint:161
+msgid ""
+"These settings change how the app looks. The main colour is also the accent "
+"colour when a menu design is reset, and the app logo is the default logo of "
+"every menu."
+msgstr ""
+
+#: ui/settings-dialog.slint:169
+msgid "Reset (Casa Peix)"
+msgstr ""
+
+#: ui/settings-dialog.slint:174
+msgid "Close"
+msgstr ""
+
+#: ui/state.slint:43
+msgid "Gluten"
+msgstr ""
+
+#: ui/state.slint:43
+msgid "Crustaceans"
+msgstr ""
+
+#: ui/state.slint:43
+msgid "Eggs"
+msgstr ""
+
+#: ui/state.slint:43
+msgid "Fish"
+msgstr ""
+
+#: ui/state.slint:43
+msgid "Peanuts"
+msgstr ""
+
+#: ui/state.slint:43
+msgid "Soy"
+msgstr ""
+
+#: ui/state.slint:43
+msgid "Milk"
+msgstr ""
+
+#: ui/state.slint:44
+msgid "Tree nuts"
+msgstr ""
+
+#: ui/state.slint:44
+msgid "Celery"
+msgstr ""
+
+#: ui/state.slint:44
+msgid "Mustard"
+msgstr ""
+
+#: ui/state.slint:44
+msgid "Sesame"
+msgstr ""
+
+#: ui/state.slint:44
+msgid "Sulphites"
+msgstr ""
+
+#: ui/state.slint:44
+msgid "Lupin"
+msgstr ""
+
+#: ui/state.slint:44
+msgid "Molluscs"
+msgstr ""
+
+#: ui/state.slint:46
+msgid "A4 (210 × 297 mm)"
+msgstr ""
+
+#: ui/state.slint:46
+msgid "A5 (148 × 210 mm)"
+msgstr ""
+
+#: ui/state.slint:46
+msgid "A3 (297 × 420 mm)"
+msgstr ""
+
+#: ui/state.slint:46
+msgid "US Letter (8.5 × 11 in)"
+msgstr ""
+
+#: ui/state.slint:46
+msgid "US Legal (8.5 × 14 in)"
+msgstr ""
+
+#: ui/state.slint:46 ui/strings.slint:20
+msgid "Custom"
+msgstr ""
+
+#. --- General ---------------------------------------------------------
+#: ui/strings.slint:8
+msgid "Ready. Changes are saved automatically."
+msgstr ""
+
+#: ui/strings.slint:9
+msgid "Could not open the preset database: {}"
+msgstr ""
+
+#: ui/strings.slint:10
+msgid "The preset database is not available."
+msgstr ""
+
+#: ui/strings.slint:11
+msgid "Could not render the menu: {}"
+msgstr ""
+
+#. --- Defaults for new content ----------------------------------------
+#: ui/strings.slint:14
+msgid "New section"
+msgstr ""
+
+#: ui/strings.slint:15
+msgid "New dish"
+msgstr ""
+
+#: ui/strings.slint:19
+msgid "{} · {} × {} mm · {}"
+msgstr ""
+
+#: ui/strings.slint:20
+msgid "US Letter"
+msgstr ""
+
+#: ui/strings.slint:20
+msgid "US Legal"
+msgstr ""
+
+#: ui/strings.slint:22
+msgid "landscape"
+msgstr ""
+
+#: ui/strings.slint:22
+msgid "portrait"
+msgstr ""
+
+#: ui/strings.slint:27
+msgid "Click the bin again to delete “{}” and all its dishes ({})."
+msgstr ""
+
+#: ui/strings.slint:29
+msgid "Section “{}” deleted."
+msgstr ""
+
+#: ui/strings.slint:31
+msgid ""
+"Click “New menu” again to start from scratch (the design is kept; save a "
+"preset first if you want to keep the dishes)."
+msgstr ""
+
+#: ui/strings.slint:33
+msgid "New menu created."
+msgstr ""
+
+#. --- Logos -------------------------------------------------------------
+#: ui/strings.slint:36
+msgid "Choose logo"
+msgstr ""
+
+#: ui/strings.slint:38
+msgid "Images"
+msgstr ""
+
+#: ui/strings.slint:39
+msgid "Logo updated."
+msgstr ""
+
+#: ui/strings.slint:40
+msgid "App logo updated."
+msgstr ""
+
+#: ui/strings.slint:41
+msgid "Could not open the image: {}"
+msgstr ""
+
+#: ui/strings.slint:42
+msgid "Unsupported image format (use PNG, JPEG, WebP or GIF)."
+msgstr ""
+
+#: ui/strings.slint:43
+msgid "Invalid image: {}"
+msgstr ""
+
+#. --- Design & settings -------------------------------------------------
+#: ui/strings.slint:46
+msgid "Design reset."
+msgstr ""
+
+#: ui/strings.slint:47
+msgid "Settings reset (Casa Peix)."
+msgstr ""
+
+#: ui/strings.slint:48
+msgid "Could not save the settings: {}"
+msgstr ""
+
+#. --- Presets -----------------------------------------------------------
+#: ui/strings.slint:51
+msgid "Could not read the presets: {}"
+msgstr ""
+
+#: ui/strings.slint:52
+msgid "Menu saved as “{}”."
+msgstr ""
+
+#: ui/strings.slint:53
+msgid "Design saved as “{}”."
+msgstr ""
+
+#: ui/strings.slint:54
+msgid "Could not save: {}"
+msgstr ""
+
+#: ui/strings.slint:55
+msgid "Menu loaded."
+msgstr ""
+
+#: ui/strings.slint:56
+msgid "Design applied to the current menu."
+msgstr ""
+
+#: ui/strings.slint:57
+msgid "Could not load: {}"
+msgstr ""
+
+#: ui/strings.slint:58
+msgid "Click the bin again to delete the preset “{}”."
+msgstr ""
+
+#: ui/strings.slint:59
+msgid "Preset “{}” deleted."
+msgstr ""
+
+#: ui/strings.slint:60
+msgid "Could not delete: {}"
+msgstr ""
+
+#. --- Files -------------------------------------------------------------
+#: ui/strings.slint:63
+msgid "Import menu or design"
+msgstr ""
+
+#: ui/strings.slint:64
+msgid "Export menu"
+msgstr ""
+
+#: ui/strings.slint:65
+msgid "Menu (JSON)"
+msgstr ""
+
+#: ui/strings.slint:66
+msgid "Could not read the file: {}"
+msgstr ""
+
+#: ui/strings.slint:67
+msgid "The file is not valid JSON: {}"
+msgstr ""
+
+#: ui/strings.slint:68
+msgid "Menu imported."
+msgstr ""
+
+#: ui/strings.slint:69
+msgid "Design imported."
+msgstr ""
+
+#: ui/strings.slint:70
+msgid "Invalid menu format: {}"
+msgstr ""
+
+#: ui/strings.slint:71
+msgid "Invalid design format: {}"
+msgstr ""
+
+#: ui/strings.slint:72
+msgid "Menu exported to {}"
+msgstr ""
+
+#: ui/strings.slint:73
+msgid "Could not export: {}"
+msgstr ""
+
+#: ui/strings.slint:77
+msgid "PDF saved to {}"
+msgstr ""
+
+#: ui/strings.slint:79
+msgid "PDF saved to {}, but the content does not fit on one sheet."
+msgstr ""
+
+#: ui/strings.slint:81
+msgid "Could not export the PDF: {}"
+msgstr ""

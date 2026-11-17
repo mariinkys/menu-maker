@@ -1,0 +1,82 @@
+// Translatable messages built by the Rust controller (status bar, file
+// dialogs, default names). Keeping them here means every user-visible string
+// goes through Slint's @tr() and ends up in the same .po files.
+// Rust calls them as `ui.global::<Strings>().invoke_<name>(...)`.
+
+export global Strings {
+    // --- General ---------------------------------------------------------
+    public pure function ready() -> string { return @tr("Ready. Changes are saved automatically."); }
+    public pure function database-unavailable(detail: string) -> string { return @tr("Could not open the preset database: {}", detail); }
+    public pure function database-missing() -> string { return @tr("The preset database is not available."); }
+    public pure function render-failed(detail: string) -> string { return @tr("Could not render the menu: {}", detail); }
+
+    // --- Defaults for new content ----------------------------------------
+    public pure function new-section-name() -> string { return @tr("New section"); }
+    public pure function new-dish-name() -> string { return @tr("New dish"); }
+
+    // --- Page description (preview header) -------------------------------
+    public pure function page-label(paper-index: int, width: string, height: string, landscape: bool) -> string {
+        return @tr("{} · {} × {} mm · {}",
+            ["A4", "A5", "A3", @tr("US Letter"), @tr("US Legal"), @tr("Custom")][paper-index],
+            width, height,
+            landscape ? @tr("landscape") : @tr("portrait"));
+    }
+
+    // --- Content -----------------------------------------------------------
+    public pure function confirm-delete-section(name: string, dishes: int) -> string {
+        return @tr("Click the bin again to delete “{}” and all its dishes ({}).", name, dishes);
+    }
+    public pure function section-deleted(name: string) -> string { return @tr("Section “{}” deleted.", name); }
+    public pure function confirm-new-document() -> string {
+        return @tr("Click “New menu” again to start from scratch (the design is kept; save a preset first if you want to keep the dishes).");
+    }
+    public pure function new-document-created() -> string { return @tr("New menu created."); }
+
+    // --- Logos -------------------------------------------------------------
+    public pure function menu-logo-dialog-title() -> string { return @tr("Choose logo"); }
+    public pure function app-logo-dialog-title() -> string { return @tr("App logo"); }
+    public pure function images-filter() -> string { return @tr("Images"); }
+    public pure function logo-updated() -> string { return @tr("Logo updated."); }
+    public pure function app-logo-updated() -> string { return @tr("App logo updated."); }
+    public pure function image-unreadable(detail: string) -> string { return @tr("Could not open the image: {}", detail); }
+    public pure function image-unsupported() -> string { return @tr("Unsupported image format (use PNG, JPEG, WebP or GIF)."); }
+    public pure function image-invalid(detail: string) -> string { return @tr("Invalid image: {}", detail); }
+
+    // --- Design & settings -------------------------------------------------
+    public pure function design-reset() -> string { return @tr("Design reset."); }
+    public pure function settings-reset() -> string { return @tr("Settings reset (Casa Peix)."); }
+    public pure function settings-not-saved(detail: string) -> string { return @tr("Could not save the settings: {}", detail); }
+
+    // --- Presets -----------------------------------------------------------
+    public pure function presets-unreadable(detail: string) -> string { return @tr("Could not read the presets: {}", detail); }
+    public pure function menu-preset-saved(name: string) -> string { return @tr("Menu saved as “{}”.", name); }
+    public pure function design-preset-saved(name: string) -> string { return @tr("Design saved as “{}”.", name); }
+    public pure function save-failed(detail: string) -> string { return @tr("Could not save: {}", detail); }
+    public pure function menu-loaded() -> string { return @tr("Menu loaded."); }
+    public pure function design-applied() -> string { return @tr("Design applied to the current menu."); }
+    public pure function load-failed(detail: string) -> string { return @tr("Could not load: {}", detail); }
+    public pure function confirm-delete-preset(name: string) -> string { return @tr("Click the bin again to delete the preset “{}”.", name); }
+    public pure function preset-deleted(name: string) -> string { return @tr("Preset “{}” deleted.", name); }
+    public pure function delete-failed(detail: string) -> string { return @tr("Could not delete: {}", detail); }
+
+    // --- Files -------------------------------------------------------------
+    public pure function import-dialog-title() -> string { return @tr("Import menu or design"); }
+    public pure function export-json-dialog-title() -> string { return @tr("Export menu"); }
+    public pure function json-filter() -> string { return @tr("Menu (JSON)"); }
+    public pure function file-unreadable(detail: string) -> string { return @tr("Could not read the file: {}", detail); }
+    public pure function invalid-json(detail: string) -> string { return @tr("The file is not valid JSON: {}", detail); }
+    public pure function menu-imported() -> string { return @tr("Menu imported."); }
+    public pure function design-imported() -> string { return @tr("Design imported."); }
+    public pure function invalid-menu(detail: string) -> string { return @tr("Invalid menu format: {}", detail); }
+    public pure function invalid-design(detail: string) -> string { return @tr("Invalid design format: {}", detail); }
+    public pure function menu-exported(path: string) -> string { return @tr("Menu exported to {}", path); }
+    public pure function export-failed(detail: string) -> string { return @tr("Could not export: {}", detail); }
+
+    // --- PDF ---------------------------------------------------------------
+    public pure function pdf-dialog-title() -> string { return @tr("Export PDF"); }
+    public pure function pdf-saved(path: string) -> string { return @tr("PDF saved to {}", path); }
+    public pure function pdf-saved-overflow(path: string) -> string {
+        return @tr("PDF saved to {}, but the content does not fit on one sheet.", path);
+    }
+    public pure function pdf-failed(detail: string) -> string { return @tr("Could not export the PDF: {}", detail); }
+}

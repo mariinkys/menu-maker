@@ -1,0 +1,150 @@
+// Main window of the menu editor. Branding (title, logo, colours) comes
+// from the `Branding` / `Theme` globals so the app is not tied to one restaurant.
+
+import { TabWidget, Palette } from "std-widgets.slint";
+import { Theme, ToolButton, IconButton } from "theme.slint";
+import { ContentPanel } from "content-panel.slint";
+import { DesignPanel } from "design-panel.slint";
+import { PresetsPanel } from "presets-panel.slint";
+import { PreviewPane } from "preview-pane.slint";
+import { SettingsDialog } from "settings-dialog.slint";
+import { AppState, Actions, Branding, SettingsState } from "state.slint";
+
+export { Catalog, MenuState, DesignState, PresetState, PreviewState, AppState, Actions, Branding, SettingsState, ProductRow, SectionRow, FontRow, PresetRow } from "state.slint";
+export { Theme } from "theme.slint";
+export { Strings } from "strings.slint";
+
+export component MainWindow inherits Window {
+    title: Branding.app-title != "" ? Branding.app-title : @tr("Casa Peix · Menu Editor");
+    icon: Branding.logo;
+    preferred-width: 1440px;
+    preferred-height: 920px;
+    min-width: 1100px;
+    min-height: 680px;
+    background: Theme.canvas;
+    default-font-size: 13px;
+
+    // Keep the std-widgets palette in sync with our theme.
+    property <bool> dark-theme: Theme.dark;
+    changed dark-theme => { root.sync-color-scheme(); }
+    init => { root.sync-color-scheme(); }
+    function sync-color-scheme() {
+        Palette.color-scheme = Theme.dark ? ColorScheme.dark : ColorScheme.light;
+    }
+
+    VerticalLayout {
+        // Top bar
+        Rectangle {
+            height: 56px;
+            background: Theme.brand;
+            HorizontalLayout {
+                padding-left: 16px;
+                padding-right: 14px;
+                spacing: 10px;
+                if Branding.has-logo: VerticalLayout {
+                    alignment: center;
+                    Image {
+                        source: Branding.logo;
+                        colorize: Branding.colorize-logo ? Theme.on-brand : transparent;
+                        height: 34px;
+                        max-width: 160px;
+                        image-fit: contain;
+                    }
+                }
+                if Branding.has-logo: Rectangle {
+                    width: 1px;
+                    background: Theme.on-brand.with-alpha(0.33);
+                }
+                Text {
+                    text: Branding.app-title != "" ? Branding.app-title : @tr("Casa Peix · Menu Editor");
+                    color: Theme.on-brand;
+                    font-size: 15px;
+                    font-weight: 600;
+                    vertical-alignment: center;
+                }
+                Rectangle { horizontal-stretch: 1; }
+                VerticalLayout {
+                    alignment: center;
+                    ToolButton {
+                        text: @tr("New menu");
+                        clicked => { Actions.new-document(); }
+                    }
+                }
+                VerticalLayout {
+                    alignment: center;
+                    ToolButton {
+                        text: @tr("Export PDF");
+                        primary: true;
+                        clicked => { Actions.export-pdf(); }
+                    }
+                }
+                VerticalLayout {
+                    alignment: center;
+                    IconButton {
+                        icon: "cog";
+                        icon-size: 20px;
+                        width: 34px;
+                        height: 34px;
+                        tint: Theme.on-brand;
+                        hover-background: Theme.on-brand.with-alpha(0.13);
+                        clicked => { SettingsState.open = true; }
+                    }
+                }
+            }
+        }
+
+        HorizontalLayout {
+            vertical-stretch: 1;
+            Rectangle {
+                width: 580px;
+                background: Theme.surface-alt;
+                TabWidget {
+                    Tab {
+                        title: @tr("Content");
+                        ContentPanel { }
+                    }
+                    Tab {
+                        title: @tr("Design");
+                        DesignPanel { }
+                    }
+                    Tab {
+                        title: @tr("Presets");
+                        PresetsPanel { }
+                    }
+                }
+            }
+            Rectangle {
+                width: 1px;
+                background: Theme.border;
+            }
+            PreviewPane {
+                horizontal-stretch: 1;
+            }
+        }
+
+        // Status bar
+        Rectangle {
+            height: 28px;
+            background: Theme.surface;
+            border-width: 0px;
+            HorizontalLayout {
+                padding-left: 14px;
+                padding-right: 14px;
+                Text {
+                    text: AppState.status;
+                    color: AppState.status-kind == 2 ? Theme.danger : AppState.status-kind == 1 ? Theme.success : Theme.text-muted;
+                    font-size: 12px;
+                    vertical-alignment: center;
+                    overflow: elide;
+                }
+            }
+        }
+    }
+
+    if SettingsState.open: SettingsDialog {
+        x: 0;
+        y: 0;
+        width: root.width;
+        height: root.height;
+    }
+}

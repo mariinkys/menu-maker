@@ -1,0 +1,97 @@
+// Live preview: a bitmap of the actual PDF page, so what you see is what gets exported.
+
+import { Theme } from "theme.slint";
+import { PreviewState, Actions } from "state.slint";
+
+export component PreviewPane inherits Rectangle {
+    background: Theme.canvas;
+
+    VerticalLayout {
+        HorizontalLayout {
+            padding: 10px;
+            padding-left: 18px;
+            spacing: 14px;
+            height: 44px;
+
+            Text {
+                text: PreviewState.page-label;
+                color: Theme.text-muted;
+                font-size: 12px;
+                vertical-alignment: center;
+            }
+            Text {
+                text: @tr("Text at {} %", PreviewState.scale-percent);
+                color: Theme.text-muted;
+                font-size: 12px;
+                vertical-alignment: center;
+            }
+            Rectangle { horizontal-stretch: 1; }
+            if PreviewState.busy: Text {
+                text: @tr("Updating…");
+                color: Theme.text-muted;
+                font-size: 12px;
+                vertical-alignment: center;
+            }
+            Rectangle {
+                width: fit-label.preferred-width + 20px;
+                border-radius: 12px;
+                background: PreviewState.error != "" || !PreviewState.fits ? Theme.danger-soft : Theme.success-soft;
+                fit-label := Text {
+                    text: PreviewState.error != "" ? @tr("Render error") : PreviewState.fits ? @tr("✓ Fits on one sheet") : @tr("Does not fit on one sheet");
+                    color: PreviewState.error != "" || !PreviewState.fits ? Theme.danger : Theme.success;
+                    font-size: 12px;
+                    font-weight: 600;
+                    vertical-alignment: center;
+                    horizontal-alignment: center;
+                }
+            }
+        }
+
+        area := Rectangle {
+            property <length> avail-w: self.width - 48px;
+            property <length> avail-h: self.height - 36px;
+            property <length> page-w: min(self.avail-w, self.avail-h / PreviewState.aspect);
+
+            changed page-w => {
+                PreviewState.display-width = self.page-w;
+                Actions.preview-resized();
+            }
+
+            Rectangle {
+                y: 6px;
+                width: area.page-w;
+                height: area.page-w * PreviewState.aspect;
+                background: #FFFFFF;
+                drop-shadow-blur: 22px;
+                drop-shadow-offset-y: 6px;
+                drop-shadow-color: #0000002E;
+
+                Image {
+                    width: parent.width;
+                    height: parent.height;
+                    source: PreviewState.page;
+                    image-fit: contain;
+                    image-rendering: smooth;
+                }
+            }
+
+            if PreviewState.error != "" || !PreviewState.fits: Rectangle {
+                y: area.height - 64px;
+                width: min(area.width - 48px, 520px);
+                height: banner.preferred-height + 20px;
+                border-radius: 8px;
+                background: #B3261EE6; // always red: it is an error banner over the page
+                banner := Text {
+                    width: parent.width - 24px;
+                    text: PreviewState.error != "" ? PreviewState.error
+                        : @tr("The content does not fit on one sheet even at the smallest text size. Shorten descriptions, reduce margins or use more columns.");
+                    color: #FFFFFF;
+                    font-size: 12px;
+                    wrap: word-wrap;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+        }
+    }
+}
