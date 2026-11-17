@@ -1,7 +1,22 @@
-# menu-maker · Casa Peix
+# Menu Maker · Casa Peix
+
+<div align="center">
+<br>
+<img src="./resources/icons/hicolor/scalable/apps/icon.svg" width="150" />
+<h1 align="center">MenuMaker</h1>
+
+![GitHub License](https://img.shields.io/github/license/mariinkys/menu-maker)
+
+<h3>Desktop app for designing the restaurant menu of Hotel Casa Peix (Customizable to other restaurants)</h3>
+
+<img src="./resources/screenshots/main.png" width=700>
+
+</div>
+
+<br>
 
 Desktop app made with [Slint](https://slint.dev) for designing the restaurant menu of
-Hotel Casa Peix (Customizable to other restaruants).
+Hotel Casa Peix (Customizable to other restaurants).
 
 - Customizable header with logo: left, centre or right, with adjustable height.
 - Sections with dishes: name, description, price and allergens.
