@@ -7,7 +7,7 @@
 
 ![GitHub License](https://img.shields.io/github/license/mariinkys/menu-maker)
 
-<h3>Desktop app for designing the restaurant menu of Hotel Casa Peix (Customizable to other restaurants)</h3>
+<h3>Desktop app for designing single-page restaurant menus</h3>
 
 <img src="./resources/screenshots/main.png" width=700>
 
