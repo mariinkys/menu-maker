@@ -1,5 +1,3 @@
-# Menu Maker · Casa Peix
-
 <div align="center">
 <br>
 <img src="./resources/icons/hicolor/scalable/apps/icon.svg" width="150" />
