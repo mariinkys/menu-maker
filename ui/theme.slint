@@ -65,6 +65,7 @@ export component IconButton inherits Rectangle {
             : root.icon == "close" ? "M 6 6 L 18 18 M 18 6 L 6 18"
             : root.icon == "plus" ? "M 12 5 L 12 19 M 5 12 L 19 12"
             : root.icon == "trash" ? "M 4 7 L 20 7 M 9 7 L 9 4 L 15 4 L 15 7 M 6 7 L 7 20 L 17 20 L 18 7"
+            : root.icon == "info" ? "M 12 3 A 9 9 0 1 0 12 21 A 9 9 0 1 0 12 3 Z M 12 11 L 12 16.5 M 12 7 L 12 8.6"
             : root.icon == "cog" ? "M 19.56 9.38 L 22.26 9.75 L 22.26 14.25 L 19.56 14.62 L 19.20 15.49 L 20.84 17.66 L 17.66 20.84 L 15.49 19.20 L 14.62 19.56 L 14.25 22.26 L 9.75 22.26 L 9.38 19.56 L 8.51 19.20 L 6.34 20.84 L 3.16 17.66 L 4.80 15.49 L 4.44 14.62 L 1.74 14.25 L 1.74 9.75 L 4.44 9.38 L 4.80 8.51 L 3.16 6.34 L 6.34 3.16 L 8.51 4.80 L 9.38 4.44 L 9.75 1.74 L 14.25 1.74 L 14.62 4.44 L 15.49 4.80 L 17.66 3.16 L 20.84 6.34 L 19.20 8.51 Z M 15 12 A 3 3 0 1 0 9 12 A 3 3 0 1 0 15 12 Z"
             : "M 6 9 L 12 15 L 18 9";
     }
@@ -241,5 +242,26 @@ export component ColorSwatch inherits Rectangle {
     touch := TouchArea {
         mouse-cursor: MouseCursor.pointer;
         clicked => { root.clicked(); }
+    }
+}
+
+// Clickable, underlined text that reports a URL.
+export component LinkText inherits Text {
+    in property <string> url;
+    callback activated(string);
+    color: touch.has-hover ? Theme.brand-text.darker(0.2) : Theme.brand-text;
+    font-size: 13px;
+    overflow: elide;
+    Rectangle {
+        x: 0; // without this the underline is centred, not under the text
+        y: parent.height - 2px;
+        width: min(parent.width, root.preferred-width);
+        height: 1px;
+        background: root.color;
+        opacity: touch.has-hover ? 1 : 0.5;
+    }
+    touch := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => { root.activated(root.url); }
     }
 }

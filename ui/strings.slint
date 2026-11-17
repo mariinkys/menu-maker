@@ -42,10 +42,11 @@ export global Strings {
     public pure function image-unsupported() -> string { return @tr("Unsupported image format (use PNG, JPEG, WebP or GIF)."); }
     public pure function image-invalid(detail: string) -> string { return @tr("Invalid image: {}", detail); }
 
-    // --- Design & settings -------------------------------------------------
+    // --- Design, Settings & About ------------------------------------------
     public pure function design-reset() -> string { return @tr("Design reset."); }
     public pure function settings-reset() -> string { return @tr("Settings reset (Casa Peix)."); }
     public pure function settings-not-saved(detail: string) -> string { return @tr("Could not save the settings: {}", detail); }
+    public pure function link-failed(url: string) -> string { return @tr("Could not open {} in the browser.", url); }
 
     // --- Presets -----------------------------------------------------------
     public pure function presets-unreadable(detail: string) -> string { return @tr("Could not read the presets: {}", detail); }

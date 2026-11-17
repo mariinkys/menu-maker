@@ -8,9 +8,10 @@ import { DesignPanel } from "design-panel.slint";
 import { PresetsPanel } from "presets-panel.slint";
 import { PreviewPane } from "preview-pane.slint";
 import { SettingsDialog } from "settings-dialog.slint";
+import { AboutDialog } from "about-dialog.slint";
 import { AppState, Actions, Branding, SettingsState } from "state.slint";
 
-export { Catalog, MenuState, DesignState, PresetState, PreviewState, AppState, Actions, Branding, SettingsState, ProductRow, SectionRow, FontRow, PresetRow } from "state.slint";
+export { AboutInfo, Catalog, MenuState, DesignState, PresetState, PreviewState, AppState, Actions, Branding, SettingsState, ProductRow, SectionRow, FontRow, PresetRow } from "state.slint";
 export { Theme } from "theme.slint";
 export { Strings } from "strings.slint";
 
@@ -81,6 +82,18 @@ export component MainWindow inherits Window {
                 VerticalLayout {
                     alignment: center;
                     IconButton {
+                        icon: "info";
+                        icon-size: 20px;
+                        width: 34px;
+                        height: 34px;
+                        tint: Theme.on-brand;
+                        hover-background: Theme.on-brand.with-alpha(0.13);
+                        clicked => { AppState.about-open = true; }
+                    }
+                }
+                VerticalLayout {
+                    alignment: center;
+                    IconButton {
                         icon: "cog";
                         icon-size: 20px;
                         width: 34px;
@@ -142,6 +155,13 @@ export component MainWindow inherits Window {
     }
 
     if SettingsState.open: SettingsDialog {
+        x: 0;
+        y: 0;
+        width: root.width;
+        height: root.height;
+    }
+
+    if AppState.about-open: AboutDialog {
         x: 0;
         y: 0;
         width: root.width;

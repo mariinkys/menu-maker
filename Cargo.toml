@@ -3,7 +3,7 @@ name = "menu-maker"
 version = "0.1.0"
 edition = "2024"
 description = "Editor de Cartas de Restaurante"
-license = "GPL-3.0"
+license = "GPL-3.0-only"
 default-run = "menu-maker"
 authors = ["mariinkys"]
 repository ="https://github.com/mariinkys/menu-maker"
@@ -20,6 +20,7 @@ path = "src/main.rs"
 # UI
 slint = "1.19"
 rfd = "0.18"
+open = "5.4.5"
 
 # PDF writing, PDF rasterising (preview), text shaping
 krilla = { version = "0.8", default-features = false, features = ["raster-images"] }

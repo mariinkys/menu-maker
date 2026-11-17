@@ -1,0 +1,81 @@
+import { AboutSlint, Button } from "std-widgets.slint";
+import { Theme, FieldLabel, IconButton, LinkText } from "theme.slint";
+import { AboutInfo, AppState, Actions } from "state.slint";
+
+component InfoRow inherits HorizontalLayout {
+    in property <string> label;
+    spacing: 10px;
+    FieldLabel { text: root.label; width: 110px; }
+    @children
+}
+
+export component AboutDialog inherits Rectangle {
+    background: Theme.scrim;
+    TouchArea { clicked => { AppState.about-open = false; } } // click outside closes
+
+    Rectangle {
+        width: 440px;
+        height: content.preferred-height;
+        background: Theme.surface;
+        border-radius: 12px;
+        border-width: 1px;
+        border-color: Theme.border;
+        drop-shadow-blur: 30px;
+        drop-shadow-color: #00000055;
+        TouchArea { } // swallow clicks on the card
+
+        content := VerticalLayout {
+            padding: 22px;
+            spacing: 12px;
+
+            HorizontalLayout {
+                spacing: 14px;
+                Image { source: @image-url("../resources/icons/hicolor/scalable/apps/icon.svg"); width: 56px; height: 56px; }
+                VerticalLayout {
+                    alignment: center;
+                    spacing: 2px;
+                    Text { text: AboutInfo.name; color: Theme.text; font-size: 20px; font-weight: 700; }
+                    Text { text: @tr("Version {}", AboutInfo.version); color: Theme.text-muted; font-size: 12px; }
+                }
+                Rectangle { horizontal-stretch: 1; }
+                VerticalLayout {
+                    alignment: start;
+                    IconButton { icon: "close"; clicked => { AppState.about-open = false; } }
+                }
+            }
+
+            Text { text: AboutInfo.description; color: Theme.text; wrap: word-wrap; }
+
+            InfoRow {
+                label: @tr("License");
+                LinkText {
+                    text: AboutInfo.license;
+                    url: AboutInfo.license-url;
+                    activated(url) => { Actions.open-url(url); }
+                }
+            }
+            InfoRow {
+                label: @tr("Authors");
+                Text { text: AboutInfo.authors; color: Theme.text; wrap: word-wrap; horizontal-stretch: 1; }
+            }
+            InfoRow {
+                label: @tr("Repository");
+                LinkText {
+                    text: AboutInfo.repository;
+                    url: AboutInfo.repository;
+                    activated(url) => { Actions.open-url(url); }
+                }
+            }
+
+            Rectangle { height: 1px; background: Theme.border; }
+
+            // Slint's standard "Made with Slint" badge.
+            HorizontalLayout { alignment: center; AboutSlint { } }
+
+            HorizontalLayout {
+                alignment: end;
+                Button { text: @tr("Close"); clicked => { AppState.about-open = false; } }
+            }
+        }
+    }
+}

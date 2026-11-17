@@ -2,6 +2,7 @@
 //! core (engine, storage). The `.slint` files only describe the
 //! interface; every decision is taken here or in `menu_core`.
 
+mod about;
 mod branding;
 mod convert;
 mod editor;
@@ -191,6 +192,7 @@ impl Controller {
         let ui = self.ui();
         let catalog = ui.global::<Catalog>();
         catalog.set_font_families(convert::string_model(self.fonts().families()));
+        about::fill(&ui);
         self.apply_everything();
         self.refresh_presets();
     }
@@ -507,6 +509,15 @@ impl Controller {
         });
         on!(on_export_pdf, |c| {
             c.export_pdf();
+        });
+        // --- About ---------------------------------------------------------
+        on!(on_open_url, |c, url: SharedString| {
+            if let Err(url) = about::open_url(&url) {
+                c.status(
+                    StatusKind::Error,
+                    c.tr(|t| t.invoke_link_failed(url.into())),
+                );
+            }
         });
         // --- Settings ------------------------------------------------------
         on!(on_settings_changed, |c| {
