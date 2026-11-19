@@ -141,3 +141,9 @@ cargo test                      # 29 tests: prices, layout, flow, PDF, SQLite, l
 ```
 
 On Windows and macOS no extra system dependencies are needed.
+
+## AI Disclosure
+
+No agentic AI (vibe-coding) has been used for the development of this app; however, I've used the web interface extensively for asking questions and writing some parts of the code, specially regarding the PDF rendering. This is the first time I use Slint, so some questions regarding the architecture of the app have also been solved largely by AI.
+
+The model I've used is Opus 5.5 Medium Effort.
