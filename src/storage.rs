@@ -29,7 +29,11 @@ impl PresetKind {
     }
 
     fn parse(s: &str) -> Self {
-        if s == "style" { PresetKind::Style } else { PresetKind::Menu }
+        if s == "style" {
+            PresetKind::Style
+        } else {
+            PresetKind::Menu
+        }
     }
 }
 
@@ -78,9 +82,11 @@ impl PresetStore {
 
     pub fn open(path: &Path) -> anyhow::Result<Self> {
         if let Some(dir) = path.parent() {
-            std::fs::create_dir_all(dir).with_context(|| format!("could not create {}", dir.display()))?;
+            std::fs::create_dir_all(dir)
+                .with_context(|| format!("could not create {}", dir.display()))?;
         }
-        let conn = Connection::open(path).with_context(|| format!("could not open {}", path.display()))?;
+        let conn =
+            Connection::open(path).with_context(|| format!("could not open {}", path.display()))?;
         let store = Self::init(conn)?;
         info!(path = %path.display(), "database opened");
         Ok(store)
@@ -95,10 +101,14 @@ impl PresetStore {
         let version: i64 = conn.pragma_query_value(None, "user_version", |r| r.get(0))?;
         for (i, sql) in MIGRATIONS.iter().enumerate().skip(version as usize) {
             info!(from = i, to = i + 1, "applying database migration");
-            conn.execute_batch(sql).with_context(|| format!("migration {} failed", i + 1))?;
+            conn.execute_batch(sql)
+                .with_context(|| format!("migration {} failed", i + 1))?;
             conn.pragma_update(None, "user_version", (i + 1) as i64)?;
         }
-        debug!(schema_version = MIGRATIONS.len(), "database schema up to date");
+        debug!(
+            schema_version = MIGRATIONS.len(),
+            "database schema up to date"
+        );
         Ok(Self { conn })
     }
 
@@ -140,14 +150,24 @@ impl PresetStore {
             params![name, kind.as_str()],
             |r| r.get(0),
         )?;
-        info!(id, name, kind = kind.as_str(), bytes = payload.len(), "preset saved");
+        info!(
+            id,
+            name,
+            kind = kind.as_str(),
+            bytes = payload.len(),
+            "preset saved"
+        );
         Ok(id)
     }
 
     pub fn load(&self, id: i64) -> anyhow::Result<PresetPayload> {
         let (kind, payload): (String, String) = self
             .conn
-            .query_row("SELECT kind, payload FROM presets WHERE id = ?1", [id], |r| Ok((r.get(0)?, r.get(1)?)))
+            .query_row(
+                "SELECT kind, payload FROM presets WHERE id = ?1",
+                [id],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
             .context("the preset does not exist")?;
         info!(id, kind, "preset loaded");
         Ok(match PresetKind::parse(&kind) {
@@ -160,14 +180,19 @@ impl PresetStore {
         let new_name = new_name.trim();
         anyhow::ensure!(!new_name.is_empty(), "the preset name is empty");
         self.conn
-            .execute("UPDATE presets SET name = ?1 WHERE id = ?2", params![new_name, id])
+            .execute(
+                "UPDATE presets SET name = ?1 WHERE id = ?2",
+                params![new_name, id],
+            )
             .context("a preset with that name already exists")?;
         info!(id, new_name, "preset renamed");
         Ok(())
     }
 
     pub fn delete(&self, id: i64) -> anyhow::Result<()> {
-        let removed = self.conn.execute("DELETE FROM presets WHERE id = ?1", [id])?;
+        let removed = self
+            .conn
+            .execute("DELETE FROM presets WHERE id = ?1", [id])?;
         info!(id, removed, "preset deleted");
         Ok(())
     }
@@ -186,7 +211,11 @@ impl PresetStore {
     pub fn load_last_document(&self) -> anyhow::Result<Option<MenuDocument>> {
         let json: Option<String> = self
             .conn
-            .query_row("SELECT value FROM app_state WHERE key = ?1", [LAST_DOCUMENT_KEY], |r| r.get(0))
+            .query_row(
+                "SELECT value FROM app_state WHERE key = ?1",
+                [LAST_DOCUMENT_KEY],
+                |r| r.get(0),
+            )
             .optional()?;
         Ok(match json {
             Some(json) => Some(serde_json::from_str(&json)?),
@@ -208,7 +237,9 @@ impl PresetStore {
     fn get_state(&self, key: &str) -> anyhow::Result<Option<String>> {
         Ok(self
             .conn
-            .query_row("SELECT value FROM app_state WHERE key = ?1", [key], |r| r.get(0))
+            .query_row("SELECT value FROM app_state WHERE key = ?1", [key], |r| {
+                r.get(0)
+            })
             .optional()?)
     }
 
@@ -247,7 +278,13 @@ mod tests {
             PresetPayload::Style(_) => panic!("wrong kind"),
         }
         store.rename(id, "Verano 2027").unwrap();
-        assert!(store.list().unwrap().iter().any(|p| p.name == "Verano 2027"));
+        assert!(
+            store
+                .list()
+                .unwrap()
+                .iter()
+                .any(|p| p.name == "Verano 2027")
+        );
         store.delete(id).unwrap();
         assert_eq!(store.list().unwrap().len(), 1);
         assert!(store.save_menu("  ", &doc).is_err());

@@ -10,7 +10,11 @@ pub struct EditorState {
 }
 
 fn direction(delta: i32) -> Direction {
-    if delta < 0 { Direction::Up } else { Direction::Down }
+    if delta < 0 {
+        Direction::Up
+    } else {
+        Direction::Down
+    }
 }
 
 fn swap_for<T>(items: &mut [T], index: usize, dir: Direction) {
@@ -23,7 +27,11 @@ fn swap_for<T>(items: &mut [T], index: usize, dir: Direction) {
 
 impl EditorState {
     pub fn new(doc: MenuDocument) -> Self {
-        let mut state = Self { doc, section_open: Vec::new(), product_open: Vec::new() };
+        let mut state = Self {
+            doc,
+            section_open: Vec::new(),
+            product_open: Vec::new(),
+        };
         state.reset_view();
         state
     }
@@ -31,7 +39,12 @@ impl EditorState {
     /// Sections expanded, dishes collapsed.
     pub fn reset_view(&mut self) {
         self.section_open = vec![true; self.doc.sections.len()];
-        self.product_open = self.doc.sections.iter().map(|s| vec![false; s.products.len()]).collect();
+        self.product_open = self
+            .doc
+            .sections
+            .iter()
+            .map(|s| vec![false; s.products.len()])
+            .collect();
     }
 
     pub fn replace(&mut self, doc: MenuDocument) {
@@ -44,7 +57,11 @@ impl EditorState {
     }
 
     pub fn product_open(&self, si: usize, pi: usize) -> bool {
-        self.product_open.get(si).and_then(|s| s.get(pi)).copied().unwrap_or(false)
+        self.product_open
+            .get(si)
+            .and_then(|s| s.get(pi))
+            .copied()
+            .unwrap_or(false)
     }
 
     pub fn add_section(&mut self, name: &str) {

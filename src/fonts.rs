@@ -36,7 +36,10 @@ pub struct LoadedFont {
 
 impl std::fmt::Debug for LoadedFont {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("LoadedFont").field("id", &self.id).field("family", &self.family).finish()
+        f.debug_struct("LoadedFont")
+            .field("id", &self.id)
+            .field("family", &self.family)
+            .finish()
     }
 }
 
@@ -57,12 +60,32 @@ pub struct FontCatalog {
 }
 
 const PREFERRED_SANS: &[&str] = &[
-    "Inter", "Lato", "Open Sans", "Source Sans 3", "Roboto", "Segoe UI", "Helvetica Neue",
-    "Helvetica", "Arial", "Noto Sans", "DejaVu Sans", "Liberation Sans", "FreeSans",
+    "Inter",
+    "Lato",
+    "Open Sans",
+    "Source Sans 3",
+    "Roboto",
+    "Segoe UI",
+    "Helvetica Neue",
+    "Helvetica",
+    "Arial",
+    "Noto Sans",
+    "DejaVu Sans",
+    "Liberation Sans",
+    "FreeSans",
 ];
 const PREFERRED_SERIF: &[&str] = &[
-    "Lora", "Playfair Display", "Cormorant Garamond", "EB Garamond", "Georgia", "Cambria",
-    "Times New Roman", "Noto Serif", "DejaVu Serif", "Liberation Serif", "FreeSerif",
+    "Lora",
+    "Playfair Display",
+    "Cormorant Garamond",
+    "EB Garamond",
+    "Georgia",
+    "Cambria",
+    "Times New Roman",
+    "Noto Serif",
+    "DejaVu Serif",
+    "Liberation Serif",
+    "FreeSerif",
 ];
 
 impl FontCatalog {
@@ -89,7 +112,9 @@ impl FontCatalog {
     pub fn from_database(mut db: Database) -> Self {
         let mut families = BTreeSet::new();
         for face in db.faces() {
-            let Some((name, _)) = face.families.first() else { continue };
+            let Some((name, _)) = face.families.first() else {
+                continue;
+            };
             if name.starts_with('.') || name.is_empty() {
                 continue;
             }
@@ -125,15 +150,23 @@ impl FontCatalog {
     }
 
     fn family_supports_latin(db: &Database, family: &str) -> bool {
-        let query = Query { families: &[Family::Name(family)], ..Query::default() };
-        let Some(id) = db.query(&query) else { return false };
+        let query = Query {
+            families: &[Family::Name(family)],
+            ..Query::default()
+        };
+        let Some(id) = db.query(&query) else {
+            return false;
+        };
         db.with_face_data(id, |data, index| {
             FontRef::from_index(data, index).is_ok_and(|font| {
                 let has_outlines = [b"glyf", b"CFF ", b"CFF2"]
                     .iter()
                     .any(|tag| font.table_data(Tag::new(tag)).is_some());
                 let charmap = font.charmap();
-                has_outlines && ['a', 'Z', 'é', 'ñ', '1'].iter().all(|c| charmap.map(*c).is_some())
+                has_outlines
+                    && ['a', 'Z', 'é', 'ñ', '1']
+                        .iter()
+                        .all(|c| charmap.map(*c).is_some())
             })
         })
         .unwrap_or(false)
@@ -165,7 +198,11 @@ impl FontCatalog {
     /// Loads the face that best matches the spec, falling back gracefully.
     pub fn load(&self, spec: &FontSpec) -> Option<LoadedFont> {
         let family = self.resolve_family_name(&spec.family);
-        let key = FaceKey { family: family.clone(), bold: spec.bold, italic: spec.italic };
+        let key = FaceKey {
+            family: family.clone(),
+            bold: spec.bold,
+            italic: spec.italic,
+        };
         if let Some(font) = self.cache.lock().ok()?.get(&key) {
             return Some(font.clone());
         }
@@ -175,15 +212,25 @@ impl FontCatalog {
 
         let query = Query {
             families: &[Family::Name(&family), Family::SansSerif],
-            weight: if spec.bold { Weight::BOLD } else { Weight::NORMAL },
+            weight: if spec.bold {
+                Weight::BOLD
+            } else {
+                Weight::NORMAL
+            },
             stretch: Stretch::Normal,
-            style: if spec.italic { Style::Italic } else { Style::Normal },
+            style: if spec.italic {
+                Style::Italic
+            } else {
+                Style::Normal
+            },
         };
         let Some(id) = self.db.query(&query) else {
             warn!(%family, bold = spec.bold, italic = spec.italic, "no matching font face");
             return None;
         };
-        let (data, index) = self.db.with_face_data(id, |data, index| (data.to_vec(), index))?;
+        let (data, index) = self
+            .db
+            .with_face_data(id, |data, index| (data.to_vec(), index))?;
         let data = Arc::new(data);
 
         let (ascender, descender, cap_height) = {
@@ -224,7 +271,10 @@ mod tests {
         if catalog.families().is_empty() {
             return; // Headless CI without fonts.
         }
-        let spec = FontSpec { family: "Definitely Not Installed".into(), ..Default::default() };
+        let spec = FontSpec {
+            family: "Definitely Not Installed".into(),
+            ..Default::default()
+        };
         let font = catalog.load(&spec).expect("fallback font");
         assert_eq!(font.family, catalog.default_sans());
         assert!(font.ascender > 0.0 && font.descender < 0.0);

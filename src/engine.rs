@@ -41,7 +41,9 @@ impl std::fmt::Display for LogoError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             LogoError::Unreadable(detail) => write!(f, "could not read the image: {detail}"),
-            LogoError::UnsupportedFormat => write!(f, "unsupported image format (use PNG, JPEG, WebP or GIF)"),
+            LogoError::UnsupportedFormat => {
+                write!(f, "unsupported image format (use PNG, JPEG, WebP or GIF)")
+            }
             LogoError::Invalid(detail) => write!(f, "invalid image: {detail}"),
         }
     }
@@ -119,13 +121,22 @@ impl MenuEngine {
         loaded.map(Some)
     }
 
-    pub fn layout(&self, doc: &MenuDocument, logo: Option<&Image>) -> anyhow::Result<(PageLayout, RoleFonts)> {
+    pub fn layout(
+        &self,
+        doc: &MenuDocument,
+        logo: Option<&Image>,
+    ) -> anyhow::Result<(PageLayout, RoleFonts)> {
         let fonts = RoleFonts::resolve(&self.fonts, &doc.style.typography)?;
         let logo_aspect = logo.map(|img| {
             let (w, h) = img.size();
             w as f32 / h.max(1) as f32
         });
-        let layout = layout_menu(&LayoutInput { doc, fonts: &fonts, shaper: &self.shaper, logo_aspect });
+        let layout = layout_menu(&LayoutInput {
+            doc,
+            fonts: &fonts,
+            shaper: &self.shaper,
+            logo_aspect,
+        });
         Ok((layout, fonts))
     }
 
@@ -135,10 +146,19 @@ impl MenuEngine {
         let started = std::time::Instant::now();
         let logo = self.logo(&doc.header.logo).unwrap_or(None);
         let (layout, fonts) = self.layout(doc, logo.as_ref())?;
-        let title = if doc.header.title.trim().is_empty() { "Carta" } else { doc.header.title.trim() };
+        let title = if doc.header.title.trim().is_empty() {
+            "Carta"
+        } else {
+            doc.header.title.trim()
+        };
         let pdf = render_pdf(
             &layout,
-            &PdfContext { fonts: &fonts, shaper: &self.shaper, logo: logo.as_ref(), title },
+            &PdfContext {
+                fonts: &fonts,
+                shaper: &self.shaper,
+                logo: logo.as_ref(),
+                title,
+            },
         )?;
         debug!(
             scale = layout.scale,
@@ -149,13 +169,25 @@ impl MenuEngine {
             "menu rendered to PDF"
         );
         if !layout.fits {
-            warn!(scale = layout.scale, "menu content does not fit on one page even at minimum scale");
+            warn!(
+                scale = layout.scale,
+                "menu content does not fit on one page even at minimum scale"
+            );
         }
-        Ok(RenderedMenu { pdf, scale: layout.scale, fits: layout.fits, page_size_pt: (layout.width, layout.height) })
+        Ok(RenderedMenu {
+            pdf,
+            scale: layout.scale,
+            fits: layout.fits,
+            page_size_pt: (layout.width, layout.height),
+        })
     }
 
     /// Renders the PDF and rasterises it for display.
-    pub fn render_preview(&self, doc: &MenuDocument, pixels_per_point: f32) -> anyhow::Result<(RenderedMenu, RgbaImage)> {
+    pub fn render_preview(
+        &self,
+        doc: &MenuDocument,
+        pixels_per_point: f32,
+    ) -> anyhow::Result<(RenderedMenu, RgbaImage)> {
         let rendered = self.render(doc)?;
         let started = std::time::Instant::now();
         let image = rasterize_first_page(rendered.pdf.clone(), pixels_per_point)?;
@@ -170,7 +202,8 @@ impl MenuEngine {
 }
 
 fn load_image_file(path: &Path) -> Result<Image, LogoError> {
-    let bytes = std::fs::read(path).map_err(|e| LogoError::Unreadable(format!("{}: {e}", path.display())))?;
+    let bytes = std::fs::read(path)
+        .map_err(|e| LogoError::Unreadable(format!("{}: {e}", path.display())))?;
     decode_image(bytes)
 }
 
@@ -213,12 +246,17 @@ mod tests {
 
     #[test]
     fn default_menu_logo_follows_app_logo() {
-        let engine = MenuEngine::new(Arc::new(FontCatalog::from_database(fontdb::Database::new())));
+        let engine = MenuEngine::new(Arc::new(
+            FontCatalog::from_database(fontdb::Database::new()),
+        ));
         assert!(engine.logo(&LogoSource::Default).unwrap().is_some());
         engine.set_app_logo(LogoSource::None);
         assert!(engine.logo(&LogoSource::Default).unwrap().is_none());
         engine.set_app_logo(LogoSource::File("/definitely/missing.png".into()));
-        assert!(matches!(engine.logo(&LogoSource::Default), Err(LogoError::Unreadable(_))));
+        assert!(matches!(
+            engine.logo(&LogoSource::Default),
+            Err(LogoError::Unreadable(_))
+        ));
     }
 
     #[test]

@@ -69,13 +69,23 @@ impl TextShaper {
     }
 
     /// Greedy word wrap. Words longer than `max_width` are split by character.
-    pub fn wrap(&self, font: &LoadedFont, text: &str, size: f32, tracking: f32, max_width: f32) -> Vec<String> {
+    pub fn wrap(
+        &self,
+        font: &LoadedFont,
+        text: &str,
+        size: f32,
+        tracking: f32,
+        max_width: f32,
+    ) -> Vec<String> {
         let mut lines = Vec::new();
         for paragraph in text.split('\n') {
             let mut current = String::new();
             for word in paragraph.split_whitespace() {
-                let candidate =
-                    if current.is_empty() { word.to_string() } else { format!("{current} {word}") };
+                let candidate = if current.is_empty() {
+                    word.to_string()
+                } else {
+                    format!("{current} {word}")
+                };
                 if self.width(font, &candidate, size, tracking) <= max_width {
                     current = candidate;
                     continue;
@@ -90,7 +100,9 @@ impl TextShaper {
                     for ch in word.chars() {
                         let mut next = current.clone();
                         next.push(ch);
-                        if !current.is_empty() && self.width(font, &next, size, tracking) > max_width {
+                        if !current.is_empty()
+                            && self.width(font, &next, size, tracking) > max_width
+                        {
                             lines.push(std::mem::take(&mut current));
                             current.push(ch);
                         } else {
@@ -108,7 +120,10 @@ impl TextShaper {
 }
 
 fn shape_uncached(font: &LoadedFont, text: &str) -> ShapedText {
-    let empty = || ShapedText { glyphs: Vec::new(), advance: 0.0 };
+    let empty = || ShapedText {
+        glyphs: Vec::new(),
+        advance: 0.0,
+    };
     // Default scale is 1.0, so positions come back in font units.
     let shaper_font = harfrust::ShaperFont::new(&font.shaper);
     let upem = font.shaper.units_per_em().max(1) as f32;

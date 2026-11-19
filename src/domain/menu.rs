@@ -32,7 +32,11 @@ pub struct Header {
 
 impl Default for Header {
     fn default() -> Self {
-        Self { title: "Carta del Jardín".into(), subtitle: String::new(), logo: LogoSource::Default }
+        Self {
+            title: "Carta del Jardín".into(),
+            subtitle: String::new(),
+            logo: LogoSource::Default,
+        }
     }
 }
 
@@ -69,8 +73,9 @@ impl Default for MenuDocument {
         Self {
             header: Header::default(),
             sections: Vec::new(),
-            footer: "IVA incluido. Si tiene alguna alergia o intolerancia, consulte a nuestro personal."
-                .into(),
+            footer:
+                "IVA incluido. Si tiene alguna alergia o intolerancia, consulte a nuestro personal."
+                    .into(),
             style: MenuStyle::default(),
         }
     }
@@ -106,7 +111,10 @@ impl MenuDocument {
     }
 
     pub fn add_section(&mut self, name: &str) -> usize {
-        self.sections.push(Section { name: name.into(), ..Default::default() });
+        self.sections.push(Section {
+            name: name.into(),
+            ..Default::default()
+        });
         self.sections.len() - 1
     }
 
@@ -125,7 +133,10 @@ impl MenuDocument {
 
     pub fn add_product(&mut self, section: usize, name: &str) -> Option<usize> {
         let s = self.sections.get_mut(section)?;
-        s.products.push(Product { name: name.into(), ..Default::default() });
+        s.products.push(Product {
+            name: name.into(),
+            ..Default::default()
+        });
         Some(s.products.len() - 1)
     }
 
@@ -150,7 +161,9 @@ impl MenuDocument {
     }
 
     pub fn toggle_allergen(&mut self, section: usize, product: usize, allergen: Allergen) -> bool {
-        let Some(p) = self.product_mut(section, product) else { return false };
+        let Some(p) = self.product_mut(section, product) else {
+            return false;
+        };
         if !p.allergens.remove(&allergen) {
             p.allergens.insert(allergen);
         }
@@ -182,35 +195,90 @@ impl MenuDocument {
                 name: "Para picar".into(),
                 note: "Ideales para compartir".into(),
                 products: vec![
-                    p("Croquetas de jamón ibérico", "Bechamel cremosa y rebozado crujiente (6 uds.)", "9,50", &[Gluten, Eggs, Dairy]),
-                    p("Patatas bravas", "Salsa brava de la casa y alioli suave", "6,50", &[Eggs]),
-                    p("Pan de cristal con tomate", "Tomate rallado, aceite de oliva virgen extra y sal en escamas", "4", &[Gluten]),
-                    p("Mejillones al vapor", "Con limón y laurel", "11", &[Molluscs]),
+                    p(
+                        "Croquetas de jamón ibérico",
+                        "Bechamel cremosa y rebozado crujiente (6 uds.)",
+                        "9,50",
+                        &[Gluten, Eggs, Dairy],
+                    ),
+                    p(
+                        "Patatas bravas",
+                        "Salsa brava de la casa y alioli suave",
+                        "6,50",
+                        &[Eggs],
+                    ),
+                    p(
+                        "Pan de cristal con tomate",
+                        "Tomate rallado, aceite de oliva virgen extra y sal en escamas",
+                        "4",
+                        &[Gluten],
+                    ),
+                    p(
+                        "Mejillones al vapor",
+                        "Con limón y laurel",
+                        "11",
+                        &[Molluscs],
+                    ),
                 ],
             },
             Section {
                 name: "Ensaladas".into(),
                 note: String::new(),
                 products: vec![
-                    p("Ensalada del Jardín", "Brotes tiernos, tomate cherry, aguacate y vinagreta de cítricos", "11,50", &[Mustard]),
-                    p("Burrata con tomate rosa", "Pesto de albahaca y piñones tostados", "13,90", &[Dairy, TreeNuts]),
+                    p(
+                        "Ensalada del Jardín",
+                        "Brotes tiernos, tomate cherry, aguacate y vinagreta de cítricos",
+                        "11,50",
+                        &[Mustard],
+                    ),
+                    p(
+                        "Burrata con tomate rosa",
+                        "Pesto de albahaca y piñones tostados",
+                        "13,90",
+                        &[Dairy, TreeNuts],
+                    ),
                 ],
             },
             Section {
                 name: "Del mar".into(),
                 note: String::new(),
                 products: vec![
-                    p("Arroz negro", "Sepia, alioli y un toque de pimentón (mín. 2 personas, precio por persona)", "17,50", &[Molluscs, Crustaceans, Eggs]),
-                    p("Lubina a la brasa", "Verduras de temporada y aceite de hierbas", "21", &[Fish]),
-                    p("Pulpo a la gallega", "Patata cachelo, pimentón de la Vera", "19,50", &[Molluscs]),
+                    p(
+                        "Arroz negro",
+                        "Sepia, alioli y un toque de pimentón (mín. 2 personas, precio por persona)",
+                        "17,50",
+                        &[Molluscs, Crustaceans, Eggs],
+                    ),
+                    p(
+                        "Lubina a la brasa",
+                        "Verduras de temporada y aceite de hierbas",
+                        "21",
+                        &[Fish],
+                    ),
+                    p(
+                        "Pulpo a la gallega",
+                        "Patata cachelo, pimentón de la Vera",
+                        "19,50",
+                        &[Molluscs],
+                    ),
                 ],
             },
             Section {
                 name: "De la tierra".into(),
                 note: String::new(),
                 products: vec![
-                    p("Entrecot de vaca madurada", "300 g, con patatas y pimientos de Padrón", "24", &[]),
-                    p("Hamburguesa Casa Peix", "Ternera, queso curado, cebolla caramelizada y pan brioche", "15,50", &[Gluten, Dairy, Eggs, Sesame]),
+                    p(
+                        "Entrecot de vaca madurada",
+                        "300 g, con patatas y pimientos de Padrón",
+                        "24",
+                        &[],
+                    ),
+                    p(
+                        "Hamburguesa Casa Peix",
+                        "Ternera, queso curado, cebolla caramelizada y pan brioche",
+                        "15,50",
+                        &[Gluten, Dairy, Eggs, Sesame],
+                    ),
                 ],
             },
             Section {
@@ -218,12 +286,20 @@ impl MenuDocument {
                 note: String::new(),
                 products: vec![
                     p("Crema catalana", "Receta de la abuela", "6", &[Eggs, Dairy]),
-                    p("Tarta de queso", "Al horno, con frutos rojos", "6,50", &[Gluten, Eggs, Dairy]),
+                    p(
+                        "Tarta de queso",
+                        "Al horno, con frutos rojos",
+                        "6,50",
+                        &[Gluten, Eggs, Dairy],
+                    ),
                     p("Sorbete de limón", "Con cava", "5,50", &[Sulphites]),
                 ],
             },
         ];
-        Self { sections, ..Self::default() }
+        Self {
+            sections,
+            ..Self::default()
+        }
     }
 }
 
@@ -258,7 +334,8 @@ mod tests {
         assert_eq!(partial.header.title, "X");
         assert!(partial.style.show_allergen_legend);
         // Documents saved before the rename still load.
-        let old: MenuDocument = serde_json::from_str(r#"{"header":{"logo":{"kind":"builtin"}}}"#).unwrap();
+        let old: MenuDocument =
+            serde_json::from_str(r#"{"header":{"logo":{"kind":"builtin"}}}"#).unwrap();
         assert_eq!(old.header.logo, LogoSource::Default);
     }
 }

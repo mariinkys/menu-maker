@@ -13,7 +13,7 @@ pub mod text;
 
 use std::ops::Range;
 
-use crate::domain::{MenuDocument, Rgb, TextRole, MM_TO_PT};
+use crate::domain::{MM_TO_PT, MenuDocument, Rgb, TextRole};
 use blocks::{Block, BlockBuilder};
 use flow::Flowed;
 pub use model::{DrawOp, PageLayout};
@@ -56,7 +56,12 @@ fn content_frame(doc: &MenuDocument) -> (f32, f32, Frame) {
         m.top_mm.max(0.0) * MM_TO_PT,
         m.bottom_mm.max(0.0) * MM_TO_PT,
     );
-    let frame = Frame { x: l, y: t, width: (pw - l - r).max(20.0), height: (ph - t - b).max(20.0) };
+    let frame = Frame {
+        x: l,
+        y: t,
+        width: (pw - l - r).max(20.0),
+        height: (ph - t - b).max(20.0),
+    };
     (pw, ph, frame)
 }
 
@@ -67,9 +72,14 @@ fn arrange(input: &LayoutInput, frame: &Frame, scale: f32, force: bool) -> Optio
     let spacing = doc.style.typography.spacing.clamp(0.3, 3.0);
 
     let header = builder.header(frame.width);
-    let header_gap = if header.height > 0.0 { builder.size(TextRole::Section) * 0.9 * spacing } else { 0.0 };
+    let header_gap = if header.height > 0.0 {
+        builder.size(TextRole::Section) * 0.9 * spacing
+    } else {
+        0.0
+    };
     let footer = builder.footer(frame.width);
-    let body_height = frame.height - header.height - header_gap - footer.height - footer.space_before;
+    let body_height =
+        frame.height - header.height - header_gap - footer.height - footer.space_before;
     if body_height <= 0.0 && !force {
         return None;
     }
@@ -92,12 +102,34 @@ fn arrange(input: &LayoutInput, frame: &Frame, scale: f32, force: bool) -> Optio
 
     let body_height = body_height.max(0.0);
     let flowed = if force {
-        flow::flow(&blocks, &sections, columns, body_height, layout.keep_sections_together, true)?
+        flow::flow(
+            &blocks,
+            &sections,
+            columns,
+            body_height,
+            layout.keep_sections_together,
+            true,
+        )?
     } else {
-        flow::flow_balanced(&blocks, &sections, columns, body_height, layout.keep_sections_together)?
+        flow::flow_balanced(
+            &blocks,
+            &sections,
+            columns,
+            body_height,
+            layout.keep_sections_together,
+        )?
     };
 
-    Some(Arrangement { header, header_gap, footer, body_height, body_width, column_width, blocks, flowed })
+    Some(Arrangement {
+        header,
+        header_gap,
+        footer,
+        body_height,
+        body_width,
+        column_width,
+        blocks,
+        flowed,
+    })
 }
 
 /// Lays out the whole menu on one page, choosing the best scale.
@@ -106,12 +138,17 @@ pub fn layout_menu(input: &LayoutInput) -> PageLayout {
     let (page_w, page_h, frame) = content_frame(doc);
     let fit = &doc.style.fit;
     let min_scale = fit.min_scale.clamp(0.1, 1.0);
-    let max_scale = if fit.grow_to_fill { fit.max_scale.clamp(1.0, 4.0) } else { 1.0 };
+    let max_scale = if fit.grow_to_fill {
+        fit.max_scale.clamp(1.0, 4.0)
+    } else {
+        1.0
+    };
 
     let (scale, arrangement, fits) = if let Some(a) = arrange(input, &frame, max_scale, false) {
         (max_scale, a, true)
     } else if arrange(input, &frame, min_scale, false).is_none() {
-        let forced = arrange(input, &frame, min_scale, true).expect("forced arrangement always succeeds");
+        let forced =
+            arrange(input, &frame, min_scale, true).expect("forced arrangement always succeeds");
         (min_scale, forced, false)
     } else {
         let (mut lo, mut hi) = (min_scale, max_scale);
@@ -126,7 +163,11 @@ pub fn layout_menu(input: &LayoutInput) -> PageLayout {
                 break;
             }
         }
-        (lo, arrange(input, &frame, lo, false).expect("lower bound fits"), true)
+        (
+            lo,
+            arrange(input, &frame, lo, false).expect("lower bound fits"),
+            true,
+        )
     };
 
     tracing::trace!(
@@ -139,19 +180,35 @@ pub fn layout_menu(input: &LayoutInput) -> PageLayout {
         "layout computed"
     );
     let ops = compose(doc, &frame, &arrangement);
-    PageLayout { width: page_w, height: page_h, ops, scale, fits }
+    PageLayout {
+        width: page_w,
+        height: page_h,
+        ops,
+        scale,
+        fits,
+    }
 }
 
 fn compose(doc: &MenuDocument, frame: &Frame, a: &Arrangement) -> Vec<DrawOp> {
     let layout = &doc.style.layout;
     let mut ops = Vec::new();
 
-    ops.extend(a.header.ops.iter().cloned().map(|op| op.translated(frame.x, frame.y)));
+    ops.extend(
+        a.header
+            .ops
+            .iter()
+            .cloned()
+            .map(|op| op.translated(frame.x, frame.y)),
+    );
 
     let body_top = frame.y + a.header.height + a.header_gap;
     let body_left = frame.x + (frame.width - a.body_width) / 2.0;
     let used = a.flowed.used_height;
-    let offset = if layout.vertical_center { ((a.body_height - used) / 2.0).max(0.0) } else { 0.0 };
+    let offset = if layout.vertical_center {
+        ((a.body_height - used) / 2.0).max(0.0)
+    } else {
+        0.0
+    };
     let gap = layout.gap_mm.max(0.0) * MM_TO_PT;
 
     for (block, placement) in a.blocks.iter().zip(&a.flowed.placements) {
@@ -176,7 +233,13 @@ fn compose(doc: &MenuDocument, frame: &Frame, a: &Arrangement) -> Vec<DrawOp> {
     }
 
     let footer_top = frame.y + frame.height - a.footer.height;
-    ops.extend(a.footer.ops.iter().cloned().map(|op| op.translated(frame.x, footer_top)));
+    ops.extend(
+        a.footer
+            .ops
+            .iter()
+            .cloned()
+            .map(|op| op.translated(frame.x, footer_top)),
+    );
     ops
 }
 
@@ -197,7 +260,12 @@ mod tests {
         }
         let fonts = RoleFonts::resolve(&catalog, &doc.style.typography).unwrap();
         let shaper = TextShaper::default();
-        Some(layout_menu(&LayoutInput { doc, fonts: &fonts, shaper: &shaper, logo_aspect: Some(2.4) }))
+        Some(layout_menu(&LayoutInput {
+            doc,
+            fonts: &fonts,
+            shaper: &shaper,
+            logo_aspect: Some(2.4),
+        }))
     }
 
     fn bottom_of_body(layout: &PageLayout) -> f32 {
@@ -216,7 +284,9 @@ mod tests {
         for columns in 1..=3 {
             let mut doc = MenuDocument::sample();
             doc.style.layout.columns = columns;
-            let Some(layout) = layout_for(&doc) else { return };
+            let Some(layout) = layout_for(&doc) else {
+                return;
+            };
             assert!(layout.fits, "{columns} columns should fit");
             assert!(bottom_of_body(&layout) < layout.height);
         }
@@ -227,7 +297,9 @@ mod tests {
         let mut doc = MenuDocument::sample();
         let extra = doc.sections.clone();
         doc.sections.extend(extra.clone());
-        let Some(layout) = layout_for(&doc) else { return };
+        let Some(layout) = layout_for(&doc) else {
+            return;
+        };
         assert!(layout.fits);
         assert!(layout.scale < 1.0, "scale was {}", layout.scale);
         let (_, _, frame) = content_frame(&doc);
@@ -249,7 +321,9 @@ mod tests {
         for _ in 0..12 {
             doc.sections.extend(extra.clone());
         }
-        let Some(layout) = layout_for(&doc) else { return };
+        let Some(layout) = layout_for(&doc) else {
+            return;
+        };
         assert!(!layout.fits);
         assert_eq!(layout.scale, doc.style.fit.min_scale);
     }
@@ -259,7 +333,9 @@ mod tests {
         let mut doc = MenuDocument::sample();
         doc.sections.truncate(1);
         doc.style.fit.grow_to_fill = true;
-        let Some(layout) = layout_for(&doc) else { return };
+        let Some(layout) = layout_for(&doc) else {
+            return;
+        };
         assert!(layout.scale > 1.0);
     }
 }

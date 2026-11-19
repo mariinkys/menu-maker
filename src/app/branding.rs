@@ -21,7 +21,9 @@ pub fn load_logo_image(path: &Path) -> Result<slint::Image, slint::LoadImageErro
 pub fn select_language(language: Language) {
     match slint::select_bundled_translation(language.code()) {
         Ok(()) => tracing::info!(language = language.code(), "interface language selected"),
-        Err(error) => warn!(language = language.code(), %error, "could not select the interface language"),
+        Err(error) => {
+            warn!(language = language.code(), %error, "could not select the interface language")
+        }
     }
 }
 
@@ -30,7 +32,11 @@ pub fn select_language(language: Language) {
 pub fn apply(ui: &MainWindow, settings: &AppSettings) {
     let dark = settings.theme == ThemeMode::Dark;
     // Must match `Theme.surface` in ui/theme.slint.
-    let surface = if dark { Rgb(0x24, 0x20, 0x1E) } else { Rgb(0xFF, 0xFF, 0xFF) };
+    let surface = if dark {
+        Rgb(0x24, 0x20, 0x1E)
+    } else {
+        Rgb(0xFF, 0xFF, 0xFF)
+    };
     let theme = ui.global::<Theme>();
     theme.set_dark(dark);
     theme.set_brand(to_slint_color(settings.brand_color));
@@ -59,7 +65,8 @@ pub fn apply(ui: &MainWindow, settings: &AppSettings) {
             }
         },
     }
-    ui.global::<SettingsState>().set_brand_preview(to_slint_color(settings.brand_color));
+    ui.global::<SettingsState>()
+        .set_brand_preview(to_slint_color(settings.brand_color));
 }
 
 /// Fills every field of the settings dialog from `settings`.

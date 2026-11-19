@@ -7,18 +7,27 @@ use slint::{ComponentHandle, ModelRc, SharedString, VecModel};
 
 use menu_core::domain::price::format_price;
 use menu_core::domain::{
-    Allergen, AllergenDisplay, FontSpec, HAlign, Language, LogoSource, MenuDocument, MenuStyle, Orientation,
-    PaperSize, Rgb, Typography,
+    Allergen, AllergenDisplay, FontSpec, HAlign, Language, LogoSource, MenuDocument, MenuStyle,
+    Orientation, PaperSize, Rgb, Typography,
 };
 use menu_core::fonts::FontCatalog;
 use menu_core::storage::{PresetKind, PresetSummary};
 
 use super::editor::EditorState;
-use crate::{DesignState, FontRow, MainWindow, MenuState, PresetRow, ProductRow, SectionRow, Strings};
+use crate::{
+    DesignState, FontRow, MainWindow, MenuState, PresetRow, ProductRow, SectionRow, Strings,
+};
 
 /// Font rows of the "Typography" card, in display order (names for logs;
 /// the UI labels are translated in design-panel.slint).
-pub const FONT_ROWS: [&str; 6] = ["title", "subtitle", "section", "dish", "description", "price"];
+pub const FONT_ROWS: [&str; 6] = [
+    "title",
+    "subtitle",
+    "section",
+    "dish",
+    "description",
+    "price",
+];
 
 pub fn font_spec_mut(t: &mut Typography, row: usize) -> Option<&mut FontSpec> {
     Some(match row {
@@ -47,17 +56,29 @@ fn font_spec(t: &Typography, row: usize) -> &FontSpec {
 /// (serif for headings, sans for body), so the UI and PDF agree.
 pub fn normalize_fonts(style: &mut MenuStyle, catalog: &FontCatalog) {
     for row in 0..FONT_ROWS.len() {
-        let Some(spec) = font_spec_mut(&mut style.typography, row) else { continue };
-        let installed = catalog.families().iter().any(|f| f.eq_ignore_ascii_case(spec.family.trim()));
+        let Some(spec) = font_spec_mut(&mut style.typography, row) else {
+            continue;
+        };
+        let installed = catalog
+            .families()
+            .iter()
+            .any(|f| f.eq_ignore_ascii_case(spec.family.trim()));
         if !installed {
-            spec.family =
-                if row <= 2 { catalog.default_serif().to_string() } else { catalog.default_sans().to_string() };
+            spec.family = if row <= 2 {
+                catalog.default_serif().to_string()
+            } else {
+                catalog.default_sans().to_string()
+            };
         }
     }
 }
 
-fn shared_strings<I: IntoIterator<Item = S>, S: Into<SharedString>>(items: I) -> ModelRc<SharedString> {
-    ModelRc::new(VecModel::from(items.into_iter().map(Into::into).collect::<Vec<_>>()))
+fn shared_strings<I: IntoIterator<Item = S>, S: Into<SharedString>>(
+    items: I,
+) -> ModelRc<SharedString> {
+    ModelRc::new(VecModel::from(
+        items.into_iter().map(Into::into).collect::<Vec<_>>(),
+    ))
 }
 
 pub fn string_model(items: &[String]) -> ModelRc<SharedString> {
@@ -87,12 +108,20 @@ pub fn sections_model(state: &EditorState) -> ModelRc<SectionRow> {
                     name: p.name.as_str().into(),
                     description: p.description.as_str().into(),
                     price: p.price.as_str().into(),
-                    price_label: format_price(&p.price, &doc.style.prices).unwrap_or_default().into(),
+                    price_label: format_price(&p.price, &doc.style.prices)
+                        .unwrap_or_default()
+                        .into(),
                     allergens: ModelRc::new(VecModel::from(
-                        Allergen::ALL.iter().map(|a| p.allergens.contains(a)).collect::<Vec<_>>(),
+                        Allergen::ALL
+                            .iter()
+                            .map(|a| p.allergens.contains(a))
+                            .collect::<Vec<_>>(),
                     )),
                     allergen_numbers: ModelRc::new(VecModel::from(
-                        p.allergens.iter().map(|a| a.number() as i32).collect::<Vec<_>>(),
+                        p.allergens
+                            .iter()
+                            .map(|a| a.number() as i32)
+                            .collect::<Vec<_>>(),
                     )),
                     expanded: state.product_open(si, pi),
                 })
@@ -118,7 +147,10 @@ pub fn logo_mode(source: &LogoSource) -> i32 {
 
 pub fn logo_file_name(source: &LogoSource) -> String {
     match source {
-        LogoSource::File(path) => path.file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default(),
+        LogoSource::File(path) => path
+            .file_name()
+            .map(|n| n.to_string_lossy().into_owned())
+            .unwrap_or_default(),
         _ => String::new(),
     }
 }
@@ -185,7 +217,11 @@ pub fn apply_design(ui: &MainWindow, style: &MenuStyle, catalog: &FontCatalog) {
     let (w, h) = page.paper.dimensions_mm();
     d.set_custom_width(w.round() as i32);
     d.set_custom_height(h.round() as i32);
-    d.set_orientation_index(if page.orientation == Orientation::Landscape { 1 } else { 0 });
+    d.set_orientation_index(if page.orientation == Orientation::Landscape {
+        1
+    } else {
+        0
+    });
     d.set_margin_top(page.margins.top_mm.round() as i32);
     d.set_margin_right(page.margins.right_mm.round() as i32);
     d.set_margin_bottom(page.margins.bottom_mm.round() as i32);
@@ -221,7 +257,12 @@ pub fn apply_design(ui: &MainWindow, style: &MenuStyle, catalog: &FontCatalog) {
     d.set_symbol_before(style.prices.symbol_before);
     d.set_always_decimals(style.prices.always_show_decimals);
     d.set_dot_leaders(style.prices.dot_leaders);
-    d.set_allergen_mode(AllergenDisplay::ALL.iter().position(|a| *a == style.allergens).unwrap_or(0) as i32);
+    d.set_allergen_mode(
+        AllergenDisplay::ALL
+            .iter()
+            .position(|a| *a == style.allergens)
+            .unwrap_or(0) as i32,
+    );
     d.set_show_legend(style.show_allergen_legend);
     d.set_legend_language(style.legend_language.index() as i32);
 }
@@ -239,11 +280,18 @@ pub fn read_design(ui: &MainWindow, style: &mut MenuStyle) {
     let d = ui.global::<DesignState>();
     let page = &mut style.page;
     let paper_index = d.get_paper_index().max(0) as usize;
-    page.paper = PaperSize::STANDARD.get(paper_index).copied().unwrap_or(PaperSize::Custom {
-        width_mm: d.get_custom_width().max(50) as f32,
-        height_mm: d.get_custom_height().max(50) as f32,
-    });
-    page.orientation = if d.get_orientation_index() == 1 { Orientation::Landscape } else { Orientation::Portrait };
+    page.paper = PaperSize::STANDARD
+        .get(paper_index)
+        .copied()
+        .unwrap_or(PaperSize::Custom {
+            width_mm: d.get_custom_width().max(50) as f32,
+            height_mm: d.get_custom_height().max(50) as f32,
+        });
+    page.orientation = if d.get_orientation_index() == 1 {
+        Orientation::Landscape
+    } else {
+        Orientation::Portrait
+    };
     page.margins.top_mm = d.get_margin_top().max(0) as f32;
     page.margins.right_mm = d.get_margin_right().max(0) as f32;
     page.margins.bottom_mm = d.get_margin_bottom().max(0) as f32;
@@ -311,7 +359,11 @@ pub fn preset_rows(presets: &[PresetSummary]) -> ModelRc<PresetRow> {
 /// Short English page description for logs, e.g. "A4 210x297mm portrait".
 pub fn page_summary(style: &MenuStyle) -> String {
     let (w, h) = oriented_mm(style);
-    let orientation = if style.page.orientation == Orientation::Landscape { "landscape" } else { "portrait" };
+    let orientation = if style.page.orientation == Orientation::Landscape {
+        "landscape"
+    } else {
+        "portrait"
+    };
     format!("{:?} {w:.0}x{h:.0}mm {orientation}", style.page.paper)
 }
 
@@ -329,7 +381,11 @@ pub fn page_label(ui: &MainWindow, style: &MenuStyle, language: Language) -> Sha
 
 fn oriented_mm(style: &MenuStyle) -> (f32, f32) {
     let (w, h) = style.page.paper.dimensions_mm();
-    if style.page.orientation == Orientation::Landscape { (h, w) } else { (w, h) }
+    if style.page.orientation == Orientation::Landscape {
+        (h, w)
+    } else {
+        (w, h)
+    }
 }
 
 /// Whole millimetres as integers, otherwise one decimal with the
@@ -339,5 +395,9 @@ fn fmt_mm(v: f32, language: Language) -> String {
         return format!("{}", v.round() as i32);
     }
     let text = format!("{v:.1}");
-    if language == Language::Es { text.replace('.', ",") } else { text }
+    if language == Language::Es {
+        text.replace('.', ",")
+    } else {
+        text
+    }
 }

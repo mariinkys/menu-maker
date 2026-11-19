@@ -1,6 +1,7 @@
 //! Writes a [`PageLayout`] to PDF with krilla.
 
 use anyhow::{Context, anyhow};
+use krilla::Document;
 use krilla::color::rgb;
 use krilla::geom::{PathBuilder, Point, Size, Transform};
 use krilla::image::Image;
@@ -10,7 +11,6 @@ use krilla::page::PageSettings;
 use krilla::paint::{Fill, LineCap, Stroke, StrokeDash};
 use krilla::surface::Surface;
 use krilla::text::{GlyphId, KrillaGlyph};
-use krilla::Document;
 
 use crate::domain::Rgb;
 use crate::layout::{DrawOp, PageLayout, RoleFonts, TextShaper};
@@ -56,7 +56,15 @@ fn paint(color: Rgb) -> krilla::paint::Paint {
 
 fn draw_op(surface: &mut Surface, op: &DrawOp, ctx: &PdfContext) {
     match op {
-        DrawOp::Text { x, y, text, role, size, tracking, color } => {
+        DrawOp::Text {
+            x,
+            y,
+            text,
+            role,
+            size,
+            tracking,
+            color,
+        } => {
             let font = ctx.fonts.get(*role);
             let shaped = ctx.shaper.shape(font, text);
             let glyphs: Vec<KrillaGlyph> = shaped
@@ -75,20 +83,45 @@ fn draw_op(surface: &mut Surface, op: &DrawOp, ctx: &PdfContext) {
                 })
                 .collect();
             surface.set_stroke(None);
-            surface.set_fill(Some(Fill { paint: paint(*color), ..Fill::default() }));
-            surface.draw_glyphs(Point::from_xy(*x, *y), &glyphs, font.krilla.clone(), text, *size, false);
+            surface.set_fill(Some(Fill {
+                paint: paint(*color),
+                ..Fill::default()
+            }));
+            surface.draw_glyphs(
+                Point::from_xy(*x, *y),
+                &glyphs,
+                font.krilla.clone(),
+                text,
+                *size,
+                false,
+            );
         }
-        DrawOp::Line { x1, y1, x2, y2, width, color, dotted } => {
+        DrawOp::Line {
+            x1,
+            y1,
+            x2,
+            y2,
+            width,
+            color,
+            dotted,
+        } => {
             let mut builder = PathBuilder::new();
             builder.move_to(*x1, *y1);
             builder.line_to(*x2, *y2);
             let Some(path) = builder.finish() else { return };
-            let dash = dotted.then(|| StrokeDash { array: vec![0.0, width * 3.0], offset: 0.0 });
+            let dash = dotted.then(|| StrokeDash {
+                array: vec![0.0, width * 3.0],
+                offset: 0.0,
+            });
             surface.set_fill(None);
             surface.set_stroke(Some(Stroke {
                 paint: paint(*color),
                 width: *width,
-                line_cap: if *dotted { LineCap::Round } else { LineCap::Butt },
+                line_cap: if *dotted {
+                    LineCap::Round
+                } else {
+                    LineCap::Butt
+                },
                 opacity: NormalizedF32::ONE,
                 dash,
                 ..Stroke::default()
@@ -97,13 +130,25 @@ fn draw_op(surface: &mut Surface, op: &DrawOp, ctx: &PdfContext) {
             surface.set_stroke(None);
         }
         DrawOp::Circle { cx, cy, r, color } => {
-            let Some(path) = circle_path(*cx, *cy, *r) else { return };
+            let Some(path) = circle_path(*cx, *cy, *r) else {
+                return;
+            };
             surface.set_stroke(None);
-            surface.set_fill(Some(Fill { paint: paint(*color), ..Fill::default() }));
+            surface.set_fill(Some(Fill {
+                paint: paint(*color),
+                ..Fill::default()
+            }));
             surface.draw_path(&path);
         }
-        DrawOp::Logo { x, y, width, height } => {
-            let (Some(image), Some(size)) = (ctx.logo, Size::from_wh(*width, *height)) else { return };
+        DrawOp::Logo {
+            x,
+            y,
+            width,
+            height,
+        } => {
+            let (Some(image), Some(size)) = (ctx.logo, Size::from_wh(*width, *height)) else {
+                return;
+            };
             surface.push_transform(&Transform::from_translate(*x, *y));
             surface.draw_image(image.clone(), size);
             surface.pop();

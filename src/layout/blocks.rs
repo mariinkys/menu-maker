@@ -6,7 +6,7 @@ use std::collections::BTreeSet;
 
 use crate::domain::price::format_price;
 use crate::domain::{
-    Allergen, AllergenDisplay, HAlign, MenuDocument, Product, Rgb, Section, TextRole, MM_TO_PT,
+    Allergen, AllergenDisplay, HAlign, MM_TO_PT, MenuDocument, Product, Rgb, Section, TextRole,
 };
 use crate::fonts::LoadedFont;
 
@@ -24,8 +24,20 @@ pub struct Block {
 /// A run of inline content placed on one line.
 #[derive(Debug, Clone)]
 enum Segment {
-    Text { text: String, role: TextRole, size: f32, tracking: f32, color: Rgb, width: f32 },
-    Badges { numbers: Vec<u8>, diameter: f32, gap: f32, center_dy: f32 },
+    Text {
+        text: String,
+        role: TextRole,
+        size: f32,
+        tracking: f32,
+        color: Rgb,
+        width: f32,
+    },
+    Badges {
+        numbers: Vec<u8>,
+        diameter: f32,
+        gap: f32,
+        center_dy: f32,
+    },
     Space(f32),
 }
 
@@ -33,9 +45,18 @@ impl Segment {
     fn width(&self) -> f32 {
         match self {
             Segment::Text { width, .. } => *width,
-            Segment::Badges { numbers, diameter, gap, .. } => {
+            Segment::Badges {
+                numbers,
+                diameter,
+                gap,
+                ..
+            } => {
                 let n = numbers.len() as f32;
-                if n == 0.0 { 0.0 } else { n * diameter + (n - 1.0) * gap }
+                if n == 0.0 {
+                    0.0
+                } else {
+                    n * diameter + (n - 1.0) * gap
+                }
             }
             Segment::Space(w) => *w,
         }
@@ -71,7 +92,13 @@ impl<'a> BlockBuilder<'a> {
         logo_aspect: Option<f32>,
         scale: f32,
     ) -> Self {
-        Self { doc, fonts, shaper, logo_aspect, scale }
+        Self {
+            doc,
+            fonts,
+            shaper,
+            logo_aspect,
+            scale,
+        }
     }
 
     pub fn size(&self, role: TextRole) -> f32 {
@@ -86,13 +113,35 @@ impl<'a> BlockBuilder<'a> {
         self.fonts.get(role)
     }
 
-    fn text_segment(&self, text: &str, role: TextRole, size: f32, tracking: f32, color: Rgb) -> Segment {
+    fn text_segment(
+        &self,
+        text: &str,
+        role: TextRole,
+        size: f32,
+        tracking: f32,
+        color: Rgb,
+    ) -> Segment {
         let width = self.shaper.width(self.font(role), text, size, tracking);
-        Segment::Text { text: text.to_string(), role, size, tracking, color, width }
+        Segment::Text {
+            text: text.to_string(),
+            role,
+            size,
+            tracking,
+            color,
+            width,
+        }
     }
 
-    fn wrap(&self, text: &str, role: TextRole, size: f32, tracking: f32, max_width: f32) -> Vec<String> {
-        self.shaper.wrap(self.font(role), text, size, tracking, max_width.max(1.0))
+    fn wrap(
+        &self,
+        text: &str,
+        role: TextRole,
+        size: f32,
+        tracking: f32,
+        max_width: f32,
+    ) -> Vec<String> {
+        self.shaper
+            .wrap(self.font(role), text, size, tracking, max_width.max(1.0))
     }
 
     /// Baseline offset from the top of a line box of height `line_height`.
@@ -103,7 +152,15 @@ impl<'a> BlockBuilder<'a> {
     }
 
     /// Emits a line aligned inside `[x, x + width]` at `baseline`.
-    fn emit_line(&self, line: &Line, x: f32, width: f32, align: HAlign, baseline: f32, ops: &mut Vec<DrawOp>) {
+    fn emit_line(
+        &self,
+        line: &Line,
+        x: f32,
+        width: f32,
+        align: HAlign,
+        baseline: f32,
+        ops: &mut Vec<DrawOp>,
+    ) {
         let line_width = line.width();
         let mut cursor = match align {
             HAlign::Left => x,
@@ -112,7 +169,14 @@ impl<'a> BlockBuilder<'a> {
         };
         for segment in &line.segments {
             match segment {
-                Segment::Text { text, role, size, tracking, color, width } => {
+                Segment::Text {
+                    text,
+                    role,
+                    size,
+                    tracking,
+                    color,
+                    width,
+                } => {
                     ops.push(DrawOp::Text {
                         x: cursor,
                         y: baseline,
@@ -124,9 +188,20 @@ impl<'a> BlockBuilder<'a> {
                     });
                     cursor += width;
                 }
-                Segment::Badges { numbers, diameter, gap, center_dy } => {
+                Segment::Badges {
+                    numbers,
+                    diameter,
+                    gap,
+                    center_dy,
+                } => {
                     for number in numbers {
-                        self.emit_badge(*number, cursor + diameter / 2.0, baseline + center_dy, *diameter, ops);
+                        self.emit_badge(
+                            *number,
+                            cursor + diameter / 2.0,
+                            baseline + center_dy,
+                            *diameter,
+                            ops,
+                        );
                         cursor += diameter + gap;
                     }
                     cursor -= gap;
@@ -138,7 +213,12 @@ impl<'a> BlockBuilder<'a> {
 
     fn emit_badge(&self, number: u8, cx: f32, cy: f32, diameter: f32, ops: &mut Vec<DrawOp>) {
         let palette = &self.doc.style.palette;
-        ops.push(DrawOp::Circle { cx, cy, r: diameter / 2.0, color: palette.accent });
+        ops.push(DrawOp::Circle {
+            cx,
+            cy,
+            r: diameter / 2.0,
+            color: palette.accent,
+        });
         let label = number.to_string();
         let size = diameter * if number >= 10 { 0.52 } else { 0.62 };
         let font = self.font(TextRole::Badge);
@@ -155,7 +235,12 @@ impl<'a> BlockBuilder<'a> {
     }
 
     /// Inline allergen marker for a dish, according to the display mode.
-    fn allergen_segment(&self, allergens: &BTreeSet<Allergen>, line_role: TextRole, line_size: f32) -> Option<Segment> {
+    fn allergen_segment(
+        &self,
+        allergens: &BTreeSet<Allergen>,
+        line_role: TextRole,
+        line_size: f32,
+    ) -> Option<Segment> {
         if allergens.is_empty() {
             return None;
         }
@@ -165,20 +250,43 @@ impl<'a> BlockBuilder<'a> {
             AllergenDisplay::Badges => {
                 let diameter = self.size(TextRole::Description) * 1.2;
                 let cap = self.font(line_role).cap_height * line_size;
-                Some(Segment::Badges { numbers, diameter, gap: diameter * 0.2, center_dy: -cap / 2.0 })
+                Some(Segment::Badges {
+                    numbers,
+                    diameter,
+                    gap: diameter * 0.2,
+                    center_dy: -cap / 2.0,
+                })
             }
             AllergenDisplay::Numbers => {
                 let text = format!(
                     "({})",
-                    numbers.iter().map(|n| n.to_string()).collect::<Vec<_>>().join(", ")
+                    numbers
+                        .iter()
+                        .map(|n| n.to_string())
+                        .collect::<Vec<_>>()
+                        .join(", ")
                 );
                 let size = self.size(TextRole::Description) * 0.9;
-                Some(self.text_segment(&text, TextRole::Badge, size, 0.0, self.doc.style.palette.muted))
+                Some(self.text_segment(
+                    &text,
+                    TextRole::Badge,
+                    size,
+                    0.0,
+                    self.doc.style.palette.muted,
+                ))
             }
         }
     }
 
-    fn short_rule(&self, x: f32, available: f32, length: f32, align: HAlign, y: f32, width: f32) -> DrawOp {
+    fn short_rule(
+        &self,
+        x: f32,
+        available: f32,
+        length: f32,
+        align: HAlign,
+        y: f32,
+        width: f32,
+    ) -> DrawOp {
         let length = length.min(available);
         let start = match align {
             HAlign::Left => x,
@@ -219,7 +327,12 @@ impl<'a> BlockBuilder<'a> {
                 HAlign::Center => (width - w) / 2.0,
                 HAlign::Right => width - w,
             };
-            ops.push(DrawOp::Logo { x, y, width: w, height: h });
+            ops.push(DrawOp::Logo {
+                x,
+                y,
+                width: w,
+                height: h,
+            });
             y += h;
         }
 
@@ -232,8 +345,23 @@ impl<'a> BlockBuilder<'a> {
             }
             let lh = size * 1.18;
             for text in self.wrap(title, TextRole::Title, size, 0.0, width) {
-                let line = Line { segments: vec![self.text_segment(&text, TextRole::Title, size, 0.0, style.palette.accent)] };
-                self.emit_line(&line, 0.0, width, align, y + self.baseline_in_line(TextRole::Title, size, lh), &mut ops);
+                let line = Line {
+                    segments: vec![self.text_segment(
+                        &text,
+                        TextRole::Title,
+                        size,
+                        0.0,
+                        style.palette.accent,
+                    )],
+                };
+                self.emit_line(
+                    &line,
+                    0.0,
+                    width,
+                    align,
+                    y + self.baseline_in_line(TextRole::Title, size, lh),
+                    &mut ops,
+                );
                 y += lh;
             }
         }
@@ -246,8 +374,23 @@ impl<'a> BlockBuilder<'a> {
             }
             let lh = size * 1.3;
             for text in self.wrap(subtitle, TextRole::Subtitle, size, 0.03, width) {
-                let line = Line { segments: vec![self.text_segment(&text, TextRole::Subtitle, size, 0.03, style.palette.muted)] };
-                self.emit_line(&line, 0.0, width, align, y + self.baseline_in_line(TextRole::Subtitle, size, lh), &mut ops);
+                let line = Line {
+                    segments: vec![self.text_segment(
+                        &text,
+                        TextRole::Subtitle,
+                        size,
+                        0.03,
+                        style.palette.muted,
+                    )],
+                };
+                self.emit_line(
+                    &line,
+                    0.0,
+                    width,
+                    align,
+                    y + self.baseline_in_line(TextRole::Subtitle, size, lh),
+                    &mut ops,
+                );
                 y += lh;
             }
         }
@@ -259,7 +402,11 @@ impl<'a> BlockBuilder<'a> {
             y += stroke;
         }
 
-        Block { ops, height: y, space_before: 0.0 }
+        Block {
+            ops,
+            height: y,
+            space_before: 0.0,
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -272,14 +419,33 @@ impl<'a> BlockBuilder<'a> {
         let size = self.size(TextRole::Section);
         let uppercase = style.typography.uppercase_sections;
         let tracking = if uppercase { UPPERCASE_TRACKING } else { 0.0 };
-        let name = if uppercase { section.name.trim().to_uppercase() } else { section.name.trim().to_string() };
+        let name = if uppercase {
+            section.name.trim().to_uppercase()
+        } else {
+            section.name.trim().to_string()
+        };
 
         let mut ops = Vec::new();
         let mut y = 0.0;
         let lh = size * 1.2;
         for text in self.wrap(&name, TextRole::Section, size, tracking, width) {
-            let line = Line { segments: vec![self.text_segment(&text, TextRole::Section, size, tracking, style.palette.accent)] };
-            self.emit_line(&line, 0.0, width, align, y + self.baseline_in_line(TextRole::Section, size, lh), &mut ops);
+            let line = Line {
+                segments: vec![self.text_segment(
+                    &text,
+                    TextRole::Section,
+                    size,
+                    tracking,
+                    style.palette.accent,
+                )],
+            };
+            self.emit_line(
+                &line,
+                0.0,
+                width,
+                align,
+                y + self.baseline_in_line(TextRole::Section, size, lh),
+                &mut ops,
+            );
             y += lh;
         }
 
@@ -288,8 +454,23 @@ impl<'a> BlockBuilder<'a> {
             let note_size = self.size(TextRole::SectionNote);
             let nlh = note_size * 1.3;
             for text in self.wrap(note, TextRole::SectionNote, note_size, 0.0, width) {
-                let line = Line { segments: vec![self.text_segment(&text, TextRole::SectionNote, note_size, 0.0, style.palette.muted)] };
-                self.emit_line(&line, 0.0, width, align, y + self.baseline_in_line(TextRole::SectionNote, note_size, nlh), &mut ops);
+                let line = Line {
+                    segments: vec![self.text_segment(
+                        &text,
+                        TextRole::SectionNote,
+                        note_size,
+                        0.0,
+                        style.palette.muted,
+                    )],
+                };
+                self.emit_line(
+                    &line,
+                    0.0,
+                    width,
+                    align,
+                    y + self.baseline_in_line(TextRole::SectionNote, note_size, nlh),
+                    &mut ops,
+                );
                 y += nlh;
             }
         }
@@ -301,7 +482,11 @@ impl<'a> BlockBuilder<'a> {
             y += stroke;
         }
 
-        Block { ops, height: y, space_before: size * 1.15 * self.spacing() }
+        Block {
+            ops,
+            height: y,
+            space_before: size * 1.15 * self.spacing(),
+        }
     }
 
     pub fn product(&self, product: &Product, width: f32, first_in_section: bool) -> Block {
@@ -327,7 +512,13 @@ impl<'a> BlockBuilder<'a> {
 
         if price_column {
             let price_text = price.unwrap_or_default();
-            let price_seg = self.text_segment(&price_text, TextRole::Price, price_size, 0.0, palette.accent);
+            let price_seg = self.text_segment(
+                &price_text,
+                TextRole::Price,
+                price_size,
+                0.0,
+                palette.accent,
+            );
             let price_w = price_seg.width();
             let gutter = name_size * 0.9;
             text_width = (width - price_w - gutter).max(width * 0.4);
@@ -335,7 +526,15 @@ impl<'a> BlockBuilder<'a> {
             let mut lines: Vec<Line> = self
                 .wrap(name, TextRole::Product, name_size, 0.0, text_width)
                 .into_iter()
-                .map(|t| Line { segments: vec![self.text_segment(&t, TextRole::Product, name_size, 0.0, palette.text)] })
+                .map(|t| Line {
+                    segments: vec![self.text_segment(
+                        &t,
+                        TextRole::Product,
+                        name_size,
+                        0.0,
+                        palette.text,
+                    )],
+                })
                 .collect();
             if lines.is_empty() {
                 lines.push(Line::default());
@@ -347,7 +546,16 @@ impl<'a> BlockBuilder<'a> {
                 self.emit_line(line, 0.0, text_width, HAlign::Left, baseline, &mut ops);
                 if i == 0 {
                     let price_x = width - price_w;
-                    self.emit_line(&Line { segments: vec![price_seg.clone()] }, price_x, price_w, HAlign::Left, baseline, &mut ops);
+                    self.emit_line(
+                        &Line {
+                            segments: vec![price_seg.clone()],
+                        },
+                        price_x,
+                        price_w,
+                        HAlign::Left,
+                        baseline,
+                        &mut ops,
+                    );
                     if style.prices.dot_leaders {
                         let start = line.width() + name_size * 0.5;
                         let end = price_x - name_size * 0.5;
@@ -371,12 +579,21 @@ impl<'a> BlockBuilder<'a> {
             let mut lines: Vec<Line> = self
                 .wrap(name, TextRole::Product, name_size, 0.0, width)
                 .into_iter()
-                .map(|t| Line { segments: vec![self.text_segment(&t, TextRole::Product, name_size, 0.0, palette.text)] })
+                .map(|t| Line {
+                    segments: vec![self.text_segment(
+                        &t,
+                        TextRole::Product,
+                        name_size,
+                        0.0,
+                        palette.text,
+                    )],
+                })
                 .collect();
             if lines.is_empty() {
                 lines.push(Line::default());
             }
-            let price_seg = price.map(|p| self.text_segment(&p, TextRole::Price, price_size, 0.0, palette.accent));
+            let price_seg = price
+                .map(|p| self.text_segment(&p, TextRole::Price, price_size, 0.0, palette.accent));
             attach_inline(&mut lines, price_seg, name_size * 0.7, width);
             attach_inline(&mut lines, badges, badge_gap, width);
             for line in &lines {
@@ -391,8 +608,22 @@ impl<'a> BlockBuilder<'a> {
             let desc_lh = desc_size * 1.3;
             y += desc_size * 0.05;
             let desc_align = if price_column { HAlign::Left } else { align };
-            for text in self.wrap(description, TextRole::Description, desc_size, 0.0, text_width) {
-                let line = Line { segments: vec![self.text_segment(&text, TextRole::Description, desc_size, 0.0, palette.muted)] };
+            for text in self.wrap(
+                description,
+                TextRole::Description,
+                desc_size,
+                0.0,
+                text_width,
+            ) {
+                let line = Line {
+                    segments: vec![self.text_segment(
+                        &text,
+                        TextRole::Description,
+                        desc_size,
+                        0.0,
+                        palette.muted,
+                    )],
+                };
                 let baseline = y + self.baseline_in_line(TextRole::Description, desc_size, desc_lh);
                 self.emit_line(&line, 0.0, text_width, desc_align, baseline, &mut ops);
                 y += desc_lh;
@@ -400,7 +631,11 @@ impl<'a> BlockBuilder<'a> {
         }
 
         let factor = if first_in_section { 0.6 } else { 0.85 };
-        Block { ops, height: y, space_before: name_size * factor * self.spacing() }
+        Block {
+            ops,
+            height: y,
+            space_before: name_size * factor * self.spacing(),
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -415,7 +650,10 @@ impl<'a> BlockBuilder<'a> {
         let mut y = 0.0;
 
         let used = self.doc.used_allergens();
-        if style.show_allergen_legend && style.allergens != AllergenDisplay::Hidden && !used.is_empty() {
+        if style.show_allergen_legend
+            && style.allergens != AllergenDisplay::Hidden
+            && !used.is_empty()
+        {
             let item_gap = size * 1.6;
             let mut items: Vec<Line> = Vec::new();
             for allergen in &used {
@@ -423,15 +661,32 @@ impl<'a> BlockBuilder<'a> {
                     AllergenDisplay::Badges => {
                         let diameter = self.size(TextRole::Description) * 1.2;
                         let cap = self.font(TextRole::Legend).cap_height * size;
-                        Segment::Badges { numbers: vec![allergen.number()], diameter, gap: 0.0, center_dy: -cap / 2.0 }
+                        Segment::Badges {
+                            numbers: vec![allergen.number()],
+                            diameter,
+                            gap: 0.0,
+                            center_dy: -cap / 2.0,
+                        }
                     }
-                    _ => self.text_segment(&allergen.number().to_string(), TextRole::Badge, size, 0.0, palette.accent),
+                    _ => self.text_segment(
+                        &allergen.number().to_string(),
+                        TextRole::Badge,
+                        size,
+                        0.0,
+                        palette.accent,
+                    ),
                 };
                 items.push(Line {
                     segments: vec![
                         marker,
                         Segment::Space(size * 0.35),
-                        self.text_segment(allergen.label(style.legend_language), TextRole::Legend, size, 0.0, palette.muted),
+                        self.text_segment(
+                            allergen.label(style.legend_language),
+                            TextRole::Legend,
+                            size,
+                            0.0,
+                            palette.muted,
+                        ),
                     ],
                 });
             }
@@ -465,15 +720,31 @@ impl<'a> BlockBuilder<'a> {
             }
             let lh = fsize * 1.35;
             for text in self.wrap(footer_text, TextRole::Footer, fsize, 0.0, width) {
-                let line = Line { segments: vec![self.text_segment(&text, TextRole::Footer, fsize, 0.0, palette.muted)] };
+                let line = Line {
+                    segments: vec![self.text_segment(
+                        &text,
+                        TextRole::Footer,
+                        fsize,
+                        0.0,
+                        palette.muted,
+                    )],
+                };
                 let baseline = y + self.baseline_in_line(TextRole::Footer, fsize, lh);
                 self.emit_line(&line, 0.0, width, HAlign::Center, baseline, &mut ops);
                 y += lh;
             }
         }
 
-        let space_before = if y > 0.0 { self.size(TextRole::Section) * 0.9 * self.spacing() } else { 0.0 };
-        Block { ops, height: y, space_before }
+        let space_before = if y > 0.0 {
+            self.size(TextRole::Section) * 0.9 * self.spacing()
+        } else {
+            0.0
+        };
+        Block {
+            ops,
+            height: y,
+            space_before,
+        }
     }
 }
 
@@ -506,6 +777,8 @@ fn attach_inline(lines: &mut Vec<Line>, segment: Option<Segment>, gap: f32, max_
         last.segments.push(Segment::Space(gap));
         last.segments.push(segment);
     } else {
-        lines.push(Line { segments: vec![segment] });
+        lines.push(Line {
+            segments: vec![segment],
+        });
     }
 }

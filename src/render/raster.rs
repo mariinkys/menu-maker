@@ -16,16 +16,27 @@ pub struct RgbaImage {
 }
 
 /// Renders the first page at `pixels_per_point` (1.0 = 72 dpi).
-pub fn rasterize_first_page(pdf_bytes: Vec<u8>, pixels_per_point: f32) -> anyhow::Result<RgbaImage> {
+pub fn rasterize_first_page(
+    pdf_bytes: Vec<u8>,
+    pixels_per_point: f32,
+) -> anyhow::Result<RgbaImage> {
     let pdf = Pdf::new(pdf_bytes).map_err(|e| anyhow!("invalid PDF: {e:?}"))?;
-    let page = pdf.pages().iter().next().ok_or_else(|| anyhow!("the PDF has no pages"))?;
+    let page = pdf
+        .pages()
+        .iter()
+        .next()
+        .ok_or_else(|| anyhow!("the PDF has no pages"))?;
     let cache = RenderCache::new();
     let pixmap = hayro::render(
         page,
         &cache,
         &InterpreterSettings::default(),
         &RenderSettings::default(),
-        &PixmapSettings { x_scale: pixels_per_point, y_scale: pixels_per_point, bg_color: WHITE },
+        &PixmapSettings {
+            x_scale: pixels_per_point,
+            y_scale: pixels_per_point,
+            bg_color: WHITE,
+        },
     );
     Ok(RgbaImage {
         width: pixmap.width() as u32,

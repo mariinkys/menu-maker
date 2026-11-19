@@ -42,7 +42,10 @@ pub enum PaperSize {
     A3,
     Letter,
     Legal,
-    Custom { width_mm: f32, height_mm: f32 },
+    Custom {
+        width_mm: f32,
+        height_mm: f32,
+    },
 }
 
 impl PaperSize {
@@ -63,9 +66,10 @@ impl PaperSize {
             PaperSize::A3 => (297.0, 420.0),
             PaperSize::Letter => (215.9, 279.4),
             PaperSize::Legal => (215.9, 355.6),
-            PaperSize::Custom { width_mm, height_mm } => {
-                (width_mm.clamp(50.0, 2000.0), height_mm.clamp(50.0, 2000.0))
-            }
+            PaperSize::Custom {
+                width_mm,
+                height_mm,
+            } => (width_mm.clamp(50.0, 2000.0), height_mm.clamp(50.0, 2000.0)),
         }
     }
 
@@ -96,7 +100,12 @@ pub struct Margins {
 
 impl Default for Margins {
     fn default() -> Self {
-        Self { top_mm: 12.0, right_mm: 14.0, bottom_mm: 12.0, left_mm: 14.0 }
+        Self {
+            top_mm: 12.0,
+            right_mm: 14.0,
+            bottom_mm: 12.0,
+            left_mm: 14.0,
+        }
     }
 }
 
@@ -178,13 +187,23 @@ pub struct FontSpec {
 
 impl Default for FontSpec {
     fn default() -> Self {
-        Self { family: String::new(), size_pt: 10.0, bold: false, italic: false }
+        Self {
+            family: String::new(),
+            size_pt: 10.0,
+            bold: false,
+            italic: false,
+        }
     }
 }
 
 impl FontSpec {
     fn new(family: &str, size_pt: f32, bold: bool, italic: bool) -> Self {
-        Self { family: family.into(), size_pt, bold, italic }
+        Self {
+            family: family.into(),
+            size_pt,
+            bold,
+            italic,
+        }
     }
 }
 
@@ -360,8 +379,11 @@ pub enum AllergenDisplay {
 }
 
 impl AllergenDisplay {
-    pub const ALL: [AllergenDisplay; 3] =
-        [AllergenDisplay::Badges, AllergenDisplay::Numbers, AllergenDisplay::Hidden];
+    pub const ALL: [AllergenDisplay; 3] = [
+        AllergenDisplay::Badges,
+        AllergenDisplay::Numbers,
+        AllergenDisplay::Hidden,
+    ];
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -377,7 +399,11 @@ pub struct FitOptions {
 
 impl Default for FitOptions {
     fn default() -> Self {
-        Self { grow_to_fill: true, max_scale: 1.5, min_scale: 0.35 }
+        Self {
+            grow_to_fill: true,
+            max_scale: 1.5,
+            min_scale: 0.35,
+        }
     }
 }
 
@@ -393,7 +419,12 @@ pub struct HeaderStyle {
 
 impl Default for HeaderStyle {
     fn default() -> Self {
-        Self { logo_align: HAlign::Center, logo_height_mm: 24.0, title_align: HAlign::Center, divider: true }
+        Self {
+            logo_align: HAlign::Center,
+            logo_height_mm: 24.0,
+            title_align: HAlign::Center,
+            divider: true,
+        }
     }
 }
 
@@ -447,7 +478,10 @@ mod tests {
 
     #[test]
     fn a4_landscape_in_points() {
-        let page = PageSetup { orientation: Orientation::Landscape, ..Default::default() };
+        let page = PageSetup {
+            orientation: Orientation::Landscape,
+            ..Default::default()
+        };
         let (w, h) = page.size_pt();
         assert!((w - 841.89).abs() < 0.1 && (h - 595.28).abs() < 0.1);
     }

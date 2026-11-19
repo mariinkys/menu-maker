@@ -25,8 +25,12 @@ const KEEP_LOG_FILES: usize = 7;
 /// Installs the global subscriber. Keep the returned guard alive until the
 /// end of `main` so buffered file output is flushed on exit.
 pub fn init(log_dir: &Path) -> Option<WorkerGuard> {
-    let filter = || EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(DEFAULT_FILTER));
-    let stderr_layer = fmt::layer().with_writer(std::io::stderr).with_target(true).with_filter(filter());
+    let filter =
+        || EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(DEFAULT_FILTER));
+    let stderr_layer = fmt::layer()
+        .with_writer(std::io::stderr)
+        .with_target(true)
+        .with_filter(filter());
 
     let file_appender = std::fs::create_dir_all(log_dir).ok().and_then(|_| {
         Builder::new()
@@ -41,13 +45,20 @@ pub fn init(log_dir: &Path) -> Option<WorkerGuard> {
     let (file_layer, guard) = match file_appender {
         Some(appender) => {
             let (writer, guard) = tracing_appender::non_blocking(appender);
-            let layer = fmt::layer().with_writer(writer).with_ansi(false).with_target(true).with_filter(filter());
+            let layer = fmt::layer()
+                .with_writer(writer)
+                .with_ansi(false)
+                .with_target(true)
+                .with_filter(filter());
             (Some(layer), Some(guard))
         }
         None => (None, None),
     };
 
-    tracing_subscriber::registry().with(stderr_layer).with(file_layer).init();
+    tracing_subscriber::registry()
+        .with(stderr_layer)
+        .with(file_layer)
+        .init();
     if guard.is_none() {
         tracing::warn!(dir = %log_dir.display(), "could not create the log folder; logging to stderr only");
     }
@@ -59,7 +70,10 @@ pub fn init(log_dir: &Path) -> Option<WorkerGuard> {
 fn install_panic_hook() {
     let default_hook = std::panic::take_hook();
     std::panic::set_hook(Box::new(move |info| {
-        let location = info.location().map(|l| format!("{}:{}", l.file(), l.line())).unwrap_or_default();
+        let location = info
+            .location()
+            .map(|l| format!("{}:{}", l.file(), l.line()))
+            .unwrap_or_default();
         let message = info
             .payload()
             .downcast_ref::<&str>()
