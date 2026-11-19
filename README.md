@@ -31,8 +31,6 @@ Hotel Casa Peix (Customizable to other restaurants).
 - Presets in SQLite: full menu or design only. Plus autosave and JSON import/export.
 - **Not tied to one restaurant.** Customizable app and menu designs.
 
-  Everything defaults to Casa Peix and is saved in SQLite.
-
 ## Architecture
 
 ```
@@ -50,7 +48,7 @@ src/
 │   ├── engine.rs          facade: MenuDocument → PDF / preview bitmap
 │   ├── storage.rs         SQLite (rusqlite, bundled): presets, autosave, app settings
 │   ├── settings.rs        app settings (theme, colour, title, logo) + contrast helpers
-│   └── paths.rs           data folder via `dirs` (dev.mariinkys.MenuMaker)
+│   └── paths.rs           data folder via `dirs` 
 ├── main.rs                binary `menu-maker`: logging + Slint UI
 ├── logging.rs             tracing setup (stderr + rolling log file)
 └── app/                   UI controller
@@ -65,70 +63,6 @@ ui/                        .slint files (interface only; no logic)
 Data flows one way: the UI calls `Actions.*`. The controller updates the `MenuDocument`,
 then `MenuEngine` lays it out (`layout`) and writes the PDF (`render`). The same text shaping
 is used for measuring and for drawing, so positions in the PDF match the layout exactly.
-
-### Translations
-
-Translations use Slint's standard gettext workflow:
-
-- Every user-visible string in `ui/*.slint` is wrapped in `@tr("…")`, with English as the source
-  language.
-- Messages built in Rust (status bar, file dialogs, default names) are pure functions in
-  `ui/strings.slint`, which Rust calls as `ui.global::<Strings>().invoke_…()`. That way they go
-  through `@tr` too.
-- `translations/<lang>/LC_MESSAGES/menu-maker.po` files are bundled into the binary at build time
-  (`with_bundled_translations` in `build.rs`). The language is switched at runtime with
-  `slint::select_bundled_translation`.
-- Translation contexts are disabled, so the same English string always has one translation.
-
-Texts printed on the menu are part of the menu itself, not the interface. Dish names and titles
-are whatever you type. The allergen legend has its own language setting in Design → Allergens.
-
-Updating translations after changing the UI:
-
-```bash
-cargo install slint-tr-extractor
-slint-tr-extractor --no-default-translation-context --package-name menu-maker \
-    -o translations/menu-maker.pot ui/*.slint
-msgmerge --update translations/es/LC_MESSAGES/menu-maker.po translations/menu-maker.pot
-# translate the new/fuzzy entries (Poedit, Lokalize, a text editor…), then rebuild
-```
-
-To add a language, for example French:
-
-```bash
-mkdir -p translations/fr/LC_MESSAGES
-msginit -i translations/menu-maker.pot -l fr -o translations/fr/LC_MESSAGES/menu-maker.po
-```
-
-Then add it to `Language` in `src/domain/language.rs` and to the language combo box in
-`ui/settings-dialog.slint`.
-
-### Data and logs
-
-All files live in one folder, resolved with [`dirs`](https://crates.io/crates/dirs):
-
-| OS      | Folder                                                      |
-|---------|-------------------------------------------------------------|
-| Linux   | `~/.local/share/dev.mariinkys.MenuMaker/`                   |
-| macOS   | `~/Library/Application Support/dev.mariinkys.MenuMaker/`    |
-| Windows | `%APPDATA%\dev.mariinkys.MenuMaker\`                       |
-
-- `menu-maker.sqlite3` holds the presets, the autosaved document and the app settings.
-- `logs/menu-maker.YYYY-MM-DD.log` holds the logs. A new file starts each day, the last 7 are kept, and timestamps are UTC.
-
-Logging uses `tracing`. The library (`menu_core`) only emits events, and the binary sends them to stderr and the log file. The default level is `info` for the app and `warn` for dependencies. Change it with `RUST_LOG`:
-
-```bash
-RUST_LOG=menu_core=debug,menu_maker=debug cargo run   # render timings, edits, autosaves
-RUST_LOG=menu_maker=trace,menu_core=trace cargo run   # also every keystroke edit and layout pass
-```
-
-What gets logged:
-
-- `info`: startup (version, folders), fonts found, database opened or migrated, document restored or loaded, presets saved, loaded or deleted, PDF and JSON export/import, exit.
-- `warn`: font fallbacks, unreadable logos, content that does not fit on one page, errors shown in the status bar.
-- `error`: database, autosave or preview failures, and panics.
-- `debug` / `trace`: individual edits, design changes, font loads, render and raster timings, autosaves.
 
 ## Building
 
