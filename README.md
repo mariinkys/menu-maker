@@ -48,7 +48,7 @@ src/
 │   ├── engine.rs          facade: MenuDocument → PDF / preview bitmap
 │   ├── storage.rs         SQLite (rusqlite, bundled): presets, autosave, app settings
 │   ├── settings.rs        app settings (theme, colour, title, logo) + contrast helpers
-│   └── paths.rs           data folder via `dirs` 
+│   └── paths.rs           data folder via `dirs`
 ├── main.rs                binary `menu-maker`: logging + Slint UI
 ├── logging.rs             tracing setup (stderr + rolling log file)
 └── app/                   UI controller
@@ -70,8 +70,7 @@ is used for measuring and for drawing, so positions in the PDF match the layout 
 # Linux (Debian/Ubuntu): fontconfig headers
 sudo apt install libfontconfig1-dev
 
-cargo run --release             # binary: target/release/menu-maker
-cargo test                      # 29 tests: prices, layout, flow, PDF, SQLite, logos, contrast…
+cargo run --release
 ```
 
 On Windows and macOS no extra system dependencies are needed.
