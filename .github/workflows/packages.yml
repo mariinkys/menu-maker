@@ -26,6 +26,22 @@ env:
   TAG: ${{ inputs.tag }}
 
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprobar que el tag coincide con la versión del Cargo.toml
+        if: env.TAG != ''
+        run: |
+          CARGO_VERSION=$(cargo metadata --no-deps --format-version 1 \
+            | jq -r --arg app "$APP" '.packages[] | select(.name == $app) | .version')
+          TAG_VERSION="${TAG#v}"
+          if [ "$TAG_VERSION" != "$CARGO_VERSION" ]; then
+            echo "::error file=Cargo.toml::El tag $TAG no coincide con la versión del Cargo.toml ($CARGO_VERSION). Sube «version» en Cargo.toml a $TAG_VERSION o usa el tag v$CARGO_VERSION."
+            exit 1
+          fi
+          echo "Versión $CARGO_VERSION ✔"
+
   windows:
     runs-on: windows-latest
     defaults:
