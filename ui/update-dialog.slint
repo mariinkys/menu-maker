@@ -1,0 +1,149 @@
+// Auto-update dialog (Windows): shows a newer GitHub release, downloads it
+// and restarts. All logic lives in src/app/update.rs and src/updater.rs.
+
+import { Button, ScrollView, ProgressIndicator, Spinner } from "std-widgets.slint";
+import { Theme, FieldLabel, IconButton, PrimaryButton } from "theme.slint";
+import { UpdateState, Actions } from "state.slint";
+
+export component UpdateDialog inherits Rectangle {
+    // Busy phases (downloading, restarting) cannot be dismissed.
+    property <bool> busy: UpdateState.phase == 2 || UpdateState.phase == 3;
+
+    background: Theme.scrim;
+    TouchArea {
+        clicked => {
+            if (!root.busy) {
+                UpdateState.open = false;
+            }
+        }
+    }
+
+    Rectangle {
+        width: 480px;
+        height: content.preferred-height;
+        background: Theme.surface;
+        border-radius: 12px;
+        border-width: 1px;
+        border-color: Theme.border;
+        drop-shadow-blur: 30px;
+        drop-shadow-color: #00000055;
+        TouchArea { }
+
+        content := VerticalLayout {
+            padding: 22px;
+            spacing: 12px;
+
+            HorizontalLayout {
+                Text {
+                    text: UpdateState.phase == 5 ? @tr("You are up to date") : @tr("Updates");
+                    color: Theme.text;
+                    font-size: 18px;
+                    font-weight: 700;
+                    horizontal-stretch: 1;
+                    vertical-alignment: center;
+                }
+                if !root.busy: IconButton {
+                    icon: "close";
+                    clicked => { UpdateState.open = false; }
+                }
+            }
+
+            // 0: checking
+            if UpdateState.phase == 0: HorizontalLayout {
+                spacing: 10px;
+                Spinner { indeterminate: true; }
+                FieldLabel { text: @tr("Checking for updates…"); }
+            }
+
+            // 1–4: there is a newer version
+            if UpdateState.phase >= 1 && UpdateState.phase <= 4: Text {
+                text: @tr("Version {} is available (you have {}).", UpdateState.new-version, UpdateState.current-version);
+                color: Theme.text;
+                wrap: word-wrap;
+            }
+
+            if (UpdateState.phase == 1 || UpdateState.phase == 4) && UpdateState.notes != "": Rectangle {
+                height: min(notes.preferred-height + 20px, 220px);
+                background: Theme.surface-alt;
+                border-radius: 8px;
+                border-width: 1px;
+                border-color: Theme.border;
+                ScrollView {
+                    notes := Text {
+                        x: 10px;
+                        y: 10px;
+                        width: parent.visible-width - 20px;
+                        text: UpdateState.notes;
+                        color: Theme.text;
+                        font-size: 12px;
+                        wrap: word-wrap;
+                    }
+                }
+            }
+
+            if UpdateState.phase == 1 && !UpdateState.can-install: FieldLabel {
+                text: @tr("This copy cannot update itself (it is in a protected folder such as Program Files, or the release has no checksum). Download the new version from the release page.");
+                wrap: word-wrap;
+            }
+
+            // 2: downloading
+            if UpdateState.phase == 2: VerticalLayout {
+                spacing: 6px;
+                ProgressIndicator { progress: UpdateState.progress; }
+                FieldLabel { text: @tr("Downloading… {} %", round(UpdateState.progress * 100)); }
+            }
+
+            // 3: restarting
+            if UpdateState.phase == 3: HorizontalLayout {
+                spacing: 10px;
+                Spinner { indeterminate: true; }
+                FieldLabel { text: @tr("Installing and restarting…"); }
+            }
+
+            // 4: failed
+            if UpdateState.phase == 4: Text {
+                text: @tr("The update failed: {}", UpdateState.error);
+                color: Theme.danger;
+                wrap: word-wrap;
+            }
+
+            // 6: the check itself failed (offline, GitHub unreachable…)
+            if UpdateState.phase == 6: Text {
+                text: @tr("Could not check for updates: {}", UpdateState.error);
+                color: Theme.danger;
+                wrap: word-wrap;
+            }
+
+            // 5: up to date
+            if UpdateState.phase == 5: FieldLabel {
+                text: @tr("You have the latest version ({}).", UpdateState.current-version);
+                wrap: word-wrap;
+            }
+
+            // Buttons
+            if UpdateState.phase == 1 || UpdateState.phase == 4: HorizontalLayout {
+                spacing: 8px;
+                Button {
+                    text: @tr("Skip this version");
+                    clicked => { Actions.update-skip(); }
+                }
+                Rectangle { horizontal-stretch: 1; }
+                Button {
+                    text: @tr("Release page");
+                    clicked => { Actions.open-url(UpdateState.page-url); }
+                }
+                if UpdateState.can-install: PrimaryButton {
+                    text: UpdateState.phase == 4 ? @tr("Try again") : @tr("Update and restart");
+                    clicked => { Actions.update-install(); }
+                }
+            }
+            if UpdateState.phase == 5 || UpdateState.phase == 6: HorizontalLayout {
+                alignment: end;
+                Button {
+                    text: @tr("Close");
+                    clicked => { UpdateState.open = false; }
+                }
+            }
+        }
+    }
+}

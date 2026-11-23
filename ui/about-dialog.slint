@@ -1,6 +1,6 @@
 import { AboutSlint, Button } from "std-widgets.slint";
 import { Theme, FieldLabel, IconButton, LinkText } from "theme.slint";
-import { AboutInfo, AppState, Actions } from "state.slint";
+import { AboutInfo, AppState, Actions, UpdateState } from "state.slint";
 
 component InfoRow inherits HorizontalLayout {
     in property <string> label;
@@ -71,6 +71,18 @@ export component AboutDialog inherits Rectangle {
 
             // Slint's standard "Made with Slint" badge.
             HorizontalLayout { alignment: center; AboutSlint { } }
+
+            // Self-update is Windows only; elsewhere `supported` is false.
+            if UpdateState.supported: HorizontalLayout {
+                alignment: center;
+                Button {
+                    text: @tr("Check for updates");
+                    clicked => {
+                        AppState.about-open = false;
+                        Actions.check-updates();
+                    }
+                }
+            }
         }
     }
 }

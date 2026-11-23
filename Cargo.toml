@@ -6,7 +6,7 @@ description = "Editor de Cartas de Restaurante"
 license = "GPL-3.0-only"
 default-run = "menu-maker"
 authors = ["mariinkys"]
-repository ="https://github.com/mariinkys/menu-maker"
+repository = "https://github.com/mariinkys/menu-maker"
 
 [lib]
 name = "menu_core"
@@ -23,9 +23,11 @@ rfd = "0.18"
 open = "5.4.5"
 
 # PDF writing, PDF rasterising (preview), text shaping
-krilla = { version = "0.8", default-features = false, features = ["raster-images"] }
+krilla = { version = "0.8", default-features = false, features = [
+    "raster-images",
+] }
 hayro = { version = "0.9", default-features = false }
-harfrust = "0.16"
+harfrust = "0.16.1"
 
 # Font metrics / coverage checks (same version krilla uses, so no extra copy).
 skrifa = "0.42.1"
@@ -36,12 +38,26 @@ rusqlite = { version = "0.43", features = ["bundled"] }
 dirs = "7"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-anyhow = "1"
+anyhow = "1.0.105"
 
 # Logging
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
 tracing-appender = "0.2"
+
+# Auto-update (Windows only)
+[target.'cfg(windows)'.dependencies]
+ureq = { version = "3.5.2", features = ["json", "platform-verifier"] }
+semver = "1.0.28"
+sha2 = "0.11.1"
+self-replace = "1.5.1"
+
+# The same crates for `cargo test` on any OS, so the updater logic is tested on Linux too.
+[dev-dependencies]
+ureq = { version = "3.5.2", features = ["json", "platform-verifier"] }
+semver = "1.0.28"
+sha2 = "0.11.1"
+self-replace = "1.5.1"
 
 [build-dependencies]
 slint-build = "1.19"
@@ -65,7 +81,19 @@ extended-description = "Editor de Cartas de Restaurante"
 # $auto añade las librerías enlazadas; las demás las carga winit/Slint en tiempo de ejecución.
 depends = "$auto, libxkbcommon-x11-0, libgl1"
 assets = [
-    ["target/release/menu-maker", "usr/bin/menu-maker", "755"],
-    ["./packaging/linux/menu-maker.desktop", "usr/share/applications/menu-maker.desktop", "644"],
-    ["./resources/icons/hicolor/scalable/apps/icon.svg", "usr/share/icons/hicolor/scalable/apps/menu-maker.svg", "644"],
+    [
+        "target/release/menu-maker",
+        "usr/bin/menu-maker",
+        "755",
+    ],
+    [
+        "./packaging/linux/menu-maker.desktop",
+        "usr/share/applications/menu-maker.desktop",
+        "644",
+    ],
+    [
+        "./resources/icons/hicolor/scalable/apps/icon.svg",
+        "usr/share/icons/hicolor/scalable/apps/menu-maker.svg",
+        "644",
+    ],
 ]

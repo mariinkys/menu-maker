@@ -8,6 +8,10 @@ mod convert;
 mod editor;
 mod preview;
 
+/// Auto-update dialog and flow (Windows only).
+#[cfg(windows)]
+mod update;
+
 use std::cell::RefCell;
 use std::path::PathBuf;
 use std::rc::Rc;
@@ -129,6 +133,8 @@ struct Controller {
     autosave: Timer,
     resize: Timer,
     pending_confirm: RefCell<Option<(Confirm, Instant)>>,
+    #[cfg(windows)]
+    update_slot: update::UpdateSlot,
     settings: RefCell<AppSettings>,
 }
 
@@ -151,6 +157,8 @@ impl Controller {
             resize: Timer::default(),
             pending_confirm: RefCell::new(None),
             settings: RefCell::new(settings),
+            #[cfg(windows)]
+            update_slot: Default::default(),
         })
     }
 
@@ -193,6 +201,8 @@ impl Controller {
         let catalog = ui.global::<Catalog>();
         catalog.set_font_families(convert::string_model(self.fonts().families()));
         about::fill(&ui);
+        #[cfg(windows)]
+        self.init_updates();
         self.apply_everything();
         self.refresh_presets();
     }
@@ -519,6 +529,26 @@ impl Controller {
                 );
             }
         });
+        // --- Updates (Windows only; elsewhere the UI hides them) -------------
+        #[cfg(windows)]
+        {
+            on!(on_check_updates, |c| {
+                c.check_for_updates(true);
+            });
+            on!(on_update_install, |c| {
+                c.install_update();
+            });
+            on!(on_update_skip, |c| {
+                c.skip_update();
+            });
+            on!(
+                on_update_installed,
+                |c, exe: SharedString, version: SharedString| {
+                    c.finish_update(&exe, &version);
+                }
+            );
+        }
+
         // --- Settings ------------------------------------------------------
         on!(on_settings_changed, |c| {
             let ui = c.ui();

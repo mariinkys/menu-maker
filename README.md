@@ -48,7 +48,8 @@ src/
 │   ├── engine.rs          facade: MenuDocument → PDF / preview bitmap
 │   ├── storage.rs         SQLite (rusqlite, bundled): presets, autosave, app settings
 │   ├── settings.rs        app settings (theme, colour, title, logo) + contrast helpers
-│   └── paths.rs           data folder via `dirs`
+│   ├── paths.rs           data folder via `dirs`
+│   └── updater.rs         self-update from GitHub Releases (Windows only)
 ├── main.rs                binary `menu-maker`: logging + Slint UI
 ├── logging.rs             tracing setup (stderr + rolling log file)
 └── app/                   UI controller
@@ -56,7 +57,8 @@ src/
     ├── editor.rs          document + view state (expanded rows)
     ├── convert.rs         domain ↔ Slint types
     ├── branding.rs        applies app settings to Theme/Branding, reads the settings dialog
-    └── preview.rs         background thread with debounce for the preview
+    ├── preview.rs         background thread with debounce for the preview
+    └── update.rs          update dialog + background check/download (Windows only)
 ui/                        .slint files (interface only; no logic)
 ```
 
