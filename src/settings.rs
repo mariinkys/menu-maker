@@ -43,6 +43,13 @@ pub struct AppSettings {
     /// Paint the logo in the text colour of the top bar (good for
     /// single-colour logos; turn off for full-colour ones).
     pub colorize_logo: bool,
+    /// Look for a new release on GitHub at startup (Windows only).
+    pub check_updates: bool,
+    /// Version the user chose to skip ("Skip this version"); empty = none.
+    pub skipped_version: String,
+    /// Last version installed by the updater. Guards against an update loop
+    /// if a release was built without bumping `version` in Cargo.toml.
+    pub installed_version: String,
 }
 
 impl Default for AppSettings {
@@ -54,6 +61,9 @@ impl Default for AppSettings {
             app_title: String::new(),
             logo: LogoSource::Default,
             colorize_logo: true,
+            check_updates: true,
+            skipped_version: String::new(),
+            installed_version: String::new(),
         }
     }
 }

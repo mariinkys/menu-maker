@@ -3,7 +3,7 @@
 
 import { ComboBox, LineEdit, CheckBox, Button } from "std-widgets.slint";
 import { Theme, FieldLabel, SectionHeading, ColorSwatch, IconButton, PrimaryButton } from "theme.slint";
-import { SettingsState, Actions } from "state.slint";
+import { SettingsState, Actions, UpdateState } from "state.slint";
 
 component SettingRow inherits HorizontalLayout {
     in property <string> label;
@@ -154,6 +154,13 @@ export component SettingsDialog inherits Rectangle {
             if SettingsState.logo-mode != 2: CheckBox {
                 text: @tr("Recolour the logo (for single-colour logos)");
                 checked <=> SettingsState.colorize-logo;
+                toggled => { Actions.settings-changed(); }
+            }
+
+            if UpdateState.supported: SectionHeading { text: @tr("UPDATES"); }
+            if UpdateState.supported: CheckBox {
+                text: @tr("Check for new versions at startup");
+                checked <=> SettingsState.check-updates;
                 toggled => { Actions.settings-changed(); }
             }
 

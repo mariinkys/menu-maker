@@ -9,9 +9,10 @@ import { PresetsPanel } from "presets-panel.slint";
 import { PreviewPane } from "preview-pane.slint";
 import { SettingsDialog } from "settings-dialog.slint";
 import { AboutDialog } from "about-dialog.slint";
-import { AppState, Actions, Branding, SettingsState } from "state.slint";
+import { UpdateDialog } from "update-dialog.slint";
+import { AppState, Actions, Branding, SettingsState, UpdateState } from "state.slint";
 
-export { AboutInfo, Catalog, MenuState, DesignState, PresetState, PreviewState, AppState, Actions, Branding, SettingsState, ProductRow, SectionRow, FontRow, PresetRow } from "state.slint";
+export { AboutInfo, Catalog, MenuState, DesignState, PresetState, PreviewState, AppState, Actions, Branding, SettingsState, UpdateState, ProductRow, SectionRow, FontRow, PresetRow } from "state.slint";
 export { Theme } from "theme.slint";
 export { Strings } from "strings.slint";
 
@@ -152,6 +153,13 @@ export component MainWindow inherits Window {
                 }
             }
         }
+    }
+
+    if UpdateState.open: UpdateDialog {
+        x: 0;
+        y: 0;
+        width: root.width;
+        height: root.height;
     }
 
     if SettingsState.open: SettingsDialog {

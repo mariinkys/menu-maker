@@ -1,8 +1,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: menu-maker VERSION\n"
-"POT-Creation-Date: 2026-11-17 18:30+0000\n"
+"Project-Id-Version: menu-maker 0.1.0\n"
+"POT-Creation-Date: 2026-11-23 16:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,32 +28,32 @@ msgstr ""
 msgid "Repository"
 msgstr ""
 
-#: ui/about-dialog.slint:77 ui/settings-dialog.slint:174
-msgid "Close"
+#: ui/about-dialog.slint:79
+msgid "Check for updates"
 msgstr ""
 
-#: ui/app.slint:19 ui/app.slint:60 ui/settings-dialog.slint:121
+#: ui/app.slint:20 ui/app.slint:61 ui/settings-dialog.slint:121
 msgid "Casa Peix · Menu Editor"
 msgstr ""
 
-#: ui/app.slint:70
+#: ui/app.slint:71
 msgid "New menu"
 msgstr ""
 
 #. --- PDF ---------------------------------------------------------------
-#: ui/app.slint:77 ui/strings.slint:77
+#: ui/app.slint:78 ui/strings.slint:77
 msgid "Export PDF"
 msgstr ""
 
-#: ui/app.slint:116
+#: ui/app.slint:117
 msgid "Content"
 msgstr ""
 
-#: ui/app.slint:120 ui/presets-panel.slint:30
+#: ui/app.slint:121 ui/presets-panel.slint:30
 msgid "Design"
 msgstr ""
 
-#: ui/app.slint:124
+#: ui/app.slint:125
 msgid "Presets"
 msgstr ""
 
@@ -551,15 +551,27 @@ msgstr ""
 msgid "Recolour the logo (for single-colour logos)"
 msgstr ""
 
-#: ui/settings-dialog.slint:161
+#: ui/settings-dialog.slint:160
+msgid "UPDATES"
+msgstr ""
+
+#: ui/settings-dialog.slint:162
+msgid "Check for new versions at startup"
+msgstr ""
+
+#: ui/settings-dialog.slint:168
 msgid ""
 "These settings change how the app looks. The main colour is also the accent "
 "colour when a menu design is reset, and the app logo is the default logo of "
 "every menu."
 msgstr ""
 
-#: ui/settings-dialog.slint:169
+#: ui/settings-dialog.slint:176
 msgid "Reset (Casa Peix)"
+msgstr ""
+
+#: ui/settings-dialog.slint:181 ui/update-dialog.slint:143
+msgid "Close"
 msgstr ""
 
 #: ui/state.slint:43
@@ -848,4 +860,63 @@ msgstr ""
 
 #: ui/strings.slint:82
 msgid "Could not export the PDF: {}"
+msgstr ""
+
+#: ui/update-dialog.slint:38
+msgid "You are up to date"
+msgstr ""
+
+#: ui/update-dialog.slint:38
+msgid "Updates"
+msgstr ""
+
+#: ui/update-dialog.slint:55
+msgid "Checking for updates…"
+msgstr ""
+
+#: ui/update-dialog.slint:60
+msgid "Version {} is available (you have {})."
+msgstr ""
+
+#: ui/update-dialog.slint:85
+msgid ""
+"This copy cannot update itself (it is in a protected folder such as Program "
+"Files, or the release has no checksum). Download the new version from the "
+"release page."
+msgstr ""
+
+#: ui/update-dialog.slint:93
+msgid "Downloading… {} %"
+msgstr ""
+
+#: ui/update-dialog.slint:100
+msgid "Installing and restarting…"
+msgstr ""
+
+#: ui/update-dialog.slint:105
+msgid "The update failed: {}"
+msgstr ""
+
+#: ui/update-dialog.slint:112
+msgid "Could not check for updates: {}"
+msgstr ""
+
+#: ui/update-dialog.slint:119
+msgid "You have the latest version ({})."
+msgstr ""
+
+#: ui/update-dialog.slint:127
+msgid "Skip this version"
+msgstr ""
+
+#: ui/update-dialog.slint:132
+msgid "Release page"
+msgstr ""
+
+#: ui/update-dialog.slint:136
+msgid "Try again"
+msgstr ""
+
+#: ui/update-dialog.slint:136
+msgid "Update and restart"
 msgstr ""

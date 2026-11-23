@@ -148,6 +148,27 @@ export global SettingsState {
     in-out property <int> logo-mode;
     in property <string> logo-file-name;
     in-out property <bool> colorize-logo: true;
+    in-out property <bool> check-updates: true;
+}
+
+// Auto-update dialog (Windows). Filled by src/app/update.rs.
+export global UpdateState {
+    // Whether self-update is available on this platform (Windows only).
+    in property <bool> supported;
+    in-out property <bool> open;
+    // 0 = checking, 1 = update available, 2 = downloading, 3 = restarting,
+    // 4 = install failed, 5 = already up to date, 6 = check failed
+    in property <int> phase;
+    in property <string> current-version;
+    in property <string> new-version;
+    in property <string> notes;
+    in property <string> page-url;
+    // Download progress, 0.0 – 1.0.
+    in property <float> progress;
+    in property <string> error;
+    // False when the exe cannot replace itself (e.g. installed in Program
+    // Files) or the release has no checksum: only manual download is offered.
+    in property <bool> can-install;
 }
 
 // Package metadata for the About dialog, filled from Cargo.toml by Rust.
@@ -204,4 +225,11 @@ export global Actions {
     callback choose-app-logo();
     callback reset-settings();
     callback open-url(string);
+    // Updates
+    callback check-updates();
+    callback update-install();
+    callback update-skip();
+    // Internal: raised by the download thread once the exe was replaced
+    // (exe path, installed version), so the controller can save and restart.
+    callback update-installed(string, string);
 }

@@ -9,6 +9,7 @@
 //! storage  ── SQLite presets and autosave
 //! settings ── app preferences: theme, brand colour, title, top-bar logo
 //! paths    ── application data folder (dev.mariinkys.MenuMaker)
+//! updater  ── self-update from GitHub Releases (Windows only)
 //! ```
 //!
 //! The library only emits `tracing` events; the binary decides where they go.
@@ -21,3 +22,7 @@ pub mod paths;
 pub mod render;
 pub mod settings;
 pub mod storage;
+
+/// Self-update from GitHub Releases
+#[cfg(any(windows, test))]
+pub mod updater;

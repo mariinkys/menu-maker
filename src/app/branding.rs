@@ -79,6 +79,7 @@ pub fn fill_form(ui: &MainWindow, settings: &AppSettings) {
     form.set_logo_mode(logo_mode(&settings.logo));
     form.set_logo_file_name(logo_file_name(&settings.logo).into());
     form.set_colorize_logo(settings.colorize_logo);
+    form.set_check_updates(settings.check_updates);
 }
 
 /// Reads the dialog into `settings`. The custom logo path is only changed by
@@ -97,4 +98,5 @@ pub fn read_form(ui: &MainWindow, settings: &mut AppSettings) {
         _ => {}
     }
     settings.colorize_logo = form.get_colorize_logo();
+    settings.check_updates = form.get_check_updates();
 }

@@ -28,32 +28,32 @@ msgstr "Autores"
 msgid "Repository"
 msgstr "Repositorio"
 
-#: ui/about-dialog.slint:77 ui/settings-dialog.slint:174
+#: ui/settings-dialog.slint:181 ui/update-dialog.slint:143
 msgid "Close"
 msgstr "Cerrar"
 
-#: ui/app.slint:19 ui/app.slint:60 ui/settings-dialog.slint:121
+#: ui/app.slint:20 ui/app.slint:61 ui/settings-dialog.slint:121
 msgid "Casa Peix · Menu Editor"
 msgstr "Casa Peix · Editor de Cartas"
 
-#: ui/app.slint:70
+#: ui/app.slint:71
 msgid "New menu"
 msgstr "Nueva carta"
 
 #. --- PDF ---------------------------------------------------------------
-#: ui/app.slint:77 ui/strings.slint:77
+#: ui/app.slint:78 ui/strings.slint:77
 msgid "Export PDF"
 msgstr "Exportar PDF"
 
-#: ui/app.slint:116
+#: ui/app.slint:117
 msgid "Content"
 msgstr "Contenido"
 
-#: ui/app.slint:120 ui/presets-panel.slint:30
+#: ui/app.slint:121 ui/presets-panel.slint:30
 msgid "Design"
 msgstr "Diseño"
 
-#: ui/app.slint:124
+#: ui/app.slint:125
 msgid "Presets"
 msgstr "Presets"
 
@@ -148,19 +148,12 @@ msgid "Choose image…"
 msgstr "Elegir imagen…"
 
 #: ui/content-panel.slint:288
-msgid ""
-"Uses the app logo, which you change in the app settings (gear icon, top "
-"right). Position and size are set in the “Design” tab."
-msgstr ""
-"Usa el logo de la aplicación, que se cambia en los ajustes (icono del "
-"engranaje, arriba a la derecha). La posición y el tamaño se ajustan en la "
-"pestaña «Diseño»."
+msgid "Uses the app logo, which you change in the app settings (gear icon, top right). Position and size are set in the “Design” tab."
+msgstr "Usa el logo de la aplicación, que se cambia en los ajustes (icono del engranaje, arriba a la derecha). La posición y el tamaño se ajustan en la pestaña «Diseño»."
 
 #: ui/content-panel.slint:289
 msgid "Logo and title position and size are set in the “Design” tab."
-msgstr ""
-"La posición y el tamaño del logo y del título se ajustan en la pestaña "
-"«Diseño»."
+msgstr "La posición y el tamaño del logo y del título se ajustan en la pestaña «Diseño»."
 
 #: ui/content-panel.slint:303
 msgid "The menu is empty. Add a section to get started."
@@ -266,7 +259,7 @@ msgstr "Izquierda (precio a la derecha)"
 msgid "Centred"
 msgstr "Centrada"
 
-#: ui/design-panel.slint:197 ui/design-panel.slint:252
+#: ui/design-panel.slint:197 ui/design-panel.slint:252 ui/design-panel.slint:197 ui/design-panel.slint:252
 msgid "Right"
 msgstr "Derecha"
 
@@ -331,12 +324,8 @@ msgid "Style"
 msgstr "Estilo"
 
 #: ui/design-panel.slint:296
-msgid ""
-"B = bold, I = italic. If the menu does not fit on the sheet, all sizes are "
-"reduced by the same proportion."
-msgstr ""
-"N = negrita, K = cursiva. Si la carta no cabe en la hoja, todos los tamaños "
-"se reducen en la misma proporción."
+msgid "B = bold, I = italic. If the menu does not fit on the sheet, all sizes are reduced by the same proportion."
+msgstr "N = negrita, K = cursiva. Si la carta no cabe en la hoja, todos los tamaños se reducen en la misma proporción."
 
 #: ui/design-panel.slint:301
 msgid "Section titles in capitals"
@@ -451,14 +440,8 @@ msgid "Save design only"
 msgstr "Guardar solo el diseño"
 
 #: ui/presets-panel.slint:102
-msgid ""
-"“Menu” saves dishes, texts and design. “Design” only saves page, columns, "
-"fonts and colours, to apply them to any menu. An existing name is "
-"overwritten."
-msgstr ""
-"«Carta» guarda platos, textos y diseño. «Diseño» guarda solo página, "
-"columnas, fuentes y colores, para aplicarlo a cualquier carta. Si el nombre "
-"ya existe, se sobrescribe."
+msgid "“Menu” saves dishes, texts and design. “Design” only saves page, columns, fonts and colours, to apply them to any menu. An existing name is overwritten."
+msgstr "«Carta» guarda platos, textos y diseño. «Diseño» guarda solo página, columnas, fuentes y colores, para aplicarlo a cualquier carta. Si el nombre ya existe, se sobrescribe."
 
 #: ui/presets-panel.slint:109
 msgid "SAVED PRESETS"
@@ -473,12 +456,8 @@ msgid "FILES"
 msgstr "ARCHIVOS"
 
 #: ui/presets-panel.slint:121
-msgid ""
-"To move a menu to another computer, export it to a .json file and import it "
-"there."
-msgstr ""
-"Para llevar una carta a otro ordenador, expórtala a un archivo .json e "
-"impórtala allí."
+msgid "To move a menu to another computer, export it to a .json file and import it there."
+msgstr "Para llevar una carta a otro ordenador, expórtala a un archivo .json e impórtala allí."
 
 #: ui/presets-panel.slint:128
 msgid "Import from file…"
@@ -509,12 +488,8 @@ msgid "Does not fit on one sheet"
 msgstr "No cabe en una hoja"
 
 #: ui/preview-pane.slint:87
-msgid ""
-"The content does not fit on one sheet even at the smallest text size. "
-"Shorten descriptions, reduce margins or use more columns."
-msgstr ""
-"El contenido no cabe en una hoja ni reduciendo el texto al mínimo. Acorta "
-"descripciones, reduce márgenes o usa más columnas."
+msgid "The content does not fit on one sheet even at the smallest text size. Shorten descriptions, reduce margins or use more columns."
+msgstr "El contenido no cabe en una hoja ni reduciendo el texto al mínimo. Acorta descripciones, reduce márgenes o usa más columnas."
 
 #: ui/settings-dialog.slint:45
 msgid "App settings"
@@ -564,17 +539,11 @@ msgstr "Logo Casa Peix"
 msgid "Recolour the logo (for single-colour logos)"
 msgstr "Recolorear el logo (para logos de un solo color)"
 
-#: ui/settings-dialog.slint:161
-msgid ""
-"These settings change how the app looks. The main colour is also the accent "
-"colour when a menu design is reset, and the app logo is the default logo of "
-"every menu."
-msgstr ""
-"Estos ajustes cambian el aspecto de la aplicación. El color principal "
-"también es el color de acento al restablecer el diseño de una carta, y el "
-"logo de la aplicación es el logo predeterminado de las cartas."
+#: ui/settings-dialog.slint:168
+msgid "These settings change how the app looks. The main colour is also the accent colour when a menu design is reset, and the app logo is the default logo of every menu."
+msgstr "Estos ajustes cambian el aspecto de la aplicación. El color principal también es el color de acento al restablecer el diseño de una carta, y el logo de la aplicación es el logo predeterminado de las cartas."
 
-#: ui/settings-dialog.slint:169
+#: ui/settings-dialog.slint:176
 msgid "Reset (Casa Peix)"
 msgstr "Restablecer (Casa Peix)"
 
@@ -713,12 +682,8 @@ msgid "Section “{}” deleted."
 msgstr "Sección «{}» eliminada."
 
 #: ui/strings.slint:31
-msgid ""
-"Click “New menu” again to start from scratch (the design is kept; save a "
-"preset first if you want to keep the dishes)."
-msgstr ""
-"Pulsa «Nueva carta» otra vez para empezar de cero (se mantiene el diseño; "
-"guarda antes un preset si quieres conservar los platos)."
+msgid "Click “New menu” again to start from scratch (the design is kept; save a preset first if you want to keep the dishes)."
+msgstr "Pulsa «Nueva carta» otra vez para empezar de cero (se mantiene el diseño; guarda antes un preset si quieres conservar los platos)."
 
 #: ui/strings.slint:33
 msgid "New menu created."
@@ -767,7 +732,6 @@ msgid "Could not save the settings: {}"
 msgstr "No se pudieron guardar los ajustes: {}"
 
 #: ui/strings.slint:49
-#, fuzzy
 msgid "Could not open {} in the browser."
 msgstr "No se pudo abrir {} en el navegador."
 
@@ -868,3 +832,71 @@ msgstr "PDF guardado en {}, pero el contenido no cabe en una hoja."
 #: ui/strings.slint:82
 msgid "Could not export the PDF: {}"
 msgstr "No se pudo exportar el PDF: {}"
+
+#: ui/about-dialog.slint:79
+msgid "Check for updates"
+msgstr "Buscar actualizaciones"
+
+#: ui/settings-dialog.slint:160
+msgid "UPDATES"
+msgstr "ACTUALIZACIONES"
+
+#: ui/settings-dialog.slint:162
+msgid "Check for new versions at startup"
+msgstr "Buscar nuevas versiones al iniciar"
+
+#: ui/update-dialog.slint:38
+msgid "You are up to date"
+msgstr "Ya tienes la última versión"
+
+#: ui/update-dialog.slint:38
+msgid "Updates"
+msgstr "Actualizaciones"
+
+#: ui/update-dialog.slint:55
+msgid "Checking for updates…"
+msgstr "Buscando actualizaciones…"
+
+#: ui/update-dialog.slint:60
+msgid "Version {} is available (you have {})."
+msgstr "Está disponible la versión {} (tienes la {})."
+
+#: ui/update-dialog.slint:85
+msgid "This copy cannot update itself (it is in a protected folder such as Program Files, or the release has no checksum). Download the new version from the release page."
+msgstr "Esta copia no puede actualizarse sola (está en una carpeta protegida como Archivos de programa, o la versión no tiene suma de comprobación). Descarga la nueva versión desde la página de la versión."
+
+#: ui/update-dialog.slint:93
+msgid "Downloading… {} %"
+msgstr "Descargando… {} %"
+
+#: ui/update-dialog.slint:100
+msgid "Installing and restarting…"
+msgstr "Instalando y reiniciando…"
+
+#: ui/update-dialog.slint:105
+msgid "The update failed: {}"
+msgstr "La actualización ha fallado: {}"
+
+#: ui/update-dialog.slint:119
+msgid "You have the latest version ({})."
+msgstr "Tienes la última versión ({})."
+
+#: ui/update-dialog.slint:127
+msgid "Skip this version"
+msgstr "Omitir esta versión"
+
+#: ui/update-dialog.slint:132
+msgid "Release page"
+msgstr "Página de la versión"
+
+#: ui/update-dialog.slint:136
+msgid "Try again"
+msgstr "Reintentar"
+
+#: ui/update-dialog.slint:136
+msgid "Update and restart"
+msgstr "Actualizar y reiniciar"
+
+#: ui/update-dialog.slint:112
+msgid "Could not check for updates: {}"
+msgstr "No se pudo comprobar si hay actualizaciones: {}"
