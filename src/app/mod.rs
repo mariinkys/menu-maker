@@ -55,6 +55,10 @@ const AUTOSAVE_DELAY: Duration = Duration::from_millis(800);
 
 pub fn run() -> anyhow::Result<()> {
     let ui = MainWindow::new()?;
+    // we need to set the appid before the window opens so that the icon works
+    if let Err(e) = slint::set_xdg_app_id(menu_core::paths::APP_NAME) {
+        warn!(error = %e, "could not set the xdg app id");
+    }
     let fonts = Arc::new(FontCatalog::load_system());
     let engine = Arc::new(MenuEngine::new(fonts.clone()));
 
