@@ -18,49 +18,49 @@ path = "src/main.rs"
 
 [dependencies]
 # UI
-slint = "1.19"
-rfd = "0.18"
+slint = "1.19.1"
+rfd = "0.18.0"
 open = "5.4.5"
 
 # PDF writing, PDF rasterising (preview), text shaping
-krilla = { version = "0.8", default-features = false, features = [
+krilla = { version = "0.8.2", default-features = false, features = [
     "raster-images",
 ] }
-hayro = { version = "0.9", default-features = false }
-harfrust = "0.16.1"
+hayro = { version = "0.9.0", default-features = false }
+harfrust = "0.16.2"
 
 # Font metrics / coverage checks (same version krilla uses, so no extra copy).
 skrifa = "0.42.1"
 fontdb = "0.24"
 
 # Persistence
-rusqlite = { version = "0.43", features = ["bundled"] }
-dirs = "7"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+rusqlite = { version = "0.43.0", features = ["bundled"] }
+dirs = "7.0.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
 anyhow = "1.0.105"
 
 # Logging
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
-tracing-appender = "0.2"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt"] }
+tracing-appender = "0.2.5"
 
 # Auto-update (Windows only)
 [target.'cfg(windows)'.dependencies]
 ureq = { version = "3.5.2", features = ["json", "platform-verifier"] }
 semver = "1.0.28"
-sha2 = "0.11.1"
+sha2 = "0.11.2"
 self-replace = "1.5.1"
 
 # The same crates for `cargo test` on any OS, so the updater logic is tested on Linux too.
 [dev-dependencies]
 ureq = { version = "3.5.2", features = ["json", "platform-verifier"] }
 semver = "1.0.28"
-sha2 = "0.11.1"
+sha2 = "0.11.2"
 self-replace = "1.5.1"
 
 [build-dependencies]
-slint-build = "1.19"
+slint-build = "1.19.1"
 winresource = "0.1.34" # needed for windows icon
 
 [profile.release]
